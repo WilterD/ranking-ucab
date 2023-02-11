@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <%- include('partials/head.ejs') %>
+    <link rel="stylesheet" href="/css/main.css">
+    <title>Crear Nuevo Equipo</title>
+    <style>
+        
+.image_container{
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    align-items: left;
+}
+.image_container img{
+    width: 300px;
+    display: block;
+    background-color: var(--color);
+}
+.image_container2 img{
+    width: 300px;
+    display: block;
+    background-color: var(--color2);
+}
+    </style>
+</head>
+<body>
+    <%- include('partials/navigation.ejs') %>
+    <section class="home-section">
+        <div class="home-content">
+          <i class='bx bx-menu' ></i>
+        </div>
+      <div class="container mt-4">     
+            <div class="card border-secondary">  
+                <div class="card-header">Nuevo Equipo</div>
+                <div class="card-body">
+                    <form action="/saveEquipo" method="POST">
+                        <div class="mb-3">
+                                <label for="nombreEquipo" class="form-label">Nombre de Equipo</label>
+                                <input type="text" required class="form-control" id="nombreEquipo" name="nombreEquipo" tabindex="1">
+                         </div>
+                         
+                        <div class="mb-3">
+                            <label for="director" class="form-label">Director Técnico</label>
+                            <input type="text" required class="form-control" id="nombreDT" name="nombreDT" tabindex="1">
+                        </div>  
+                         
+                        <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
+                        <a href="/equipos" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                </div>
+            </div>        
+      </div>
+    </section>
+    <section class="home-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12 mx-auto">
+            <div id="mensajes">
+              <p id="mensaje"></p>
+              <img class="rounded" src="images/medioAmbiente.png" width="330" height="230">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+      <%- include('partials/scripts.ejs') %>
+      <script>
+        // Obtener el elemento select y la imagen de la camisa
+        const colorSelect = document.getElementById('color-select');
+        const colorSelect2 = document.getElementById('color-select2');
+        
+    
+        // Agregar un manejador de eventos para cuando el valor del select cambie
+        colorSelect.addEventListener('change', (event) => {
+          // Obtener el valor seleccionado
+        const color = event.target.value;
+        document.documentElement.style.setProperty('--color', color);
+          
+          // Cambiar el color de la imagen de la camisa
+        });
+        colorSelect2.addEventListener('change', (event) => {
+          // Obtener el valor seleccionado
+        const color = event.target.value;
+        document.documentElement.style.setProperty('--color2', color);
+          
+          // Cambiar el color de la imagen de la camisa
+        });
+      </script>
+</body>
+</html>

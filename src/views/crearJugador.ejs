@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('partials/head.ejs') %>
+        <link rel="stylesheet" href="/css/main.css">
+        <title>Crear Nuevo Jugador</title>
+</head>
+
+<body>
+    <%- include('partials/navigation.ejs') %>
+        <section class="home-section">
+            <div class="home-content">
+                <i class='bx bx-menu'></i>
+            </div>
+            <div class="container mt-4">
+                <div class="card border-secondary">
+                    <div class="card-header">Nuevo Jugador</div>
+                    <div class="card-body">
+                        <form action="/saveJugador" method="POST">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nombre del Jugador</label>
+                                <input required type="text" class="form-control" id="nombreJugador" name="nombreJugador"
+                                    tabindex="1">
+                            </div>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Alias del Jugador</label>
+                                <input type="text" class="form-control" id="aliasJugador" name="aliasJugador"
+                                    tabindex="1">
+                            </div>
+                            <div class="mb-3">
+                                <label for="fecha" class="form-label">Fecha de Nacimiento</label>
+                                <input required type="date" class="form-control" id="fechaNac" name="fechaNac"
+                                    tabindex="1">
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label for="posicionJugador" class="form-label">Posición</label>
+                                <select id="posicionJugador" name="posicionJugador" class="form-select"
+                                    aria-label="Default select example" tabindex="2">
+                                    <option value="Portero" selected>Portero</option>
+                                    <option value="Defensor Central" selected>Defensor Central</option>
+                                    <option value="Defensor Lateral" selected>Defensor Lateral</option>
+                                    <option value="Volante Interior" selected>Volante Interior</option>
+                                    <option value="Medio Centrocampista" selected>Medio Centrocampista</option>
+                                    <option value="Media Punta" selected>Media Punta</option>
+                                    <option value="Delantero" selected>Delantero</option>
+                                    <option value="Centrodelantero" selected>Centrodelantero</option>
+                                    <option value="Delantero Extremo Lateral" selected>Delantero Extremo Lateral
+                                    </option>
+
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Número de Camisa</label>
+                                <input required type="number" class="form-control" id="nroCamisa" name="nroCamisa"
+                                    tabindex="1">
+                            </div>
+                            <div class="mb-3">
+                                <label for="codEquipo" class="form-label">Código Equipo</label>
+                                <select name="codEquipo" id="codEquipo" class="form-select">
+                                    <% equipos.forEach((equipo)=>{ %>
+                                        <option value="<%= equipo.codEquipo %>">
+                                            <%= equipo.codEquipo %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
+                            <a href="/jugadores" class="btn btn-secondary">Cancelar</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="home-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 mx-auto">
+                        <div id="mensajes">
+                            <p id="mensaje"></p>
+                            <img class="rounded" src="images/medioAmbiente.png" width="330" height="230">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <%- include('partials/scripts.ejs') %>
+</body>
+
+</html>
