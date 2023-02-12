@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-02-2023 a las 19:40:01
+-- Tiempo de generación: 12-02-2023 a las 02:23:03
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.29
 
@@ -18,20 +18,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `fifa4`
+-- Base de datos: `ranking`
 --
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `alojan`
---
-
-CREATE TABLE `alojan` (
-  `codHotel` int(11) NOT NULL,
-  `codEquipo` varchar(3) NOT NULL,
-  `codPartido` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -68,6 +56,25 @@ INSERT INTO `arbitro` (`codArbitro`, `nombreArbitro`, `codPais`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `carreras`
+--
+
+CREATE TABLE `carreras` (
+  `id` int(11) NOT NULL,
+  `nombreCarrera` varchar(255) COLLATE utf8mb4_spanish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `carreras`
+--
+
+INSERT INTO `carreras` (`id`, `nombreCarrera`) VALUES
+(1, 'Ing Informática'),
+(2, 'Ing. Industrial');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `ciudad`
 --
 
@@ -86,45 +93,21 @@ INSERT INTO `ciudad` (`nombre`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `coloresuniforme`
+-- Estructura de tabla para la tabla `deporte`
 --
 
-CREATE TABLE `coloresuniforme` (
-  `codEquipo` varchar(3) NOT NULL,
-  `clocal` varchar(10) NOT NULL,
-  `cvisitante` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `deporte` (
+  `id` int(11) NOT NULL,
+  `nombreDeporte` varchar(255) COLLATE utf8mb4_spanish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
--- Volcado de datos para la tabla `coloresuniforme`
+-- Volcado de datos para la tabla `deporte`
 --
 
-INSERT INTO `coloresuniforme` (`codEquipo`, `clocal`, `cvisitante`) VALUES
-('COL', '#e8af11', '#451f6b'),
-('VEN', '#ad142e', '#7fa47f'),
-('FRA', '#cbcf07', '#ff0000'),
-('ESP', '#100dce', '#dae2da');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `confederacion`
---
-
-CREATE TABLE `confederacion` (
-  `nombreConf` varchar(50) NOT NULL,
-  `continente` varchar(50) NOT NULL,
-  `siglasConf` varchar(3) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `confederacion`
---
-
-INSERT INTO `confederacion` (`nombreConf`, `continente`, `siglasConf`) VALUES
-('CONMEBOL SUDAMERICA', 'América', 'CON'),
-('EURO', 'Europa', 'EUF'),
-('Ing. Informática', 'América', 'INF');
+INSERT INTO `deporte` (`id`, `nombreDeporte`) VALUES
+(2, 'Baloncesto'),
+(3, 'Tenis de mesa (Ping Pong)');
 
 -- --------------------------------------------------------
 
@@ -144,24 +127,23 @@ CREATE TABLE `eliminatorias` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `equipo`
+-- Estructura de tabla para la tabla `equipos`
 --
 
-CREATE TABLE `equipo` (
-  `codEquipo` varchar(3) NOT NULL,
-  `esloganEquipo` varchar(50) NOT NULL,
-  `nombreDT` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `equipos` (
+  `codEquipo` int(11) NOT NULL,
+  `nombreEquipo` varchar(255) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `nombreDT` varchar(255) COLLATE utf8mb4_spanish_ci NOT NULL,
+  `nombreDeporte` varchar(255) COLLATE utf8mb4_spanish_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
--- Volcado de datos para la tabla `equipo`
+-- Volcado de datos para la tabla `equipos`
 --
 
-INSERT INTO `equipo` (`codEquipo`, `esloganEquipo`, `nombreDT`) VALUES
-('COL', 'Colombia bonita', 'Pekerman'),
-('ESP', 'VIVA EL TIGRE', 'SAMUEL ROJAS'),
-('FRA', 'DAMA', 'FRANCE'),
-('VEN', 'vinotinto', 'Cesar farias');
+INSERT INTO `equipos` (`codEquipo`, `nombreEquipo`, `nombreDT`, `nombreDeporte`) VALUES
+(5, 'Lokitos', 'Cesar', 'Baloncesto'),
+(6, 'Wilter Díaz', 'Cesar Farías', 'Tenis de mesa (Ping Pong)');
 
 -- --------------------------------------------------------
 
@@ -193,27 +175,27 @@ INSERT INTO `estadio` (`codEstadio`, `ubicacion`, `nombreEstadio`, `capacidad`, 
 --
 
 CREATE TABLE `estadisticasgenerales` (
-  `codEquipo` varchar(3) NOT NULL,
+  `codEquipo` int(11) NOT NULL,
   `codPartido` int(11) NOT NULL,
-  `posesionBalon` int(11) NOT NULL,
-  `tirosArco` int(11) NOT NULL,
-  `tirosArcoAcertados` int(11) NOT NULL,
-  `tirosArcoFallados` int(11) NOT NULL,
-  `tiroSEsquina` int(11) NOT NULL,
-  `atajadasPortero` int(11) NOT NULL,
-  `pases` int(11) NOT NULL,
-  `pasesCortos` int(11) NOT NULL,
-  `pasesLargos` int(11) NOT NULL,
-  `entradas` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `posesionBalon` int(10) UNSIGNED DEFAULT NULL,
+  `tirosArco` int(10) UNSIGNED DEFAULT NULL,
+  `tirosArcoAcertados` int(10) UNSIGNED DEFAULT NULL,
+  `tirosArcoFallados` int(10) UNSIGNED DEFAULT NULL,
+  `tiroSEsquina` int(10) UNSIGNED DEFAULT NULL,
+  `atajadasPortero` int(10) UNSIGNED DEFAULT NULL,
+  `pases` int(10) UNSIGNED DEFAULT NULL,
+  `pasesCortos` int(10) UNSIGNED DEFAULT NULL,
+  `pasesLargos` int(10) UNSIGNED DEFAULT NULL,
+  `entradas` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `estadisticasgenerales`
 --
 
 INSERT INTO `estadisticasgenerales` (`codEquipo`, `codPartido`, `posesionBalon`, `tirosArco`, `tirosArcoAcertados`, `tirosArcoFallados`, `tiroSEsquina`, `atajadasPortero`, `pases`, `pasesCortos`, `pasesLargos`, `entradas`) VALUES
-('COL', 2, 67, 6, 8, 9, 9, 9, 45, 44, 23, 2),
-('ESP', 2, 88, 7, 78, 8, 8, 8, 8, 8, 8, 8);
+(1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+(3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 11, 1);
 
 -- --------------------------------------------------------
 
@@ -234,13 +216,6 @@ CREATE TABLE `estadisticasindividuales` (
   `tarjetasAmarillas` int(11) NOT NULL,
   `tarjetasRojas` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `estadisticasindividuales`
---
-
-INSERT INTO `estadisticasindividuales` (`codJugador`, `codPartido`, `ataque`, `defensa`, `pases`, `golesAnotados`, `asistencias`, `autogoles`, `penaltis`, `tarjetasAmarillas`, `tarjetasRojas`) VALUES
-(1, 2, 12, 12, 12, 12, 12, 12, 2, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -270,32 +245,12 @@ CREATE TABLE `grupo` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `hotel`
---
-
-CREATE TABLE `hotel` (
-  `codHotel` int(11) NOT NULL,
-  `nombreHotel` varchar(50) NOT NULL,
-  `direccion` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `hotel`
---
-
-INSERT INTO `hotel` (`codHotel`, `nombreHotel`, `direccion`) VALUES
-(123, 'hola1', 'direicon'),
-(12333, '3', 'asd');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `jornadas`
 --
 
 CREATE TABLE `jornadas` (
   `fecha` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `jornadas`
@@ -303,9 +258,8 @@ CREATE TABLE `jornadas` (
 
 INSERT INTO `jornadas` (`fecha`) VALUES
 ('0000-00-00 00:00:00'),
-('2022-02-02 14:02:00'),
-('2023-01-20 13:33:00'),
-('2023-01-21 15:35:00');
+('2023-02-08 20:08:00'),
+('2023-02-11 19:02:00');
 
 -- --------------------------------------------------------
 
@@ -315,17 +269,17 @@ INSERT INTO `jornadas` (`fecha`) VALUES
 
 CREATE TABLE `juegan` (
   `codPartido` int(11) NOT NULL,
-  `codEquipo1` varchar(3) NOT NULL,
-  `codEquipo2` varchar(3) NOT NULL
+  `nombreEquipo1` varchar(255) NOT NULL,
+  `nombreEquipo2` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `juegan`
 --
 
-INSERT INTO `juegan` (`codPartido`, `codEquipo1`, `codEquipo2`) VALUES
-(2, 'COL', 'VEN'),
-(3, 'ESP', 'FRA');
+INSERT INTO `juegan` (`codPartido`, `nombreEquipo1`, `nombreEquipo2`) VALUES
+(13, 'legalpo', 'loka'),
+(14, 'legalpo', 'loka');
 
 -- --------------------------------------------------------
 
@@ -348,33 +302,7 @@ CREATE TABLE `jugador` (
 --
 
 INSERT INTO `jugador` (`codJugador`, `nombreJugador`, `aliasJugador`, `posicionJugador`, `nroCamisa`, `fechaNac`, `codEquipo`) VALUES
-(1, 'JESUS RODRIGUEZ', 'EL DORMILON', 'Delantero', 10, '2023-01-20', 'ESP'),
-(2, 'CARLOS LOPEZ', 'CASAC', 'Portero', 1, '2023-01-03', 'ESP'),
-(3, 'EMBAPE', 'TORTUGA', 'Delantero Extremo Lateral', 12, '2023-01-11', 'FRA'),
-(5, 'EMBAPE', 'TORTUGA NINJA', 'Delantero Extremo Lateral', 10, '0000-00-00', 'FRA');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `pais`
---
-
-CREATE TABLE `pais` (
-  `codPais` varchar(3) NOT NULL,
-  `nombrePais` varchar(50) NOT NULL,
-  `nombreConf` varchar(50) NOT NULL,
-  `letraGrupo` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `pais`
---
-
-INSERT INTO `pais` (`codPais`, `nombrePais`, `nombreConf`, `letraGrupo`) VALUES
-('COL', 'Colombia', 'CONMEBOL SUDAMERICA', NULL),
-('ESP', 'ESPAÑA', 'EURO', NULL),
-('FRA', 'FRANCIA', 'EURO', NULL),
-('VEN', 'Venezuela', 'CONMEBOL SUDAMERICA', NULL);
+(7, 'Wilter Diaz', 'el mono', 'Delantero Extremo Lateral', 1, '2023-02-11', '6');
 
 -- --------------------------------------------------------
 
@@ -393,31 +321,12 @@ CREATE TABLE `partido` (
 --
 
 INSERT INTO `partido` (`codPartido`, `fecha`, `codEstadio`) VALUES
-(2, '0000-00-00 00:00:00', 1),
-(3, '2022-02-02 14:02:00', 4321);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `telefonos`
---
-
-CREATE TABLE `telefonos` (
-  `numTelefono` int(11) NOT NULL,
-  `codHotel` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+(13, '2023-02-11 23:38:00', 1),
+(14, '2023-02-11 20:38:00', 1);
 
 --
 -- Índices para tablas volcadas
 --
-
---
--- Indices de la tabla `alojan`
---
-ALTER TABLE `alojan`
-  ADD PRIMARY KEY (`codHotel`,`codEquipo`,`codPartido`),
-  ADD KEY `codEquipo` (`codEquipo`),
-  ADD KEY `codPartido` (`codPartido`);
 
 --
 -- Indices de la tabla `arbitran`
@@ -434,23 +343,24 @@ ALTER TABLE `arbitro`
   ADD KEY `codPais` (`codPais`);
 
 --
+-- Indices de la tabla `carreras`
+--
+ALTER TABLE `carreras`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nombreCarrera` (`nombreCarrera`);
+
+--
 -- Indices de la tabla `ciudad`
 --
 ALTER TABLE `ciudad`
   ADD PRIMARY KEY (`nombre`);
 
 --
--- Indices de la tabla `coloresuniforme`
+-- Indices de la tabla `deporte`
 --
-ALTER TABLE `coloresuniforme`
-  ADD KEY `colores_cascade` (`codEquipo`);
-
---
--- Indices de la tabla `confederacion`
---
-ALTER TABLE `confederacion`
-  ADD PRIMARY KEY (`nombreConf`),
-  ADD UNIQUE KEY `siglasConf` (`siglasConf`);
+ALTER TABLE `deporte`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nombreDeporte` (`nombreDeporte`);
 
 --
 -- Indices de la tabla `eliminatorias`
@@ -459,10 +369,12 @@ ALTER TABLE `eliminatorias`
   ADD PRIMARY KEY (`codPais`);
 
 --
--- Indices de la tabla `equipo`
+-- Indices de la tabla `equipos`
 --
-ALTER TABLE `equipo`
-  ADD PRIMARY KEY (`codEquipo`);
+ALTER TABLE `equipos`
+  ADD PRIMARY KEY (`codEquipo`),
+  ADD UNIQUE KEY `nombreEquipo` (`nombreEquipo`),
+  ADD UNIQUE KEY `nombreEquipo_2` (`nombreEquipo`,`nombreDeporte`);
 
 --
 -- Indices de la tabla `estadio`
@@ -475,8 +387,7 @@ ALTER TABLE `estadio`
 -- Indices de la tabla `estadisticasgenerales`
 --
 ALTER TABLE `estadisticasgenerales`
-  ADD PRIMARY KEY (`codEquipo`,`codPartido`),
-  ADD KEY `codPartido` (`codPartido`);
+  ADD PRIMARY KEY (`codEquipo`,`codPartido`);
 
 --
 -- Indices de la tabla `estadisticasindividuales`
@@ -499,12 +410,6 @@ ALTER TABLE `grupo`
   ADD PRIMARY KEY (`letraGrupo`);
 
 --
--- Indices de la tabla `hotel`
---
-ALTER TABLE `hotel`
-  ADD PRIMARY KEY (`codHotel`);
-
---
 -- Indices de la tabla `jornadas`
 --
 ALTER TABLE `jornadas`
@@ -515,8 +420,8 @@ ALTER TABLE `jornadas`
 --
 ALTER TABLE `juegan`
   ADD PRIMARY KEY (`codPartido`),
-  ADD KEY `codEquipo1` (`codEquipo1`),
-  ADD KEY `codEquipo2` (`codEquipo2`);
+  ADD KEY `codEquipo1` (`nombreEquipo1`),
+  ADD KEY `codEquipo2` (`nombreEquipo2`);
 
 --
 -- Indices de la tabla `jugador`
@@ -526,28 +431,12 @@ ALTER TABLE `jugador`
   ADD KEY `jugador_cascade` (`codEquipo`);
 
 --
--- Indices de la tabla `pais`
---
-ALTER TABLE `pais`
-  ADD PRIMARY KEY (`codPais`),
-  ADD UNIQUE KEY `nombrePais` (`nombrePais`),
-  ADD KEY `pais_cascade_confederacion` (`nombreConf`),
-  ADD KEY `pais_cascade_grupo` (`letraGrupo`);
-
---
 -- Indices de la tabla `partido`
 --
 ALTER TABLE `partido`
   ADD PRIMARY KEY (`codPartido`),
   ADD KEY `codEstadio` (`codEstadio`),
   ADD KEY `partido_cascade` (`fecha`);
-
---
--- Indices de la tabla `telefonos`
---
-ALTER TABLE `telefonos`
-  ADD PRIMARY KEY (`numTelefono`,`codHotel`),
-  ADD KEY `telefonos_cascade` (`codHotel`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -560,47 +449,51 @@ ALTER TABLE `arbitro`
   MODIFY `codArbitro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT de la tabla `carreras`
+--
+ALTER TABLE `carreras`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `deporte`
+--
+ALTER TABLE `deporte`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `equipos`
+--
+ALTER TABLE `equipos`
+  MODIFY `codEquipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT de la tabla `estadio`
 --
 ALTER TABLE `estadio`
   MODIFY `codEstadio` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4322;
 
 --
--- AUTO_INCREMENT de la tabla `hotel`
---
-ALTER TABLE `hotel`
-  MODIFY `codHotel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12334;
-
---
 -- AUTO_INCREMENT de la tabla `jugador`
 --
 ALTER TABLE `jugador`
-  MODIFY `codJugador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `codJugador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `partido`
 --
 ALTER TABLE `partido`
-  MODIFY `codPartido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `codPartido` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Restricciones para tablas volcadas
 --
 
 --
--- Filtros para la tabla `alojan`
---
-ALTER TABLE `alojan`
-  ADD CONSTRAINT `alojan_ibfk_1` FOREIGN KEY (`codHotel`) REFERENCES `hotel` (`codHotel`),
-  ADD CONSTRAINT `alojan_ibfk_2` FOREIGN KEY (`codEquipo`) REFERENCES `equipo` (`codEquipo`),
-  ADD CONSTRAINT `alojan_ibfk_3` FOREIGN KEY (`codPartido`) REFERENCES `partido` (`codPartido`);
-
---
 -- Filtros para la tabla `arbitran`
 --
 ALTER TABLE `arbitran`
-  ADD CONSTRAINT `arbitran_ibfk_1` FOREIGN KEY (`codArbitro`) REFERENCES `arbitro` (`codArbitro`),
-  ADD CONSTRAINT `arbitran_ibfk_2` FOREIGN KEY (`codPartido`) REFERENCES `partido` (`codPartido`);
+  ADD CONSTRAINT `arbitran_ibfk_1` FOREIGN KEY (`codArbitro`) REFERENCES `arbitro` (`codArbitro`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `arbitran_ibfk_2` FOREIGN KEY (`codPartido`) REFERENCES `partido` (`codPartido`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `arbitro`
@@ -609,92 +502,37 @@ ALTER TABLE `arbitro`
   ADD CONSTRAINT `arbitro_ibfk_1` FOREIGN KEY (`codPais`) REFERENCES `pais` (`codPais`);
 
 --
--- Filtros para la tabla `coloresuniforme`
---
-ALTER TABLE `coloresuniforme`
-  ADD CONSTRAINT `colores_cascade` FOREIGN KEY (`codEquipo`) REFERENCES `equipo` (`codEquipo`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `coloresuniforme_ibfk_1` FOREIGN KEY (`codEquipo`) REFERENCES `equipo` (`codEquipo`);
-
---
--- Filtros para la tabla `eliminatorias`
---
-ALTER TABLE `eliminatorias`
-  ADD CONSTRAINT `eliminatorias_ibfk_1` FOREIGN KEY (`codPais`) REFERENCES `pais` (`codPais`);
-
---
--- Filtros para la tabla `equipo`
---
-ALTER TABLE `equipo`
-  ADD CONSTRAINT `equipo_cascade` FOREIGN KEY (`codEquipo`) REFERENCES `pais` (`codPais`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `equipo_ibfk_1` FOREIGN KEY (`codEquipo`) REFERENCES `pais` (`codPais`);
-
---
 -- Filtros para la tabla `estadio`
 --
 ALTER TABLE `estadio`
   ADD CONSTRAINT `estadio_cascade` FOREIGN KEY (`nombreCiudad`) REFERENCES `ciudad` (`nombre`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `estadio_ibfk_1` FOREIGN KEY (`nombreCiudad`) REFERENCES `ciudad` (`nombre`);
-
---
--- Filtros para la tabla `estadisticasgenerales`
---
-ALTER TABLE `estadisticasgenerales`
-  ADD CONSTRAINT `estadisticasgenerales_ibfk_1` FOREIGN KEY (`codEquipo`) REFERENCES `equipo` (`codEquipo`),
-  ADD CONSTRAINT `estadisticasgenerales_ibfk_2` FOREIGN KEY (`codPartido`) REFERENCES `partido` (`codPartido`);
+  ADD CONSTRAINT `estadio_ibfk_1` FOREIGN KEY (`nombreCiudad`) REFERENCES `ciudad` (`nombre`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `estadisticasindividuales`
 --
 ALTER TABLE `estadisticasindividuales`
-  ADD CONSTRAINT `estadisticasindividuales_ibfk_1` FOREIGN KEY (`codJugador`) REFERENCES `jugador` (`codJugador`),
-  ADD CONSTRAINT `estadisticasindividuales_ibfk_2` FOREIGN KEY (`codPartido`) REFERENCES `partido` (`codPartido`);
+  ADD CONSTRAINT `estadisticasindividuales_ibfk_1` FOREIGN KEY (`codJugador`) REFERENCES `jugador` (`codJugador`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `estadisticasindividuales_ibfk_2` FOREIGN KEY (`codPartido`) REFERENCES `partido` (`codPartido`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `estadisticasportero`
 --
 ALTER TABLE `estadisticasportero`
-  ADD CONSTRAINT `estadisticasportero_ibfk_1` FOREIGN KEY (`codJugador`) REFERENCES `jugador` (`codJugador`),
-  ADD CONSTRAINT `estadisticasportero_ibfk_2` FOREIGN KEY (`codPartido`) REFERENCES `partido` (`codPartido`);
+  ADD CONSTRAINT `estadisticasportero_ibfk_1` FOREIGN KEY (`codJugador`) REFERENCES `jugador` (`codJugador`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `estadisticasportero_ibfk_2` FOREIGN KEY (`codPartido`) REFERENCES `partido` (`codPartido`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `juegan`
 --
 ALTER TABLE `juegan`
-  ADD CONSTRAINT `juegan_cascade` FOREIGN KEY (`codPartido`) REFERENCES `partido` (`codPartido`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `juegan_ibfk_1` FOREIGN KEY (`codPartido`) REFERENCES `partido` (`codPartido`),
-  ADD CONSTRAINT `juegan_ibfk_2` FOREIGN KEY (`codEquipo1`) REFERENCES `equipo` (`codEquipo`),
-  ADD CONSTRAINT `juegan_ibfk_3` FOREIGN KEY (`codEquipo2`) REFERENCES `equipo` (`codEquipo`);
-
---
--- Filtros para la tabla `jugador`
---
-ALTER TABLE `jugador`
-  ADD CONSTRAINT `jugador_cascade` FOREIGN KEY (`codEquipo`) REFERENCES `equipo` (`codEquipo`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `jugador_ibfk_1` FOREIGN KEY (`codEquipo`) REFERENCES `equipo` (`codEquipo`);
-
---
--- Filtros para la tabla `pais`
---
-ALTER TABLE `pais`
-  ADD CONSTRAINT `pais_cascade_confederacion` FOREIGN KEY (`nombreConf`) REFERENCES `confederacion` (`nombreConf`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pais_cascade_grupo` FOREIGN KEY (`letraGrupo`) REFERENCES `grupo` (`letraGrupo`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pais_ibfk_1` FOREIGN KEY (`nombreConf`) REFERENCES `confederacion` (`nombreConf`),
-  ADD CONSTRAINT `pais_ibfk_2` FOREIGN KEY (`letraGrupo`) REFERENCES `grupo` (`letraGrupo`);
+  ADD CONSTRAINT `juegan_cascade` FOREIGN KEY (`codPartido`) REFERENCES `partido` (`codPartido`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `partido`
 --
 ALTER TABLE `partido`
-  ADD CONSTRAINT `partido_cascade` FOREIGN KEY (`fecha`) REFERENCES `jornadas` (`fecha`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `partido_ibfk_1` FOREIGN KEY (`fecha`) REFERENCES `jornadas` (`fecha`),
-  ADD CONSTRAINT `partido_ibfk_2` FOREIGN KEY (`codEstadio`) REFERENCES `estadio` (`codEstadio`);
-
---
--- Filtros para la tabla `telefonos`
---
-ALTER TABLE `telefonos`
-  ADD CONSTRAINT `telefonos_cascade` FOREIGN KEY (`codHotel`) REFERENCES `hotel` (`codHotel`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `telefonos_ibfk_1` FOREIGN KEY (`codHotel`) REFERENCES `hotel` (`codHotel`);
+  ADD CONSTRAINT `partido_ibfk_2` FOREIGN KEY (`codEstadio`) REFERENCES `estadio` (`codEstadio`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

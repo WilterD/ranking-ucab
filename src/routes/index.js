@@ -142,7 +142,7 @@ router.get("/crearJugador", (req, res) => {
     if (error) {
       console.log(error);
     } else {
-      conexion.query("SELECT * FROM equipo", (error, equipos) => {
+      conexion.query("SELECT * FROM equipos", (error, equipos) => {
         if (error) {
           console.log(error);
         } else {
