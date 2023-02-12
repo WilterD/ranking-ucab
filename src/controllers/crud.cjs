@@ -506,3 +506,29 @@ exports.updateDeporte = (req, res) => {
     }
   );
 };
+
+exports.saveRI = (req, res) => {
+  const nombreJugador = req.body.nombreJugador;
+  const puntos = req.body.puntos;
+  const nombreDeporte = req.body.nombreDeporte;
+  conexion.query('SELECT nombreCarrera FROM jugador WHERE nombreJugador=?',[nombreJugador] , (error, carreras) => {
+
+    conexion.query(
+      "INSERT INTO rankini SET ?",
+      {
+        nombreJugador: nombreJugador,
+        puntos: puntos,
+        nombreCarrera: carreras[0].nombreCarrera,
+        nombreDeporte:nombreDeporte
+      },
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(400).json({ msg: "error" });
+        } else {
+          res.redirect("/rankingIndividual");
+        }
+      }
+    );
+
+  })};

@@ -1,0 +1,72 @@
+<html lang="es">
+
+<head>
+    <%- include('partials/head.ejs') %>
+        <link rel="stylesheet" href="/css/main.css">
+        <title>Crear Nuevo Ranking Individual</title>
+</head>
+
+<body>
+    <%- include('partials/navigation.ejs') %>
+        <section class="home-section">
+            <div class="home-content">
+                <i class='bx bx-menu'></i>
+            </div>
+            <div class="container mt-4">
+                <div class="card border-secondary">
+                    <div class="card-header">Nuevo Ranking Individual</div>
+                    <div class="card-body">
+                        <form action="/saveRI" method="POST">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre Jugador</label>
+                        <select id="nombreJugador" name="nombreJugador" class="form-select"
+                            aria-label="Default select example" tabindex="2" required>
+                            
+                            <option value="" disabled selected>Seleccione un jugador</option>
+                            <% jugadores.forEach((jugadores)=>{ %>
+                                <option value="<%= jugadores.nombreJugador %>">
+                                    <%= jugadores.nombreJugador %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Deporte</label>
+                        <select id="nombreDeporte" name="nombreDeporte" class="form-select"
+                            aria-label="Default select example" tabindex="2" required>
+                            
+                            <option value="" disabled selected>Seleccione un deporte</option>
+                            <% deportes.forEach((deportes)=>{ %>
+                                <option value="<%= deportes.nombreDeporte %>">
+                                    <%= deportes.nombreDeporte %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                                <label for="name" class="form-label">Puntos</label>
+                                <input type="number" class="form-control" id="puntos" name="puntos" tabindex="1">
+                    </div>
+                            <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
+                            <a href="/rankingIndividual" class="btn btn-secondary">Cancelar</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="home-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 mx-auto">
+                        <div id="mensajes">
+                            <p id="mensaje"></p>
+                            <img class="rounded" src="/images/medioAmbiente.png" width="330" height="230">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <%- include('partials/scripts.ejs') %>
+</body>
+
+</html>

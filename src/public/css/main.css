@@ -287,11 +287,11 @@ h2 {
   border-radius: 6px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
 }
-.card#paises{
+.card#deportes{
   background-color: #277BC0;
   transition: .5s;
 }
-.card#paises:hover{
+.card#deportes:hover{
   background-color: #2bb8f0;
   transition: .5s;
 }

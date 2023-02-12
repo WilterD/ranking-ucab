@@ -105,26 +105,34 @@ router.get("/crearEquipo", (req, res) => {
 
 router.get("/editarEquipo/:codEquipo", (req, res) => {
   const codEquipo = req.params.codEquipo;
-  conexion.query("SELECT * FROM equipos WHERE codEquipo=?", [codEquipo], (error, equipos) => {
-    if (error) {
-      throw error;
-    } else {
-      res.render("editarEquipo.ejs", {
-        equipo: equipos[0],
-      });
+  conexion.query(
+    "SELECT * FROM equipos WHERE codEquipo=?",
+    [codEquipo],
+    (error, equipos) => {
+      if (error) {
+        throw error;
+      } else {
+        res.render("editarEquipo.ejs", {
+          equipo: equipos[0],
+        });
+      }
     }
-  });
+  );
 });
 
 router.get("/deleteEquipo/:codEquipo", (req, res) => {
   const codEquipo = req.params.codEquipo;
-  conexion.query("DELETE FROM equipos WHERE codEquipo = ?", [codEquipo], (error, results) => {
-    if (error) {
-      console.log(error);
-    } else {
-      res.redirect("/equipos");
+  conexion.query(
+    "DELETE FROM equipos WHERE codEquipo = ?",
+    [codEquipo],
+    (error, results) => {
+      if (error) {
+        console.log(error);
+      } else {
+        res.redirect("/equipos");
+      }
     }
-  });
+  );
 });
 
 router.get("/jugadores", (req, res) => {
@@ -136,10 +144,12 @@ router.get("/jugadores", (req, res) => {
         if (error) {
           console.log(error);
         } else {
-          res.render("jugadores.ejs", { jugadores: jugadores,carrera:carrera });
+          res.render("jugadores.ejs", {
+            jugadores: jugadores,
+            carrera: carrera,
+          });
         }
       });
-      
     }
   });
 });
@@ -312,13 +322,13 @@ router.get("/deleteCarrera/:id", (req, res) => {
 
 router.get("/", (req, res) => {
   conexion.query(
-    "SELECT COUNT(*) AS cantidadPaises FROM pais",
-    (error, resultadosPaises) => {
+    "SELECT COUNT(*) AS cantidadDeportes FROM deporte",
+    (error, deportes) => {
       if (error) {
         console.log(error);
       } else {
         conexion.query(
-          "SELECT COUNT(*) AS cantidadEquipos FROM equipo",
+          "SELECT COUNT(*) AS cantidadEquipos FROM equipos",
           (error, resultadosEquipos) => {
             if (error) {
               console.log(error);
@@ -330,46 +340,20 @@ router.get("/", (req, res) => {
                     console.log(error);
                   } else {
                     conexion.query(
-                      "SELECT COUNT(*) AS cantidadHoteles FROM equipo",
-                      (error, resultadosHoteles) => {
+                      "SELECT COUNT(*) AS cantidadEstadios FROM estadio",
+                      (error, resultadosEstadios) => {
                         if (error) {
                           console.log(error);
                         } else {
-                          conexion.query(
-                            "SELECT COUNT(*) AS cantidadArbitros FROM arbitro",
-                            (error, resultadosArbitros) => {
-                              if (error) {
-                                console.log(error);
-                              } else {
-                                conexion.query(
-                                  "SELECT COUNT(*) AS cantidadEstadios FROM estadio",
-                                  (error, resultadosEstadios) => {
-                                    if (error) {
-                                      console.log(error);
-                                    } else {
-                                      res.render("dashboard.ejs", {
-                                        cantidadPaises:
-                                          resultadosPaises[0].cantidadPaises,
-                                        cantidadEquipos:
-                                          resultadosEquipos[0].cantidadEquipos,
-                                        cantidadJugadores:
-                                          resultadosJugadores[0]
-                                            .cantidadJugadores,
-                                        cantidadArbitros:
-                                          resultadosArbitros[0]
-                                            .cantidadArbitros,
-                                        cantidadHoteles:
-                                          resultadosHoteles[0].cantidadHoteles,
-                                        cantidadEstadios:
-                                          resultadosEstadios[0]
-                                            .cantidadEstadios,
-                                      });
-                                    }
-                                  }
-                                );
-                              }
-                            }
-                          );
+                          res.render("dashboard.ejs", {
+                            cantidadDeportes: deportes[0].cantidadDeportes,
+                            cantidadEquipos:
+                              resultadosEquipos[0].cantidadEquipos,
+                            cantidadJugadores:
+                              resultadosJugadores[0].cantidadJugadores,
+                            cantidadEstadios:
+                              resultadosEstadios[0].cantidadEstadios,
+                          });
                         }
                       }
                     );
@@ -845,6 +829,43 @@ router.get("/deleteDeporte/:id", (req, res) => {
   });
 });
 
+router.get("/rankingIndividual", (req, res) => {
+  conexion.query("SELECT * FROM rankini", (error, rankini) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.render("rankingIndividual.ejs", { rankini: rankini }); //render muestra el archivo ejs
+    }
+  });
+});
+
+router.get("/crearRankingIndividual", (req, res) => {
+  conexion.query("SELECT * FROM jugador", (error, jugadores) => {
+    if (error) {
+      console.log(error);
+    } else {
+      conexion.query("SELECT * FROM deporte", (error, deportes) => {
+        if (error) {
+          console.log(error);
+        } else {
+          res.render("crearRankingIndividual.ejs", { jugadores: jugadores,deportes:deportes }); 
+        }
+      });
+    }
+  });
+});
+
+router.get("/deleteRI/:id", (req, res) => {
+  const id = req.params.id;
+  conexion.query("DELETE FROM rankini WHERE id = ?", [id], (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.redirect("/rankingIndividual");
+    }
+  });
+});
+
 // Guardar registros
 router.post("/saveJugador", mycrud.saveJugador);
 router.post("/saveEquipo", mycrud.saveEquipo);
@@ -857,6 +878,7 @@ router.post("/saveEGenerales", mycrud.saveEGenerales);
 router.post("/saveEstadios", mycrud.saveEstadios);
 router.post("/saveJornada", mycrud.saveJornada);
 router.post("/saveDeporte", mycrud.saveDeporte);
+router.post("/saveRI", mycrud.saveRI);
 
 // actualizar registros
 router.post("/updateJugador", mycrud.updateJugador);
