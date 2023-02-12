@@ -21,27 +21,33 @@
           <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
             <thead>
               <tr class="bg-primary text-white">
-                <th scope="col">Código Equipo</th>
-                <th scope="col">JG</th>
-                <th scope="col">JP</th>    
+                <th scope="col">Equipo</th>
+                <th scope="col">PJ</th>
+                <th scope="col">PG</th>    
+                <th scope="col">PE</th>           
+                <th scope="col">PP</th>           
                 <th scope="col">GF</th>           
                 <th scope="col">GC</th>           
-                <th scope="col">Clasificación</th>           
+                <th scope="col">DIF</th>           
+                <th scope="col">PTS</th>           
                 <th scope="col">Acciones</th>           
               </tr>
             </thead>
             <tbody>
               <% eliminatoria.forEach((elim)=>{ %>
                 <tr>  
-                    <td><%= elim.codPais %></td>  
+                    <td><%= elim.nombreEquipo %></td>  
+                    <td><%= elim.juegos_jugados %></td>  
                     <td><%= elim.juegos_ganados %></td>
+                    <td><%= elim.juegos_empate %></td>
                     <td><%= elim.juegos_perdidos %></td>
                     <td><%= elim.goles_a_favor %></td>
                     <td><%= elim.goles_en_contra %></td>
-                    <td><%= elim.clasificacion %></td>
+                    <td><%= elim.diferencia_goles%></td>
+                    <td><%= elim.puntos%></td>
                     <td>
-                      <a href="/editarEliminatoria/<%= elim.codPais %>" class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>
-                      <a onclick="confirmar('<%= elim.codPais %>','deleteEliminatoria')" class="btn btn-outline-danger"><i class='bx bxs-trash'></i></a>
+                      <a href="/editarEliminatoria/<%= elim.nombreEquipo %>" class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>
+                      <a onclick="confirmar('<%= elim.nombreEquipo %>','deleteEliminatoria')" class="btn btn-outline-danger"><i class='bx bxs-trash'></i></a>
                     </td>
                 </tr>                                   
              <% }) %>

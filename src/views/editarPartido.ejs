@@ -34,21 +34,13 @@
                     <label for="codEquipo1" class="form-label">Nombre de Equipo 1</label>
                     <select id="codEquipo1" name="codEquipo1" class="form-select" aria-label="Default select example" tabindex="2" required>
                         <% equipos.forEach((equipo)=>{ %>
-                            <option value="<%= equipo.codEquipo %>"><%= equipo.codEquipo %> - <% paises.forEach((pais)=>{ %>
-                                <% if (equipo.codEquipo == pais.codPais) { %>
-                                    <%= pais.nombrePais %>
-                                <% } %>
-                           <% }) %> </option>
+                            <option value="<%= equipo.codEquipo %>"><%= equipo.codEquipo %> </option>
                         <% }) %>
                     </select>
                     <label for="codEquipo2" class="form-label">Nombre de Equipo 2</label>
                     <select id="codEquipo2" name="codEquipo2" class="form-select" aria-label="Default select example" tabindex="2" required selected="">
                         <% equipos.forEach((equipo)=>{ %>
-                            <option value="<%= equipo.codEquipo %>"><%= equipo.codEquipo %> - <% pais.forEach((pais)=>{ %>
-                                <% if (equipo.codEquipo == pais.codPais) { %>
-                                    <%= pais.nombrePais %>
-                                <% } %>
-                           <% }) %> </option>
+                            <option value="<%= equipo.codEquipo %>"><%= equipo.codEquipo %> </option>
                         <% }) %>
                     </select>
                     <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>

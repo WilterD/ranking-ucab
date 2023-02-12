@@ -21,23 +21,17 @@
     <thead>
       <tr class="bg-primary text-white">
         <th scope="col">Nombre</th>            
-        <th scope="col">Alias</th>    
-        <th scope="col">Fecha de Nacimiento</th>           
-        <th scope="col">Posición</th>           
-        <th scope="col">Nro Camisa</th>           
         <th scope="col">Equipo</th>           
+        <th scope="col">Carrera</th>           
         <th scope="col">Acciones</th>           
       </tr>
     </thead>
     <tbody>
-      <% resultados.forEach((jugador)=>{ %>
+      <% jugadores.forEach((jugador)=>{ %>
         <tr>  
             <td><%= jugador.nombreJugador %></td>
-            <td><%= jugador.aliasJugador %></td>
-            <td><%= jugador.fechaNac %></td>
-            <td><%= jugador.posicionJugador %></td>
-            <td><%= jugador.nroCamisa %></td>
             <td><%= jugador.nombreEquipo %></td>
+            <td><%= jugador.nombreCarrera %></td>
             <td>
               <a href="/editarJugador/<%= jugador.codJugador %>" class="btn btn-outline-info"><i class='bx bxs-pencil fs-5'></i></a>
               <a onclick="confirmar('<%= jugador.codJugador %>','deleteJugador')" class="btn btn-outline-danger"><i class='bx bxs-trash'></i></a>

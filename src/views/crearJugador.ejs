@@ -24,45 +24,23 @@
                                     tabindex="1">
                             </div>
                             <div class="mb-3">
-                                <label for="name" class="form-label">Alias del Jugador</label>
-                                <input type="text" class="form-control" id="aliasJugador" name="aliasJugador"
-                                    tabindex="1">
-                            </div>
-                            <div class="mb-3">
-                                <label for="fecha" class="form-label">Fecha de Nacimiento</label>
-                                <input required type="date" class="form-control" id="fechaNac" name="fechaNac"
-                                    tabindex="1">
-                            </div>
-
-
-                            <div class="mb-3">
-                                <label for="posicionJugador" class="form-label">Posición</label>
-                                <select id="posicionJugador" name="posicionJugador" class="form-select"
-                                    aria-label="Default select example" tabindex="2">
-                                    <option value="Portero" selected>Portero</option>
-                                    <option value="Defensor Central" selected>Defensor Central</option>
-                                    <option value="Defensor Lateral" selected>Defensor Lateral</option>
-                                    <option value="Volante Interior" selected>Volante Interior</option>
-                                    <option value="Medio Centrocampista" selected>Medio Centrocampista</option>
-                                    <option value="Media Punta" selected>Media Punta</option>
-                                    <option value="Delantero" selected>Delantero</option>
-                                    <option value="Centrodelantero" selected>Centrodelantero</option>
-                                    <option value="Delantero Extremo Lateral" selected>Delantero Extremo Lateral
-                                    </option>
-
+                                <label for="carrera" class="form-label">Equipo</label>
+                                <select name="nombreEquipo" id="nombreEquipo" class="form-select">
+                                    <option disabled selected>Seleccione un equipo</option>
+                                    <% equipo.forEach((equipo)=>{ %>
+                                        <option value="<%= equipo.nombreEquipo %>">
+                                            <%= equipo.nombreEquipo %>
+                                        </option>
+                                        <% }) %>
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="name" class="form-label">Número de Camisa</label>
-                                <input required type="number" class="form-control" id="nroCamisa" name="nroCamisa"
-                                    tabindex="1">
-                            </div>
-                            <div class="mb-3">
-                                <label for="codEquipo" class="form-label">Nombre Equipo</label>
-                                <select name="codEquipo" id="codEquipo" class="form-select">
-                                    <% equipos.forEach((equipo)=>{ %>
-                                        <option value="<%= equipo.codEquipo %>">
-                                            <%= equipo.nombreEquipo %>
+                                <label for="Carrera" class="form-label">Carrera</label>
+                                <select name="nombreCarrera" id="nombreCarrera" class="form-select">
+                                    <option disabled selected>Seleccione una carrera</option>
+                                    <% carrera.forEach((carrera)=>{ %>
+                                        <option value="<%= carrera.nombreCarrera %>">
+                                            <%= carrera.nombreCarrera %>
                                         </option>
                                         <% }) %>
                                 </select>

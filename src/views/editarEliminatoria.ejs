@@ -19,11 +19,11 @@
                 <div class="card-body">
                     <form action="/updateEliminatoria" method="POST">
                          <div class="mb-3">
-                            <label for="codPais" class="form-label">Equipo</label>
-                            <select id="codPais" name="codPais" class="form-select" aria-label="Default select example" tabindex="2" required>
+                            <label for="nombreEquipo" class="form-label">Equipo</label>
+                            <select id="nombreEquipo" name="nombreEquipo" class="form-select" aria-label="Default select example" tabindex="2" required>
                                 <option selected disabled value="Selecciona un país">Selecciona un equipo</option>
-                              <% paises.forEach((pais)=>{ %>
-                                  <option value="<%= pais.codPais %>"><%= pais.nombrePais %></option>
+                              <% equipos.forEach((equipos)=>{ %>
+                                  <option value="<%= equipos.nombreEquipo %>"><%= equipos.nombreEquipo %></option>
                               <% }) %>
                           </select>
                           </div> 
@@ -43,20 +43,7 @@
                             <label for="Goles en Contra" class="form-label">Goles en Contra</label>
                             <input value="<%= eliminatoria.goles_en_contra %>" type="number" required class="form-control" id="goles_en_contra" name="goles_en_contra" tabindex="1">
                         </div>   
-                        <div class="mb-3">
-                            <label for="clasificacion" class="form-label">Clasificación de País</label>
-                            <select id="clasificacion" name="clasificacion" class="form-select" aria-label="Default select example" tabindex="2" required>
-                                <option disabled selected value="Anfitrión">Selecciona una clasificación</option>
-                                    <option value="Anfitrión">Anfitrión</option>
-                                    <option value="1ro del grupo">1ro del grupo</option>
-                                    <option value="Top 2">Top 2</option>
-                                    <option value="Top 3">Top 3</option>
-                                    <option value="Top 4">Top 4</option>
-                                    <option value="Playoff de Europa">Playoff de Europa</option>
-                                    <option value="Playoff de África">Playoff de África</option>
-                                    <option value="Repechaje">Repechaje</option>
-                                </select>
-                     </div>
+                       
                        
 
                         <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>

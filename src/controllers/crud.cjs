@@ -53,89 +53,7 @@ exports.savePartido = (req, res) => {
   );
 };
 
-// arbitros
-exports.saveArbitro = (req, res) => {
-  const nombreArbitro = req.body.nombreArbitro;
-  const codPais = req.body.codPais;
 
-  conexion.query(
-    "INSERT INTO arbitro SET ?",
-    { nombreArbitro: nombreArbitro, codPais: codPais },
-    (error, results) => {
-      if (error) {
-        console.log(error);
-        res.status(400).json({ msg: "error" });
-      } else {
-        res.redirect("/arbitros");
-      }
-    }
-  );
-};
-
-exports.updateArbitro = (req, res) => {
-  const codArbitro = req.body.codArbitro;
-  const nombre = req.body.nombre;
-  const rol = req.body.rol;
-  const pais = req.body.pais;
-  conexion.query(
-    "UPDATE arbitro SET ? WHERE codArbitro = ?",
-    [{ nombre: nombre, rol: rol, pais: pais }, codArbitro],
-    (error, results) => {
-      if (error) {
-        console.log(error);
-        res.status(400).json({ msg: "error" });
-      } else {
-        res.redirect("/arbitros");
-      }
-    }
-  );
-};
-
-// hoteles
-
-exports.saveHotel = (req, res) => {
-  const codHotel = req.body.codHotel;
-  const nombreHotel = req.body.nombreHotel;
-  const direccion = req.body.direccion;
-  const numTelefono = req.body.numTelefono;
-
-  console.log(numTelefono);
-
-  conexion.query(
-    "INSERT INTO hotel SET ?",
-    { codHotel: codHotel, nombreHotel: nombreHotel, direccion: direccion },
-    (error, results) => {
-      if (error) {
-        console.log(error);
-        res.status(400).json({ msg: "error" });
-      } else {
-        // for(let i=0;i<numTelefono.length;i++){
-        //   conexion.query("INSERT INTO telefonos SET ?", { numTelefono: numTelefono, codHotel: codHotel });
-        // }
-        res.redirect("/hotel");
-      }
-    }
-  );
-};
-
-exports.updateHotel = (req, res) => {
-  const codHotel = req.body.codHotel;
-  const nombreHotel = req.body.nombreHotel;
-  const direccion = req.body.direccion;
-
-  conexion.query(
-    "UPDATE hotel SET ? WHERE codHotel = ?",
-    [{ nombreHotel: nombreHotel, direccion: direccion }, codHotel],
-    (error, results) => {
-      if (error) {
-        console.log(error);
-        res.status(400).json({ msg: "error" });
-      } else {
-        res.redirect("/hotel");
-      }
-    }
-  );
-};
 
 // Equipos
 
@@ -185,22 +103,16 @@ exports.updateEquipo = (req, res) => {
 // jugadores
 
 exports.saveJugador = (req, res) => {
-  const codEquipo = req.body.codEquipo;
+  const nombreCarrera = req.body.nombreCarrera;
   const nombreJugador = req.body.nombreJugador;
-  const aliasJugador = req.body.aliasJugador;
-  const posicionJugador = req.body.posicionJugador;
-  const nroCamisa = req.body.nroCamisa;
-  const fechaNac = req.body.fechaNac;
+  const nombreEquipo = req.body.nombreEquipo;
 
   conexion.query(
     "INSERT INTO jugador SET ?",
     {
       nombreJugador: nombreJugador,
-      aliasJugador: aliasJugador,
-      fechaNac: fechaNac,
-      posicionJugador: posicionJugador,
-      nroCamisa: nroCamisa,
-      codEquipo: codEquipo,
+      nombreEquipo: nombreEquipo,
+      nombreCarrera: nombreCarrera,
     },
     (error, results) => {
       if (error) {
@@ -216,20 +128,14 @@ exports.saveJugador = (req, res) => {
 exports.updateJugador = (req, res) => {
   const codJugador = req.body.codJugador;
   const nombreJugador = req.body.nombreJugador;
-  const aliasJugador = req.body.aliasJugador;
-  const fechaNac = req.body.fechaNac;
-  const posicionJugador = req.body.posicionJugador;
-  const nroCamisa = req.body.nroCamisa;
+  const nombreEquipo = req.body.nombreEquipo;
+  const nombreCarrera = req.body.nombreCarrera;
 
   conexion.query(
     "UPDATE jugador SET ? WHERE codJugador = ?",
     [
       {
         nombreJugador: nombreJugador,
-        aliasJugador: aliasJugador,
-        fechaNac: fechaNac,
-        posicionJugador: posicionJugador,
-        nroCamisa: nroCamisa,
       },
       codJugador,
     ],
@@ -280,22 +186,28 @@ exports.updateCarrera = (req, res) => {
 };
 
 exports.saveEliminatoria = (req, res) => {
-  const codPais = req.body.codPais;
+  const nombreEquipo = req.body.nombreEquipo;
   const juegos_ganados = req.body.juegos_ganados;
   const juegos_perdidos = req.body.juegos_perdidos;
   const goles_a_favor = req.body.goles_a_favor;
   const goles_en_contra = req.body.goles_en_contra;
-  const clasificacion = req.body.clasificacion;
+  const juegos_empate = req.body.juegos_empate;
+  const diferencia_goles = req.body.diferencia_goles;
+  const puntos = req.body.puntos;
+  const juegos_jugados = req.body.juegos_jugados;
 
   conexion.query(
     "INSERT INTO eliminatorias SET ?",
     {
-      codPais: codPais,
+      nombreEquipo: nombreEquipo,
       juegos_ganados: juegos_ganados,
       juegos_perdidos: juegos_perdidos,
       goles_a_favor: goles_a_favor,
       goles_en_contra: goles_en_contra,
-      clasificacion: clasificacion,
+      juegos_empate: juegos_empate,
+      diferencia_goles: diferencia_goles,
+      puntos: puntos,
+      juegos_jugados: juegos_jugados,
     },
     (error, results) => {
       if (error) {
@@ -309,31 +221,37 @@ exports.saveEliminatoria = (req, res) => {
 };
 
 exports.updateEliminatoria = (req, res) => {
-  const codPais = req.body.codPais;
+  const nombreEquipo = req.body.nombreEquipo;
   const juegos_ganados = req.body.juegos_ganados;
   const juegos_perdidos = req.body.juegos_perdidos;
   const goles_a_favor = req.body.goles_a_favor;
   const goles_en_contra = req.body.goles_en_contra;
-  const clasificacion = req.body.clasificacion;
+  const juegos_empate = req.body.juegos_empate;
+  const diferencia_goles = req.body.diferencia_goles;
+  const puntos = req.body.puntos;
+  const juegos_jugados = req.body.juegos_jugados;
 
   conexion.query(
-    "UPDATE eliminatorias SET ? WHERE codPais = ?",
+    "UPDATE eliminatorias SET ? WHERE nombreEquipo = ?",
     [
       {
         juegos_ganados: juegos_ganados,
         juegos_perdidos: juegos_perdidos,
         goles_a_favor: goles_a_favor,
         goles_en_contra: goles_en_contra,
-        clasificacion: clasificacion,
+        juegos_empate: juegos_empate,
+        diferencia_goles: diferencia_goles,
+        puntos: puntos,
+        juegos_jugados: juegos_jugados,
       },
-      codPais,
+      nombreEquipo,
     ],
     (error, results) => {
       if (error) {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/elimiantorias");
+        res.redirect("/eliminatorias");
       }
     }
   );
