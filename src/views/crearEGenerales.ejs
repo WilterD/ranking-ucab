@@ -19,14 +19,13 @@
                     <form action="/saveEGenerales" method="POST">
                         <div class="mb-3">
                                 <label for="nombreEquipo" class="form-label">Equipo</label>
-                                <select id="nombreEquipo" name="nombreEquipo" class="form-select" aria-label="Default select example" tabindex="2" required>
+                                <select id="codEquipo" name="codEquipo" class="form-select" aria-label="Default select example" tabindex="2" required>
                                     <option selected value="Seleccione un equipo" disabled>Seleccione un equipo</option>
                                     <% equipo.forEach((equipos)=>{ %>
-                                        <option value="<%= equipos.nombreEquipo %>"><%= equipos.nombreEquipo %></option>
+                                        <option value="<%= equipos.codEquipo %>"><%= equipos.nombreEquipo %></option>
                                     <% }) %>
                                     </select>
-                        </div>
-
+                                </div>
                         <div class="mb-3">
                             <label for="codPartido" class="form-label">Codigo Partido</label>
                             <select id="codPartido" name="codPartido" class="form-select" aria-label="Default select example" tabindex="2" required>

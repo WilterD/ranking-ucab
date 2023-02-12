@@ -82,46 +82,49 @@ router.get("/equipos", (req, res) => {
     if (error) {
       console.log(error);
     } else {
-      res.render("equipos.ejs", { equipos: equipos});
-      
+      conexion.query("SELECT * FROM deporte", (error, deporte) => {
+        if (error) {
+          console.log(error);
+        } else {
+          res.render("equipos.ejs", { equipos: equipos, deporte: deporte });
+        }
+      });
     }
   });
 });
 
 router.get("/crearEquipo", (req, res) => {
-      res.render("crearEquipo.ejs");
-    });
-
-router.get("/editarEquipo/:id", (req, res) => {
-  const id = req.params.id;
-  conexion.query(
-    "SELECT * FROM equipos WHERE id=?",
-    [id],
-    (error, equipos) => {
-      if (error) {
-        throw error;
-      } else {
-        res.render("editarEquipo.ejs", {
-          equipo: equipos[0]
-        });
-      }
+  conexion.query("SELECT * FROM deporte", (error, deporte) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.render("crearEquipo.ejs", { deporte: deporte });
     }
-  );
+  });
 });
 
-router.get("/deleteEquipo/:id", (req, res) => {
-  const id = req.params.id;
-  conexion.query(
-    "DELETE FROM equipos WHERE id = ?",
-    [id],
-    (error, results) => {
-      if (error) {
-        console.log(error);
-      } else {
-        res.redirect("/equipos");
-      }
+router.get("/editarEquipo/:codEquipo", (req, res) => {
+  const codEquipo = req.params.codEquipo;
+  conexion.query("SELECT * FROM equipos WHERE codEquipo=?", [codEquipo], (error, equipos) => {
+    if (error) {
+      throw error;
+    } else {
+      res.render("editarEquipo.ejs", {
+        equipo: equipos[0],
+      });
     }
-  );
+  });
+});
+
+router.get("/deleteEquipo/:codEquipo", (req, res) => {
+  const codEquipo = req.params.codEquipo;
+  conexion.query("DELETE FROM equipos WHERE codEquipo = ?", [codEquipo], (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.redirect("/equipos");
+    }
+  });
 });
 
 router.get("/jugadores", (req, res) => {
@@ -267,11 +270,12 @@ router.get("/editarCarrera/:id", (req, res) => {
   const id = req.params.id;
   conexion.query(
     "SELECT * FROM carreras WHERE id=?",
-    [id],(error, carrera) => {
+    [id],
+    (error, carrera) => {
       if (error) {
         throw error;
       } else {
-        res.render("editarCarrera.ejs", { carrera: carrera[0]});
+        res.render("editarCarrera.ejs", { carrera: carrera[0] });
       }
     }
   );
@@ -375,6 +379,7 @@ router.get("/partidos", (req, res) => {
         if (error) {
           console.log(error);
         } else {
+          console.log(juegan);
           res.render("partidos.ejs", { partidos: partidos, juegan: juegan });
         }
       });
@@ -391,11 +396,11 @@ router.get("/crearPartido", (req, res) => {
         if (error) {
           console.log(error);
         } else {
-          conexion.query("SELECT * FROM equipo", (error, equipos) => {
+          conexion.query("SELECT * FROM equipos", (error, equipos) => {
             if (error) {
               console.log(error);
             } else {
-              conexion.query("SELECT * FROM pais", (error, paises) => {
+              conexion.query("SELECT * FROM carreras", (error, carrera) => {
                 if (error) {
                   console.log(error);
                 } else {
@@ -407,7 +412,7 @@ router.get("/crearPartido", (req, res) => {
                         jornadas: jornadas,
                         estadios: estadios,
                         equipos: equipos,
-                        paises: paises,
+                        carrera: carrera,
                         arbitros,
                       });
                     }
@@ -431,39 +436,34 @@ router.get("/editarPartido/:codPartido", (req, res) => {
       if (error) {
         throw error;
       } else {
-        conexion.query(
-          "SELECT * FROM equipo",
-          (error, equipos) => {
-            if (error) {
-              console.log(error);
-            } else {
-              conexion.query(
-                "SELECT * FROM pais",
-                (error, paises) => {
+        conexion.query("SELECT * FROM equipo", (error, equipos) => {
+          if (error) {
+            console.log(error);
+          } else {
+            conexion.query("SELECT * FROM pais", (error, paises) => {
+              if (error) {
+                console.log(error);
+              } else {
+                conexion.query("SELECT * FROM estadio", (error, estadios) => {
                   if (error) {
                     console.log(error);
                   } else {
-                    conexion.query(
-                      "SELECT * FROM estadio",
-                      (error, estadios) => {
-                        if (error) {
-                          console.log(error);
-                        } else {
-                          res.render("editarPartido.ejs", { partidos: partidos[0], equipos: equipos,paises: paises,estadios: estadios });
-                        }
-                      }
-                    );
+                    res.render("editarPartido.ejs", {
+                      partidos: partidos[0],
+                      equipos: equipos,
+                      paises: paises,
+                      estadios: estadios,
+                    });
                   }
-                }
-              );
-            }
+                });
+              }
+            });
           }
-        );
+        });
       }
     }
   );
 });
-
 
 router.get("/deletePartido/:codPartido", (req, res) => {
   const codPartido = req.params.codPartido;
@@ -795,6 +795,43 @@ router.get("/deleteJornadas/:fecha", (req, res) => {
   );
 });
 
+router.get("/deportes", (req, res) => {
+  conexion.query("SELECT * FROM deporte", (error, deporte) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.render("deportes.ejs", { deporte: deporte }); //render muestra el archivo ejs
+    }
+  });
+});
+
+router.get("/crearDeporte", (req, res) => {
+  res.render("crearDeporte.ejs");
+});
+
+router.get("/editarDeporte/:id", (req, res) => {
+  const id = req.params.id;
+
+  conexion.query("SELECT * FROM deporte WHERE id=?", [id], (error, deporte) => {
+    if (error) {
+      throw error;
+    } else {
+      res.render("editarDeporte.ejs", { deporte: deporte[0] });
+    }
+  });
+});
+
+router.get("/deleteDeporte/:id", (req, res) => {
+  const id = req.params.id;
+  conexion.query("DELETE FROM deporte WHERE id = ?", [id], (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.redirect("/deportes");
+    }
+  });
+});
+
 // Guardar registros
 router.post("/saveArbitro", mycrud.saveArbitro);
 router.post("/saveJugador", mycrud.saveJugador);
@@ -807,6 +844,7 @@ router.post("/saveEIndividuales", mycrud.saveEIndividuales);
 router.post("/saveEGenerales", mycrud.saveEGenerales);
 router.post("/saveEstadios", mycrud.saveEstadios);
 router.post("/saveJornada", mycrud.saveJornada);
+router.post("/saveDeporte", mycrud.saveDeporte);
 
 // actualizar registros
 router.post("/updateArbitro", mycrud.updateArbitro);
@@ -816,5 +854,6 @@ router.post("/updateCarrera", mycrud.updateCarrera);
 router.post("/updateEliminatoria", mycrud.updateEliminatoria);
 router.post("/updateEstadio", mycrud.updateEstadio);
 router.post("/updateEstadisticasGenerales", mycrud.updateEstadisticasGenerales);
+router.post("/updateDeporte", mycrud.updateDeporte);
 
 export default router;

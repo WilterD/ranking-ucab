@@ -21,7 +21,6 @@
           <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
             <thead>
               <tr class="bg-primary text-white">
-                <th scope="col">Código Partido</th>
                 <th scope="col">Fecha</th>           
                 <th scope="col">Código Estadio</th>           
                 <th scope="col">Equipo 1</th>           
@@ -33,11 +32,10 @@
               <% for (let i = 0; i < partidos.length; i++) { %>
              
                 <tr>  
-                    <td><%= partidos[i].codPartido %></td>  
                     <td><%= partidos[i].fecha %></td>  
                     <td><%= partidos[i].codEstadio %></td>  
-                    <td><%= juegan[i].codEquipo1 %></td>  
-                    <td><%= juegan[i].codEquipo2 %></td>  
+                    <td><%= juegan[i].nombreEquipo1 %></td>  
+                    <td><%= juegan[i].nombreEquipo2 %></td>  
                     <td>
                       <a href="/editarPartido/<%= partidos[i].codPartido %>" class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>
                       <a onclick="confirmar('<%= partidos[i].codPartido %>','deletePartido')" class="btn btn-outline-danger"><i class='bx bxs-trash'></i></a>

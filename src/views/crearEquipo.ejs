@@ -35,6 +35,17 @@
                 <div class="card-header">Nuevo Equipo</div>
                 <div class="card-body">
                     <form action="/saveEquipo" method="POST">
+
+                      <div class="mb-3">
+                        <label for="deporte" class="form-label">Deporte</label>
+                        <select id="nombreDeporte" name="nombreDeporte" class="form-select" aria-label="Default select example" tabindex="2" required>
+                          <option selected disabled>Seleccione un deporte</option>
+                            <% deporte.forEach((deporte)=>{ %>
+                                <option value="<%= deporte.nombreDeporte %>"><%= deporte.nombreDeporte %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                      
                         <div class="mb-3">
                                 <label for="nombreEquipo" class="form-label">Nombre de Equipo</label>
                                 <input type="text" required class="form-control" id="nombreEquipo" name="nombreEquipo" tabindex="1">

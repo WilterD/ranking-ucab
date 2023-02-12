@@ -22,6 +22,7 @@
               <tr class="bg-primary text-white">
                 <th scope="col">Nombre</th>
                 <th scope="col">Director Técnico</th>    
+                <th scope="col">Deporte</th>    
                 <th scope="col">Acciones</th>           
               </tr>
           </thead>
@@ -30,9 +31,10 @@
         <tr>  
             <td><%= equipos[i].nombreEquipo %></td>  
             <td><%= equipos[i].nombreDT %></td>  
+            <td><%= equipos[i].nombreDeporte %></td>  
             <td>
-              <a href="/editarEquipo/<%= equipos[i].id %>" class="btn btn-outline-info"><i class='bx bxs-pencil fs-5'></i></a>
-              <a onclick="confirmar('<%= equipos[i].id %>','deleteEquipo')" class="btn btn-outline-danger">
+              <a href="/editarEquipo/<%= equipos[i].codEquipo %>" class="btn btn-outline-info"><i class='bx bxs-pencil fs-5'></i></a>
+              <a onclick="confirmar('<%= equipos[i].codEquipo %>','deleteEquipo')" class="btn btn-outline-danger">
                 <i class='bx bxs-trash'></i></a>
             </td>
         </tr>                                   

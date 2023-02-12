@@ -33,24 +33,21 @@
                                 <option value="<%= estadio.codEstadio %>"><%= estadio.codEstadio %> - <%= estadio.nombreEstadio %></option>
                             <% }) %>
                         </select>
+
                         <label for="codEquipo1" class="form-label">Nombre de Equipo 1</label>
-                        <select id="codEquipo1" name="codEquipo1" class="form-select" aria-label="Default select example" tabindex="2" required>
+                        <select id="codEquipo1" name="nombreEquipo1" class="form-select" aria-label="Default select example" tabindex="2" required>
+                            <option disabled selected>Seleccione un equipo</option>
                             <% equipos.forEach((equipo)=>{ %>
-                                <option value="<%= equipo.codEquipo %>"><%= equipo.codEquipo %> - <% paises.forEach((pais)=>{ %>
-                                    <% if (equipo.codEquipo == pais.codPais) { %>
-                                        <%= pais.nombrePais %>
-                                    <% } %>
-                               <% }) %> </option>
+                                <option value="<%= equipo.nombreEquipo %>">
+                                    <%= equipo.nombreEquipo %>  %> 
+                            </option>
                             <% }) %>
                         </select>
                         <label for="codEquipo2" class="form-label">Nombre de Equipo 2</label>
-                        <select id="codEquipo2" name="codEquipo2" class="form-select" aria-label="Default select example" tabindex="2" required>
+                        <select id="codEquipo2" name="nombreEquipo2" class="form-select" aria-label="Default select example" tabindex="2" required>
+                            <option disabled selected>Seleccione un equipo</option>
                             <% equipos.forEach((equipo)=>{ %>
-                                <option value="<%= equipo.codEquipo %>"><%= equipo.codEquipo %> - <% paises.forEach((pais)=>{ %>
-                                    <% if (equipo.codEquipo == pais.codPais) { %>
-                                        <%= pais.nombrePais %>
-                                    <% } %>
-                               <% }) %> </option>
+                                <option value="<%= equipo.nombreEquipo %>"><%= equipo.nombreEquipo %></option>
                             <% }) %>
                         </select>
                         </select>
