@@ -73,5 +73,12 @@
   
   
   <%- include('partials/scripts.ejs') %>
+  <script>
+    $(document).ready(function() {
+    let tabla = $('#miTabla').DataTable();
+    tabla.order([8, 'desc']).draw();
+    })
+    
+  </script>
 </body>
 </html>

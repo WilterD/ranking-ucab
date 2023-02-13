@@ -36,7 +36,7 @@
                   <div class="card-header">Editar Equipo</div>
                   <div class="card-body">
                       <form action="/updateEquipo" method="POST">
-                           <input id="id" name="id" value="<%= equipo.id %>" hidden>
+                           <input id="codEquipo" name="codEquipo" value="<%= equipo.codEquipo %>" hidden>
                            <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre Equipo</label>
                             <input type="text" class="form-control" id="nombreEquipo" name="nombreEquipo" tabindex="1" value="<%= equipo.nombreEquipo %>">                        
@@ -45,6 +45,16 @@
                             <label for="nombre" class="form-label">Director Técnico</label>
                             <input type="text" class="form-control" id="nombreDT" name="nombreDT" tabindex="1" value="<%= equipo.nombreDT %>">                        
                           </div>  
+                          <div class="mb-3">
+                            <label for="deporte" class="form-label">Deporte</label>
+                            <select id="nombreDeporte" name="nombreDeporte" class="form-select" aria-label="Default select example" tabindex="2" required>
+                              <option selected value="<%= equipo.nombreDeporte %>"><%= equipo.nombreDeporte %></option>
+                              <% deporte.forEach((deporte)=>{ %>
+                                  <option value="<%= deporte.nombreDeporte %>"><%= deporte.nombreDeporte %></option>
+                              <% }) %>
+                              
+                          </select>
+                          </div> 
                           <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
                           <a href="/equipos" class="btn btn-secondary">Cancelar</a>
                       </form>      

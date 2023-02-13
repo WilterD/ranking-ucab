@@ -19,14 +19,9 @@
                     <div class="card-body">
                         <form action="/saveEstadios" method="POST">
                             <div class="mb-3">
-                                <label for="name" class="form-label">Código del Estadio</label>
-                                <input type="text" class="form-control" id="codEstadio" name="codEstadio" tabindex="1">
-                            </div>
-                            <div class="mb-3">
                                 <label for="name" class="form-label">Nombre del Estadio</label>
                                 <input type="text" class="form-control" id="nombreEstadio" name="nombreEstadio" tabindex="1">
                             </div>
-                           
                             <div class="mb-3">
                                 <label for="name" class="form-label">Ubicación</label>
                                 <input type="text" class="form-control" id="ubicacion" name="ubicacion" tabindex="1">
@@ -39,7 +34,6 @@
                                 <label for="nombre" class="form-label">Nombre de la Ciudad</label>
                                 <select id="nombreCiudad" name="nombreCiudad" class="form-select"
                                     aria-label="Default select example" tabindex="2" required>
-                                    
                                     <option value="" disabled selected>Seleccione una ciudad</option>
                                     <% ciudades.forEach((ciudad)=>{ %>
                                         <option value="<%= ciudad.nombre %>">
@@ -48,7 +42,6 @@
                                         <% }) %>
                                 </select>
                             </div>
-
                             <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
                             <a href="/estadios" class="btn btn-secondary">Cancelar</a>
                         </form>
@@ -70,5 +63,4 @@
         </section>
         <%- include('partials/scripts.ejs') %>
 </body>
-
 </html>

@@ -2,65 +2,9 @@ import { Router } from "express";
 const router = Router();
 import conexion from "../database/db.cjs";
 import mycrud from "../controllers/crud.cjs";
+// importar moment
+import moment from 'moment';
 
-router.get("/arbitros", (req, res) => {
-  conexion.query("SELECT * FROM arbitro", (error, resultados) => {
-    if (error) {
-      console.log(error);
-    } else {
-      res.render("arbitros.ejs", { resultados: resultados });
-    }
-  });
-});
-
-router.get("/crearArbitro", (req, res) => {
-  conexion.query("SELECT * FROM pais", (error, paises) => {
-    if (error) {
-      console.log(error);
-    } else {
-      res.render("crearArbitro.ejs", { paises: paises });
-    }
-  });
-});
-
-router.get("/editarArbitro/:codArbitro", (req, res) => {
-  const codArbitro = req.params.codArbitro;
-  conexion.query(
-    "SELECT * FROM arbitro WHERE codArbitro=?",
-    [codArbitro],
-    (error, arbitro) => {
-      if (error) {
-        throw error;
-      } else {
-        conexion.query("SELECT nombrePais FROM pais", (error, paises) => {
-          if (error) {
-            console.log(error);
-          } else {
-            res.render("editarArbitro.ejs", {
-              arbitro: arbitro[0],
-              paises: paises,
-            });
-          }
-        });
-      }
-    }
-  );
-});
-
-router.get("/deleteArbitro/:codArbitro", (req, res) => {
-  const codArbitro = req.params.codArbitro;
-  conexion.query(
-    "DELETE FROM arbitro WHERE codArbitro = ?",
-    [codArbitro],
-    (error, results) => {
-      if (error) {
-        console.log(error);
-      } else {
-        res.redirect("/arbitros");
-      }
-    }
-  );
-});
 
 router.get("/deleteEstadio/:codEstadio", (req, res) => {
   const codEstadio = req.params.codEstadio;
@@ -112,9 +56,20 @@ router.get("/editarEquipo/:codEquipo", (req, res) => {
       if (error) {
         throw error;
       } else {
-        res.render("editarEquipo.ejs", {
-          equipo: equipos[0],
-        });
+
+        conexion.query(
+          "SELECT * FROM deporte",(error, deporte) => {
+            if (error) {
+              throw error;
+            } else {
+              res.render("editarEquipo.ejs", {
+                equipo: equipos[0],deporte:deporte
+              });
+            }
+          }
+        );
+
+        
       }
     }
   );
@@ -377,7 +332,21 @@ router.get("/partidos", (req, res) => {
         if (error) {
           console.log(error);
         } else {
-          res.render("partidos.ejs", { partidos: partidos, juegan: juegan });
+          // formatear fecha del objeto partidos
+          
+          let fecha = partidos.map((partido) => {
+            // obtener los dias de la semana
+
+            let fecha = new Date(partido.fecha);
+            // dia lunes, martes, miercoles, jueves, viernes, sabado, domingo
+            let dia = fecha.getDate();
+            let mes = fecha.getMonth() + 1;
+            let anio = fecha.getFullYear();
+            let hora = fecha.getHours();
+            let minutos = fecha.getMinutes();
+            return `${dia}/${mes}/${anio} ${hora}:${minutos}`;
+          });
+          res.render("partidos.ejs", { partidos: partidos, juegan: juegan,fecha:fecha });
         }
       });
     }
@@ -401,16 +370,18 @@ router.get("/crearPartido", (req, res) => {
                 if (error) {
                   console.log(error);
                 } else {
-                  conexion.query("SELECT * FROM arbitro", (error, arbitros) => {
+                  conexion.query("SELECT * FROM deporte", (error, deporte) => {
                     if (error) {
                       console.log(error);
                     } else {
-                      res.render("crearPartido.ejs", {
-                        jornadas: jornadas,
-                        estadios: estadios,
-                        equipos: equipos,
-                        carrera: carrera,
-                        arbitros,
+                          res.render("crearPartido.ejs", {
+                            jornadas: jornadas,
+                            estadios: estadios,
+                            equipos: equipos,
+                            carrera: carrera,
+                            deporte:deporte
+                          });
+                        }
                       });
                     }
                   });
@@ -420,10 +391,8 @@ router.get("/crearPartido", (req, res) => {
           });
         }
       });
-    }
-  });
-});
-
+    });
+  
 router.get("/editarPartido/:codPartido", (req, res) => {
   const codPartido = req.params.codPartido;
   conexion.query(
@@ -855,6 +824,23 @@ router.get("/crearRankingIndividual", (req, res) => {
   });
 });
 
+router.get("/editarRankingRI/:id", (req, res) => {
+  const id = req.params.id;
+  conexion.query(
+    "SELECT * FROM rankini WHERE id=?",
+    [id],
+    (error, rankingRI) => {
+      if (error) {
+        throw error;
+      } else {
+        res.render("editarRankingRI.ejs", {
+          rankingRI: rankingRI[0],
+        });
+      }
+    }
+  );
+});
+
 router.get("/deleteRI/:id", (req, res) => {
   const id = req.params.id;
   conexion.query("DELETE FROM rankini WHERE id = ?", [id], (error, results) => {
@@ -888,5 +874,6 @@ router.post("/updateEliminatoria", mycrud.updateEliminatoria);
 router.post("/updateEstadio", mycrud.updateEstadio);
 router.post("/updateEstadisticasGenerales", mycrud.updateEstadisticasGenerales);
 router.post("/updateDeporte", mycrud.updateDeporte);
+router.post("/updateRI", mycrud.updateRI);
 
 export default router;

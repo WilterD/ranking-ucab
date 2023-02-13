@@ -1,6 +1,7 @@
 const conexion = require("../database/db.cjs");
 const Swal = require("sweetalert2");
 const bodyParser = require("body-parser");
+const moment = require('moment');
 
 exports.saveGrupo = (req, res) => {
   const letraGrupo = req.body.letraGrupo;
@@ -20,14 +21,14 @@ exports.saveGrupo = (req, res) => {
 };
 
 exports.savePartido = (req, res) => {
-  const fecha = req.body.fecha.slice(0, 19).replace("T", " ") + ":00"; //.toISOString().slice(0, 19).replace('T', ' ');
+  
+  const fecha = moment(req.body.fecha).format('YYYY-MM-DD HH:mm:ss');
+  console.log(fecha)
+  
   const codEstadio = req.body.codEstadio;
   const nombreEquipo1 = req.body.nombreEquipo1;
   const nombreEquipo2 = req.body.nombreEquipo2;
   
-  console.log(nombreEquipo1)
-  console.log(nombreEquipo2)
-
   conexion.query(
     "INSERT INTO partido SET ?",
     { fecha: fecha, codEstadio: codEstadio },
@@ -81,14 +82,14 @@ exports.saveEquipo = (req, res) => {
 };
 
 exports.updateEquipo = (req, res) => {
-  const id = req.body.id;
+  const codEquipo = req.body.codEquipo;
   const nombreDT = req.body.nombreDT;
   const nombreEquipo = req.body.nombreEquipo;
   const nombreDeporte = req.body.nombreDeporte;
 
   conexion.query(
-    "UPDATE equipos SET ? WHERE id = ?",
-    [{ nombreDT: nombreDT, nombreEquipo: nombreEquipo, nombreDeporte: nombreDeporte }, id],
+    "UPDATE equipos SET ? WHERE codEquipo = ?",
+    [{ nombreDT: nombreDT, nombreEquipo: nombreEquipo, nombreDeporte: nombreDeporte }, codEquipo],
     (error, results) => {
       if (error) {
         console.log(error);
@@ -394,7 +395,6 @@ exports.updateEstadisticasGenerales = (req, res) => {
 };
 
 exports.saveEstadios = (req, res) => {
-  const codEstadio = req.body.codEstadio;
   const ubicacion = req.body.ubicacion;
   const nombreEstadio = req.body.nombreEstadio;
   const capacidad = req.body.capacidad;
@@ -403,7 +403,6 @@ exports.saveEstadios = (req, res) => {
   conexion.query(
     "INSERT INTO estadio SET ?",
     {
-      codEstadio: codEstadio,
       ubicacion: ubicacion,
       nombreEstadio: nombreEstadio,
       capacidad: capacidad,
@@ -532,3 +531,23 @@ exports.saveRI = (req, res) => {
     );
 
   })};
+
+
+  exports.updateRI = (req, res) => {
+    const id = req.body.id;
+    const puntos = req.body.puntos;
+  
+    conexion.query(
+      "UPDATE rankini SET ? WHERE id = ?",
+      [{ puntos: puntos }, id],
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(400).json({ msg: "error" });
+        } else {
+          res.redirect("/rankingIndividual");
+        }
+      }
+    );
+  };
+  
