@@ -23,11 +23,10 @@ exports.saveGrupo = (req, res) => {
 exports.savePartido = (req, res) => {
   
   const fecha = moment(req.body.fecha).format('YYYY-MM-DD HH:mm:ss');
-  console.log(fecha)
-  
   const codEstadio = req.body.codEstadio;
   const nombreEquipo1 = req.body.nombreEquipo1;
   const nombreEquipo2 = req.body.nombreEquipo2;
+  const nombreDeporte = req.body.nombreDeporte;
   
   conexion.query(
     "INSERT INTO partido SET ?",
@@ -45,7 +44,18 @@ exports.savePartido = (req, res) => {
               console.log(error);
               res.status(400).json({ msg: "error" });
             } else {
-              res.redirect("/partidos");
+              conexion.query(
+                "INSERT INTO jornadas SET ?",
+                { fecha: fecha, nombreDeporte:nombreDeporte },
+                (error, results) => {
+                  if (error) {
+                    console.log(error);
+                    res.status(400).json({ msg: "error" });
+                  } else {
+                    res.redirect("/partidos");
+                  }
+                }
+              );
             }
           }
         );
@@ -136,7 +146,7 @@ exports.updateJugador = (req, res) => {
     "UPDATE jugador SET ? WHERE codJugador = ?",
     [
       {
-        nombreJugador: nombreJugador,
+        nombreJugador: nombreJugador,nombreEquipo:nombreEquipo,nombreCarrera:nombreCarrera
       },
       codJugador,
     ],

@@ -309,10 +309,10 @@ h2 {
   background-color: #9725f5;
   transition: .5s;
 }
-.card#hoteles{
+.card#partidos{
   background-color: darkcyan;
 }
-.card#hoteles:hover{
+.card#partidos:hover{
   background-color: rgb(14, 173, 173);
   transition: .5s;
 }
@@ -324,11 +324,11 @@ h2 {
   background-color: #b30d0d;
   transition: .5s;
 }
-.card#arbitros{
+.card#carreras{
   background-color: #FF8B13;
   transition: .5s;
 }
-.card#arbitros:hover{
+.card#carreras:hover{
   background-color: #ffac13;
 }
 

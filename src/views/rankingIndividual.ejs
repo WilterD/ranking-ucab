@@ -69,13 +69,14 @@
     let tabla = $('#miTabla').DataTable();
     tabla.order([3, 'desc']).draw();
     
-      //Función para filtrar los valores
-function filterTable(value) {
-  tabla.search(value).draw();
-}
-receivedVariable = "tenis"
+//Función para filtrar los valores
+// function filterTable(value) {
+//   tabla.search(value).draw();
+// }
+// receivedVariable = "tenis"
 //Llamamos a la función y le pasamos la variable recibida
-filterTable(receivedVariable);
+// filterTable(receivedVariable);
+// fin de filtrar valores
 
 // $('.dataTables_filter').hide(); // ocultar el buscador
 }); // ordernar tabla de forma descendente

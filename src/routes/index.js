@@ -141,15 +141,35 @@ router.get("/editarJugador/:codJugador", (req, res) => {
   conexion.query(
     "SELECT * FROM jugador WHERE codJugador=?",
     [codJugador],
-    (error, results) => {
+    (error, jugador) => {
       if (error) {
         throw error;
       } else {
-        res.render("editarJugador.ejs", { name: results[0] });
+        conexion.query(
+                "SELECT * FROM carreras",
+                (error, carrera) => {
+                  if (error) {
+                    throw error;
+                  } else {
+                    conexion.query(
+                      "SELECT * FROM equipos",
+                      (error, equipo) => {
+                        if (error) {
+                          throw error;
+                        } else {
+                          res.render("editarJugador.ejs", { jugador: jugador[0],carrera:carrera,equipo:equipo });
+                        }
+                      }
+                    );
+                  }
+                }
+              );
+            }
+          }
+        );
       }
-    }
-  );
-});
+    );
+   
 
 router.get("/deleteJugador/:codJugador", (req, res) => {
   const codJugador = req.params.codJugador;
@@ -300,15 +320,37 @@ router.get("/", (req, res) => {
                         if (error) {
                           console.log(error);
                         } else {
-                          res.render("dashboard.ejs", {
-                            cantidadDeportes: deportes[0].cantidadDeportes,
-                            cantidadEquipos:
-                              resultadosEquipos[0].cantidadEquipos,
-                            cantidadJugadores:
-                              resultadosJugadores[0].cantidadJugadores,
-                            cantidadEstadios:
-                              resultadosEstadios[0].cantidadEstadios,
-                          });
+                          conexion.query(
+                            "SELECT COUNT(*) AS cantidadPartidos FROM partido",
+                            (error, resultadosPartidos) => {
+                              if (error) {
+                                console.log(error);
+                              } else {
+                                conexion.query(
+                                  "SELECT COUNT(*) AS cantidadCarreras FROM carreras",
+                                  (error, resultadosCarreras) => {
+                                    if (error) {
+                                      console.log(error);
+                                    } else {
+                                      res.render("dashboard.ejs", {
+                                        cantidadDeportes: deportes[0].cantidadDeportes,
+                                        cantidadEquipos:
+                                          resultadosEquipos[0].cantidadEquipos,
+                                        cantidadJugadores:
+                                          resultadosJugadores[0].cantidadJugadores,
+                                        cantidadEstadios:
+                                          resultadosEstadios[0].cantidadEstadios,
+                                          cantidadPartidos:
+                                          resultadosPartidos[0].cantidadPartidos,
+                                          cantidadCarreras:
+                                          resultadosCarreras[0].cantidadCarreras,
+                                      });
+                                    }
+                                  }
+                                );
+                              }
+                            }
+                          );
                         }
                       }
                     );
@@ -737,7 +779,24 @@ router.get("/jornadas", (req, res) => {
     if (error) {
       console.log(error);
     } else {
-      res.render("jornadas.ejs", { jornadas: jornadas }); //render muestra el archivo ejs
+      conexion.query("SELECT * FROM deporte", (error, deporte) => {
+        if (error) {
+          console.log(error);
+        } else {
+          // formatear fecha del objeto partidos
+          let fecha = jornadas.map((jornadas) => {
+            // obtener los dias de la semana
+            let fecha = new Date(jornadas.fecha);
+            let dia = fecha.getDate();
+            let mes = fecha.getMonth() + 1;
+            let anio = fecha.getFullYear();
+            let hora = fecha.getHours();
+            let minutos = fecha.getMinutes();
+            return `${dia}/${mes}/${anio} ${hora}:${minutos}`;
+          });
+          res.render("jornadas.ejs", { jornadas: jornadas,fecha:fecha,deporte:deporte }); //render muestra el archivo ejs
+        }
+      });
     }
   });
 });
