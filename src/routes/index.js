@@ -416,12 +416,19 @@ router.get("/crearPartido", (req, res) => {
                     if (error) {
                       console.log(error);
                     } else {
-                          res.render("crearPartido.ejs", {
-                            jornadas: jornadas,
-                            estadios: estadios,
-                            equipos: equipos,
-                            carrera: carrera,
-                            deporte:deporte
+                      conexion.query("SELECT * FROM jugador", (error, jugadores) => {
+                        if (error) {
+                          console.log(error);
+                        } else {
+                              res.render("crearPartido.ejs", {
+                                jornadas: jornadas,
+                                estadios: estadios,
+                                equipos: equipos,
+                                carrera: carrera,
+                                deporte:deporte,
+                                jugadores:jugadores,
+                              });
+                            }
                           });
                         }
                       });
@@ -537,11 +544,12 @@ router.get("/crearEliminatoria", (req, res) => {
   });
 });
 
-router.get("/deleteEliminatoria/:nombreEquipo", (req, res) => {
-  const nombreEquipo = req.params.nombreEquipo;
+router.get("/deleteEliminatoria/:codEquipo", (req, res) => {
+  const codEquipo = req.params.codEquipo;
+  console.log(codEquipo)
   conexion.query(
-    "DELETE FROM eliminatorias WHERE nombreEquipo = ?",
-    [nombreEquipo],
+    "DELETE FROM eliminatorias WHERE codEquipo = ?",
+    [codEquipo],
     (error, results) => {
       if (error) {
         console.log(error);
@@ -561,20 +569,15 @@ router.get("/editarEliminatoria/:codEquipo", (req, res) => {
       if (error) {
         throw error;
       } else {
-        conexion.query("SELECT * FROM equipos", (error, equipos) => {
-          if (error) {
-            console.log(error);
-          } else {
+        
             res.render("editarEliminatoria.ejs", {
-              eliminatoria: eliminatoria[0],
-              equipos: equipos,
+              eliminatoria: eliminatoria[0]
             });
           }
         });
-      }
-    }
-  );
-});
+      })
+
+    
 
 router.get("/crearEIndividuales", (req, res) => {
   conexion.query(
@@ -911,6 +914,60 @@ router.get("/deleteRI/:id", (req, res) => {
   });
 });
 
+router.get("/rankingEquipos", (req, res) => {
+  conexion.query("SELECT * FROM rankinge", (error, rankinge) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.render("rankingEquipos.ejs", { rankinge: rankinge }); //render muestra el archivo ejs
+    }
+  });
+});
+
+router.get("/crearRankingEquipos", (req, res) => {
+  conexion.query("SELECT * FROM equipos", (error, equipos) => {
+    if (error) {
+      console.log(error);
+    } else {
+      conexion.query("SELECT * FROM deporte", (error, deportes) => {
+        if (error) {
+          console.log(error);
+        } else {
+          res.render("crearRankingEquipos.ejs", { equipos: equipos,deportes:deportes }); 
+        }
+      });
+    }
+  });
+});
+
+router.get("/editarRankingRE/:id", (req, res) => {
+  const id = req.params.id;
+  conexion.query(
+    "SELECT * FROM rankinge WHERE id=?",
+    [id],
+    (error, rankingRE) => {
+      if (error) {
+        throw error;
+      } else {
+        res.render("editarRankingRE.ejs", {
+          rankingRE: rankingRE[0],
+        });
+      }
+    }
+  );
+});
+
+router.get("/deleteRE/:id", (req, res) => {
+  const id = req.params.id;
+  conexion.query("DELETE FROM rankinge WHERE id = ?", [id], (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.redirect("/rankingEquipos");
+    }
+  });
+});
+
 // Guardar registros
 router.post("/saveJugador", mycrud.saveJugador);
 router.post("/saveEquipo", mycrud.saveEquipo);
@@ -924,6 +981,7 @@ router.post("/saveEstadios", mycrud.saveEstadios);
 router.post("/saveJornada", mycrud.saveJornada);
 router.post("/saveDeporte", mycrud.saveDeporte);
 router.post("/saveRI", mycrud.saveRI);
+router.post("/saveRE", mycrud.saveRE);
 
 // actualizar registros
 router.post("/updateJugador", mycrud.updateJugador);
@@ -934,5 +992,6 @@ router.post("/updateEstadio", mycrud.updateEstadio);
 router.post("/updateEstadisticasGenerales", mycrud.updateEstadisticasGenerales);
 router.post("/updateDeporte", mycrud.updateDeporte);
 router.post("/updateRI", mycrud.updateRI);
+router.post("/updateRE", mycrud.updateRE);
 
 export default router;

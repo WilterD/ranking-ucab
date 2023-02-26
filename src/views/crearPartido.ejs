@@ -35,16 +35,20 @@
                                 
                                 </select>
                             </div>
-
-                        <label for="codEstadio" class="form-label">Estadio</label>
+                            <div class="mb-3">
+                            <label for="codEstadio" class="form-label">Estadio</label>
                         <select id="codEstadio" name="codEstadio" class="form-select" aria-label="Default select example" tabindex="2" required>
                             <option disabled selected>Seleccione un estadio</option>
                             <% estadios.forEach((estadio)=>{ %>
                                 <option value="<%= estadio.codEstadio %>"><%= estadio.nombreEstadio %></option>
                             <% }) %>
                         </select>
+                      </div>
 
-                        <label for="codEquipo1" class="form-label">Nombre de Equipo 1</label>
+                      
+
+                      <div class="mb-3">
+                        <label for="codEquipo1" class="form-label">Equipo Local</label>
                         <select id="codEquipo1" name="nombreEquipo1" class="form-select" aria-label="Default select example" tabindex="2" required>
                             <option disabled selected>Seleccione un equipo</option>
                             <% equipos.forEach((equipo)=>{ %>
@@ -53,14 +57,16 @@
                             </option>
                             <% }) %>
                         </select>
-                        <label for="codEquipo2" class="form-label">Nombre de Equipo 2</label>
+                      </div>
+                      <div class="mb-3">
+                        <label for="codEquipo2" class="form-label">Equipo Visitante</label>
                         <select id="codEquipo2" name="nombreEquipo2" class="form-select" aria-label="Default select example" tabindex="2" required>
                             <option disabled selected>Seleccione un equipo</option>
                             <% equipos.forEach((equipo)=>{ %>
                                 <option value="<%= equipo.nombreEquipo %>"><%= equipo.nombreEquipo %></option>
                             <% }) %>
                         </select>
-                        </select>
+                      </div>
                        
                                
                         <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>

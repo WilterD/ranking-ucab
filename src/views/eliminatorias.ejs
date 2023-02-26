@@ -46,8 +46,9 @@
                     <td><%= elim.diferencia_goles%></td>
                     <td><%= elim.puntos%></td>
                     <td>
-                      <a href="/editarEliminatoria/<%= elim.nombreEquipo %>" class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>
-                      <a onclick="confirmar('<%= elim.nombreEquipo %>','deleteEliminatoria')" class="btn btn-outline-danger"><i class='bx bxs-trash'></i></a>
+                      <a href="/editarEliminatoria/<%= elim.codEquipo %>" class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>
+                      <a onclick="confirmar('<%= elim.codEquipo %>','deleteEliminatoria')" class="btn btn-outline-danger"><i
+                        class='bx bxs-trash'></i></a>
                     </td>
                 </tr>                                   
              <% }) %>

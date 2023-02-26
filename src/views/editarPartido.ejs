@@ -31,13 +31,13 @@
                             <option value="<%= estadio.codEstadio %>"><%= estadio.codEstadio %> - <%= estadio.nombreEstadio %></option>
                         <% }) %>
                     </select>
-                    <label for="codEquipo1" class="form-label">Nombre de Equipo 1</label>
+                    <label for="codEquipo1" class="form-label">Equipo Local</label>
                     <select id="codEquipo1" name="codEquipo1" class="form-select" aria-label="Default select example" tabindex="2" required>
                         <% equipos.forEach((equipo)=>{ %>
                             <option value="<%= equipo.codEquipo %>"><%= equipo.codEquipo %> </option>
                         <% }) %>
                     </select>
-                    <label for="codEquipo2" class="form-label">Nombre de Equipo 2</label>
+                    <label for="codEquipo2" class="form-label">Equipo Visitante</label>
                     <select id="codEquipo2" name="codEquipo2" class="form-select" aria-label="Default select example" tabindex="2" required selected="">
                         <% equipos.forEach((equipo)=>{ %>
                             <option value="<%= equipo.codEquipo %>"><%= equipo.codEquipo %> </option>

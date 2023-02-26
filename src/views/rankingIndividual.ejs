@@ -3,7 +3,6 @@
 <head>
   <%- include('partials/head.ejs') %>
     <title>Ranking Individual</title>
-    
 </head>
 <body>
    <%- include('partials/navigation.ejs') %>
@@ -21,6 +20,7 @@
           <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
             <thead>
               <tr class="bg-primary text-white">
+                <th scope="col">#</th>
                 <th scope="col">Nombre Jugador</th>
                 <th scope="col">Carrera / Unidad</th>
                 <th scope="col">Deporte</th>
@@ -29,8 +29,10 @@
               </tr>
             </thead>
             <tbody>
+              <% var count %>
               <% rankini.forEach((rankini)=>{ %>
                 <tr>  
+                  <td> </td>
                     <td><%= rankini.nombreJugador %></td>  
                     <td><%= rankini.nombreCarrera %></td>  
                     <td><%= rankini.nombreDeporte %></td>  
@@ -62,12 +64,44 @@
       </div>
     </div>
   </section>
-  
   <%- include('partials/scripts.ejs') %>
   <script>
-    $(document).ready(function() {
-    let tabla = $('#miTabla').DataTable();
-    tabla.order([3, 'desc']).draw();
+   $(document).ready(function() {
+    if ($.fn.DataTable.isDataTable('#miTabla')) {
+      $('#miTabla').DataTable().destroy();
+}
+  var tabla = $('#miTabla').DataTable({
+    columnDefs: [{
+      orderable: false,
+      targets: 5 // deshabilitar ordenamiento en la columna "Acciones"
+    }],
+    order: [[ 4, "desc" ]], // ordenar por la columna "Puntos" de forma descendente
+    createdRow: function(row, data, index) {
+      // Agregar un número de fila que indica la posición original de cada registro
+      $('td', row).eq(0).text(index + 1);
+      
+      // Agregar la posición de cada registro en la tabla
+      var posicion;
+      switch(index) {
+        case 0:
+          posicion = '1er lugar';
+          break;
+        case 1:
+          posicion = '2do lugar';
+          break;
+        case 2:
+          posicion = '3er lugar';
+          break;
+        default:
+          posicion = (index + 1) + 'º lugar';
+      }
+      $('td', row).eq(6).text(posicion);
+    }
+  });
+});
+
+
+    // tabla.order([4, 'desc']).draw();
     
 //Función para filtrar los valores
 // function filterTable(value) {
@@ -79,7 +113,8 @@
 // fin de filtrar valores
 
 // $('.dataTables_filter').hide(); // ocultar el buscador
-}); // ordernar tabla de forma descendente
+
+ // ordernar tabla de forma descendente
   </script>
 </body>
 </html>

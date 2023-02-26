@@ -233,14 +233,14 @@ exports.saveEliminatoria = (req, res) => {
 
 exports.updateEliminatoria = (req, res) => {
   const nombreEquipo = req.body.nombreEquipo;
+  const juegos_jugados = req.body.juegos_jugados;
   const juegos_ganados = req.body.juegos_ganados;
+  const juegos_empate = req.body.juegos_empate;
   const juegos_perdidos = req.body.juegos_perdidos;
   const goles_a_favor = req.body.goles_a_favor;
   const goles_en_contra = req.body.goles_en_contra;
-  const juegos_empate = req.body.juegos_empate;
   const diferencia_goles = req.body.diferencia_goles;
   const puntos = req.body.puntos;
-  const juegos_jugados = req.body.juegos_jugados;
 
   conexion.query(
     "UPDATE eliminatorias SET ? WHERE nombreEquipo = ?",
@@ -478,10 +478,11 @@ exports.saveJornada = (req, res) => {
 
 exports.saveDeporte = (req, res) => {
   const nombreDeporte = req.body.nombreDeporte;
+  const tipoDeporte = req.body.tipoDeporte;
 
   conexion.query(
     "INSERT INTO deporte SET ?",
-    { nombreDeporte: nombreDeporte },
+    { nombreDeporte: nombreDeporte,tipoDeporte:tipoDeporte },
     (error, results) => {
       if (error) {
         console.log(error);
@@ -495,13 +496,15 @@ exports.saveDeporte = (req, res) => {
 
 exports.updateDeporte = (req, res) => {
   const nombreDeporte = req.body.nombreDeporte;
+  const tipoDeporte = req.body.tipoDeporte;
   const id = req.body.id;
   
   conexion.query(
     "UPDATE deporte SET ? WHERE id = ?",
     [
       {
-        nombreDeporte: nombreDeporte
+        nombreDeporte: nombreDeporte,
+        tipoDeporte: tipoDeporte
       },
       id,
     ],
@@ -541,8 +544,6 @@ exports.saveRI = (req, res) => {
     );
 
   })};
-
-
   exports.updateRI = (req, res) => {
     const id = req.body.id;
     const puntos = req.body.puntos;
@@ -560,4 +561,47 @@ exports.saveRI = (req, res) => {
       }
     );
   };
+
+  exports.saveRE = (req, res) => {
+    const nombreEquipo = req.body.nombreEquipo;
+    const puntos = req.body.puntos;
+    const nombreDeporte = req.body.nombreDeporte;
+    
+    conexion.query(
+        "INSERT INTO rankinge SET ?",
+        {
+          nombreEquipo: nombreEquipo,
+          puntos: puntos,
+          nombreDeporte:nombreDeporte
+        },
+        (error, results) => {
+          if (error) {
+            console.log(error);
+            res.status(400).json({ msg: "error" });
+          } else {
+            res.redirect("/rankingEquipos");
+          }
+        }
+      );
+  }
+  
+  
+  
+    exports.updateRE = (req, res) => {
+      const id = req.body.id;
+      const puntos = req.body.puntos;
+    
+      conexion.query(
+        "UPDATE rankinge SET ? WHERE id = ?",
+        [{ puntos: puntos }, id],
+        (error, results) => {
+          if (error) {
+            console.log(error);
+            res.status(400).json({ msg: "error" });
+          } else {
+            res.redirect("/rankingEquipos");
+          }
+        }
+      );
+    };
   
