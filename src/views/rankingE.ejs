@@ -1,0 +1,94 @@
+<html lang="es">
+<head>
+    <%- include('partials/head.ejs') %>
+        <title>Home - Wolf League</title>
+</head>
+
+<body>
+    
+    <%- include('partials/navHome.ejs') %>
+    <div class="preloader"></div>
+    <div class="col-xs-12 col-md-10 col-lg-11 mx-auto mt-3">
+        <div class="row">
+            <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
+                <thead>
+                    <tr class="bg-primary text-white">
+                        <th scope="col">#</th>
+                        <th scope="col">Nombre Equipo</th>
+                        <th scope="col">Deporte</th>
+                        <th scope="col">Puntos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% var count=0 %>
+                        <% rankinge.forEach((rankinge)=>{ %>
+                            <tr>
+                                <td>
+                                    <%= count++ %>
+                                </td>
+                                <td>
+                                    <%= rankinge.nombreEquipo %>
+                                </td>
+                                <td>
+                                    <%= rankinge.nombreDeporte %>
+                                </td>
+                                <td>
+                                    <%= rankinge.puntos %>
+                                </td>
+                            </tr>
+                            <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <%- include('partials/scripts2.ejs') %>
+        <script>
+            $(document).ready(function () {
+                if ($.fn.DataTable.isDataTable('#miTabla')) { // corregir poq se ve en ingles
+                    $('#miTabla').DataTable().destroy();
+                }
+                let tabla = $('#miTabla').DataTable({
+                    order: [[3, "desc"]], // ordenar por la columna "Puntos" de forma descendente
+                    pageLength: 10,
+                    lengthMenu: [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, 'Todos']],
+                    "language": {
+                        "lengthMenu": "Mostrar _MENU_ ",
+                        "zeroRecords": "No se encontraron registros",
+                        "info": "",
+                        "infoEmpty": "No hay registros disponibles",
+                        "infoFiltered": "",
+                        "search": "Buscar:",
+                        "paginate": {
+                            "first": "Primero",
+                            "last": "Último",
+                            "next": "Siguiente",
+                            "previous": "Anterior"
+
+                        }
+                    }
+                })
+                // mostrar variable de nombreDeporte evniada desde el controlador
+                let receivedVariable = "<%= deporte.nombreDeporte %>"; // recibimos la variable del controlador
+            //Función para filtrar los valores
+            function filterTable(receivedVariable) {
+              tabla.search(receivedVariable).draw();
+            }
+            // Llamamos a la función y le pasamos la variable recibida
+            filterTable(receivedVariable);
+            // fin de filtrar valores
+             $('.dataTables_filter').hide(); // ocultar el buscador
+            });
+
+           
+
+
+            
+        </script>
+
+        <!-- Asegúrate de agregar los archivos de JavaScript necesarios de Bootstrap a tu HTML -->
+       
+
+
+</body>
+
+</html>

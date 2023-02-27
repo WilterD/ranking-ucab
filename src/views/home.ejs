@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('partials/head.ejs') %>
+        <title>Home - Wolf League</title>
+</head>
+
+<body>
+    <%- include('partials/navHome.ejs') %>
+
+    <!-- Asegúrate de agregar los archivos de JavaScript necesarios de Bootstrap a tu HTML -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"
+        integrity="sha512-KYU6OC+0xRkAlwksI2FVJyAcnU/7VX9W+u3AXVUZfh6UZsVsfzLbPGowpVl23bjlEGhPkFgC+nD52pwHr00rOA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.min.js"
+        integrity="sha512-mzSZO+5D5kmvX9WdCfZGKFgx0ekiq+5grN+5N5yv3zNZ5W8n+Y5Yccj/soStQ9XkMNhR4QyFrhq4y4ktJm27gA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        // Agrega un evento de click al botón del navbar-toggler para que se abra y cierre el navbar cuando se hace clic en él
+        const navbarToggler = document.querySelector('.navbar-toggler');
+        const navbarMenu = document.querySelector('.navbar-collapse');
+
+        navbarToggler.addEventListener('click', () => {
+            navbarMenu.classList.toggle('show');
+        });
+
+
+    </script>
+
+
+
+</body>
+
+</html>
