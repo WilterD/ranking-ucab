@@ -1,0 +1,136 @@
+body{
+    background-color: #E4E9F7;
+    font-size: 16px;
+    color: #333;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+}
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+a:link {
+    text-decoration: none;
+  }
+  a:visited {
+    text-decoration: none;
+  }
+  a:link, a:visited {
+    text-decoration: none;
+  }
+  
+  
+p#tituloLogo{
+    position: absolute; 
+    bottom: 10px; 
+    left: 200px;
+  }
+  @media (max-width: 991px) {
+    p#tituloLogo{
+      position: relative;
+      bottom: -15px; 
+      left: 0;
+      display: inline;
+    } 
+  }
+  
+  /*Sub menu Home*/
+  
+  /* Estilo para el submenú desplegable de Ranking */
+  .dropdown-menu {
+    display: none; /* Oculta el submenú por defecto */
+  }
+  
+  /* Estilo para mostrar el submenú cuando se hace clic en el enlace "Ranking" */
+  .nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    
+  }
+  
+  /* Estilo para ocultar el submenú cuando se cierra */
+  .dropdown-menu {
+    position: absolute;
+  }
+  
+  /* Ajuste del ancho del submenú desplegable */
+  .dropdown-menu {
+    width: auto;
+  }
+  
+  /*Preloader*/
+  .preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: 9999;
+  }
+  .preloader.hidden {
+    display: none;
+  }
+
+  /*Estilos Swipers Slider*/
+  
+  .slide-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    z-index: 1;
+  }
+  
+  .slide-content h2 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .slide-content p {
+    font-size: 1.5rem;
+  }
+  
+  .swiper-slide img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+
+    max-height: 80vh; /* Cambiar el valor según se desee */
+    object-fit: cover;
+    object-position: center;
+  }
+  
+  /* CSS */
+.swiper-container {
+  position: absolute;
+  top: 80px; /* Cambiar el valor según se desee */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+
+/* CSS */
+.swiper-button-prev,
+.swiper-button-next {
+  color: #ffffff; /* Cambiar el color de las flechas */
+  font-size: 24px; /* Cambiar el tamaño de las flechas */
+  opacity: 0.5; /* Cambiar la opacidad de las flechas */
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  opacity: 1; /* Cambiar la opacidad de las flechas al pasar el ratón por encima */
+}
+
+

@@ -268,9 +268,6 @@ body{
 
 /*Dashboard*/
 
-body {
-  background-color: #f5f5f5;
-}
 
 h1 {
   text-align: center;
@@ -365,56 +362,5 @@ a:visited {
 a:link, a:visited {
   text-decoration: none;
 }
-
-p#tituloLogo{
-  position: absolute; 
-  bottom: 10px; 
-  left: 200px;
-}
-@media (max-width: 991px) {
-  p#tituloLogo{
-    position: relative;
-    bottom: -15px; 
-    left: 0;
-    display: inline;
-  } 
-}
-
-/*Sub menu Home*/
-
-/* Estilo para el submenú desplegable de Ranking */
-.dropdown-menu {
-  display: none; /* Oculta el submenú por defecto */
-}
-
-/* Estilo para mostrar el submenú cuando se hace clic en el enlace "Ranking" */
-.nav-item.dropdown:hover .dropdown-menu {
-  display: block;
-}
-
-/* Estilo para ocultar el submenú cuando se cierra */
-.dropdown-menu {
-  position: absolute;
-}
-
-/* Ajuste del ancho del submenú desplegable */
-.dropdown-menu {
-  width: auto;
-}
-
-/*Preloader*/
-.preloader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #fff;
-  z-index: 9999;
-}
-.preloader.hidden {
-  display: none;
-}
-
 
 
