@@ -31,28 +31,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% var count %>
-                                    <% rankinge.forEach((rankinge)=>{ %>
-                                        <tr>
-                                            <td>  <%= count++ %> </td>
-                                            <td>
-                                                <%= rankinge.nombreEquipo %>
-                                            </td>
-                                            <td>
-                                                <%= rankinge.nombreDeporte %>
-                                            </td>
-                                            <td>
-                                                <%= rankinge.puntos %>
-                                            </td>
-                                            <td>
-                                                <a href="/editarRankingRE/<%= rankinge.id %>"
-                                                    class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>
+                                <% rankinge.forEach((rankinge)=>{ %>
+                                    <tr>
+                                        <td> </td>
+                                        <td>
+                                            <%= rankinge.nombreEquipo %>
+                                        </td>
+                                        <td>
+                                            <%= rankinge.nombreDeporte %>
+                                        </td>
+                                        <td>
+                                            <%= rankinge.puntos %>
+                                        </td>
+                                        <td>
+                                            <a href="/editarRankingRE/<%= rankinge.id %>" class="btn btn-outline-info">
+                                                <i class='bx bxs-pencil fs-5'></i></a>
 
-                                                <a onclick="confirmar('<%= rankinge.id %>','deleteRE')"
-                                                    class="btn btn-outline-danger"><i class='bx bxs-trash'></i></a>
-                                            </td>
-                                        </tr>
-                                        <% }) %>
+                                            <a onclick="confirmar('<%= rankinge.id %>','deleteRE')"
+                                                class="btn btn-outline-danger"><i class='bx bxs-trash'></i></a>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
                             </tbody>
                         </table>
                     </div>
@@ -75,17 +74,37 @@
         <%- include('partials/scripts.ejs') %>
             <script>
                 $(document).ready(function () {
-                    if ($.fn.DataTable.isDataTable('#miTabla')) { // corregir poq se ve en ingles
+                    if ($.fn.DataTable.isDataTable('#miTabla')) {
                         $('#miTabla').DataTable().destroy();
                     }
                     var tabla = $('#miTabla').DataTable({
+                        "order": [[3, "desc"]], // Ordenar por la columna de Puntos en orden descendente
+                        "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                            var index = iDisplayIndex + 1; // Obtener el índice de la fila después de filtrar y sumar 1
+                            $('td:eq(0)', nRow).html(index); // Agregar el número de posición en la primera columna
+                            return nRow;
+                        },
                         columnDefs: [{
                             orderable: false,
-                            targets: 4 // deshabilitar ordenamiento en la columna "Acciones"
+                            targets: [0,1,2,4], 
                         }],
-                        order: [[3, "desc"]] // ordenar por la columna "Puntos" de forma descendente
-                    })
+                        "language": {
+                            "lengthMenu": "Mostrar _MENU_ ",
+                            "zeroRecords": "No se encontraron registros",
+                            "info": "",
+                            "infoEmpty": "No hay registros disponibles",
+                            "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                            "search": "Buscar:",
+                            "paginate": {
+                                "first": "Primero",
+                                "last": "Último",
+                                "next": "Siguiente",
+                                "previous": "Anterior"
+                            }
+                        }
+                    });
                 });
+
             </script>
 </body>
 

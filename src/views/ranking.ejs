@@ -22,26 +22,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% var count=1 %>
-                            <% ranking.forEach((ranking)=>{ %>
-                                <tr>
-                                    <td>
+                        <% ranking.forEach((ranking)=>{ %>
+                            <tr>
+                                <td>
 
-                                    </td>
-                                    <td>
-                                        <%= ranking.nombreJugador %>
-                                    </td>
-                                    <td>
-                                        <%= ranking.nombreCarrera %>
-                                    </td>
-                                    <td>
-                                        <%= ranking.nombreDeporte %>
-                                    </td>
-                                    <td>
-                                        <%= ranking.puntos %>
-                                    </td>
-                                </tr>
-                                <% }) %>
+                                </td>
+                                <td>
+                                    <%= ranking.nombreJugador %>
+                                </td>
+                                <td>
+                                    <%= ranking.nombreCarrera %>
+                                </td>
+                                <td>
+                                    <%= ranking.nombreDeporte %>
+                                </td>
+                                <td>
+                                    <%= ranking.puntos %>
+                                </td>
+                            </tr>
+                            <% }) %>
                     </tbody>
                 </table>
             </div>
@@ -59,9 +58,12 @@
                             $('td:eq(0)', nRow).html(index); // Agregar el número de posición en la primera columna
                             return nRow;
                         },
-                        // order: [[4, "desc"]], // ordenar por la columna "Puntos" de forma descendente
                         pageLength: 10,
                         lengthMenu: [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, 'Todos']],
+                        columnDefs: [{
+                            orderable: false,
+                            targets: [0, 1, 2, 3] // deshabilitar ordenamiento en la columna "Acciones"
+                        }],
                         "language": {
                             "lengthMenu": "Mostrar _MENU_ ",
                             "zeroRecords": "No se encontraron registros",

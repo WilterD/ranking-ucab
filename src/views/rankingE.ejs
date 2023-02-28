@@ -20,11 +20,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% var count=0 %>
                         <% rankinge.forEach((rankinge)=>{ %>
                             <tr>
                                 <td>
-                                    <%= count++ %>
                                 </td>
                                 <td>
                                     <%= rankinge.nombreEquipo %>
@@ -48,7 +46,12 @@
                     $('#miTabla').DataTable().destroy();
                 }
                 let tabla = $('#miTabla').DataTable({
-                    order: [[3, "desc"]], // ordenar por la columna "Puntos" de forma descendente
+                    "order": [[3, "desc"]], // Ordenar por la columna de Puntos en orden descendente
+                        "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                            var index = iDisplayIndex + 1; // Obtener el índice de la fila después de filtrar y sumar 1
+                            $('td:eq(0)', nRow).html(index); // Agregar el número de posición en la primera columna
+                            return nRow;
+                        },
                     pageLength: 10,
                     lengthMenu: [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, 'Todos']],
                     "language": {
