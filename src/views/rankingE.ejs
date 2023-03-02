@@ -54,6 +54,10 @@
                         },
                     pageLength: 10,
                     lengthMenu: [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, 'Todos']],
+                    columnDefs: [{
+                            orderable: false,
+                            targets: [0, 1, 2] // deshabilitar ordenamiento en la columna "Acciones"
+                        }],
                     "language": {
                         "lengthMenu": "Mostrar _MENU_ ",
                         "zeroRecords": "No se encontraron registros",

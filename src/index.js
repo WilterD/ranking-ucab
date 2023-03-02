@@ -2,12 +2,26 @@ import express from 'express';
 import {dirname, join} from 'path'; 
 import {fileURLToPath} from 'url'; 
 import bodyParser from 'body-parser';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import indexRoutes from './routes/index.js';
+import session from 'express-session'
 
 
 const app = express(); // referenciar a express
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true
+}));
+
 
 
 

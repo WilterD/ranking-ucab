@@ -70,15 +70,16 @@ exports.savePartido = (req, res) => {
 
 exports.saveEquipo = (req, res) => {
   const nombreEquipo = req.body.nombreEquipo;
-  const nombreDT = req.body.nombreDT;
   const nombreDeporte = req.body.nombreDeporte;
+
+  // const imagen = req.file.buffer;
 
   conexion.query(
     "INSERT INTO equipos SET ?",
     {
       nombreEquipo: nombreEquipo,
-      nombreDT: nombreDT,
-      nombreDeporte: nombreDeporte
+      nombreDeporte: nombreDeporte,
+      // imagen: imagen,
     },
     (error, results) => {
       if (error) {
@@ -93,13 +94,12 @@ exports.saveEquipo = (req, res) => {
 
 exports.updateEquipo = (req, res) => {
   const codEquipo = req.body.codEquipo;
-  const nombreDT = req.body.nombreDT;
   const nombreEquipo = req.body.nombreEquipo;
   const nombreDeporte = req.body.nombreDeporte;
 
   conexion.query(
     "UPDATE equipos SET ? WHERE codEquipo = ?",
-    [{ nombreDT: nombreDT, nombreEquipo: nombreEquipo, nombreDeporte: nombreDeporte }, codEquipo],
+    [{nombreEquipo: nombreEquipo, nombreDeporte: nombreDeporte }, codEquipo],
     (error, results) => {
       if (error) {
         console.log(error);
@@ -458,8 +458,8 @@ exports.updateEstadio = (req, res) => {
 };
 
 exports.saveJornada = (req, res) => {
-  const fecha = req.body.fecha;
-  console.log(fecha);
+  const fecha = moment(req.body.fecha).format('YYYY-MM-DD HH:mm:ss');
+  
 
   conexion.query(
     "INSERT INTO jornadas SET ?",
@@ -605,3 +605,35 @@ exports.saveRI = (req, res) => {
       );
     };
   
+
+
+    exports.saveResultados = (req, res) => {
+      const nombreDeporte = req.body.nombreDeporte;
+      const fecha = moment(req.body.fecha).format('YYYY-MM-DD');
+      const jornada = req.body.jornada;
+      const nombreEquipo1 = req.body.nombreEquipo1;
+      const puntos1 = req.body.puntos1;
+      const nombreEquipo2 = req.body.nombreEquipo2;
+      const puntos2 = req.body.puntos2;
+      
+      conexion.query(
+          "INSERT INTO resultados SET ?",
+          {
+            nombreDeporte: nombreDeporte,
+            fecha: fecha,
+            jornada:jornada,
+            nombreEquipo1:nombreEquipo1,
+            puntos1:puntos1,
+            nombreEquipo2:nombreEquipo2,
+            puntos2:puntos2,
+          },
+          (error, results) => {
+            if (error) {
+              console.log(error);
+              res.status(400).json({ msg: "error" });
+            } else {
+              res.redirect("/resultados");
+            }
+          }
+        );
+    }

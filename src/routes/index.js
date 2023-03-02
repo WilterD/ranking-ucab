@@ -4,6 +4,7 @@ import conexion from "../database/db.cjs";
 import mycrud from "../controllers/crud.cjs";
 // importar moment
 import moment from "moment";
+import multer from 'multer';
 
 router.get("/deleteEstadio/:codEstadio", (req, res) => {
   const codEstadio = req.params.codEstadio;
@@ -990,7 +991,19 @@ router.get("/home", (req, res) => {
     if (error) {
       console.log(error);
     } else {
-      res.render("home.ejs", { deportes: deportes}); //render muestra el archivo ejs
+      conexion.query("SELECT * FROM eliminatorias", (error, eliminatoria) => {
+        if (error) {
+          console.log(error);
+        } else {
+          conexion.query("SELECT * FROM resultados", (error, resultados) => {
+            if (error) {
+              console.log(error);
+            } else {
+              res.render("home.ejs", { deportes: deportes,eliminatoria:eliminatoria,resultados:resultados}); //render muestra el archivo ejs
+            }
+          });
+        }
+      });
     }
   });
 });
@@ -1041,10 +1054,137 @@ router.get("/deportes-:id", (req, res) => {
 });
 
 
+router.get("/admin", (req, res) => {
+      res.render("admin.ejs"); //render muestra el archivo ejs
+  });
+
+  router.get("/resultados", (req, res) => {
+    conexion.query("SELECT * FROM resultados", (error, resultados) => {
+      if (error) {
+        console.log(error);
+      } else {
+        res.render("resultados.ejs", { resultados: resultados});
+      }
+    });
+  });
+
+
+  router.get("/CrearResultados", (req, res) => {
+    conexion.query("SELECT * FROM equipos", (error, equipos) => {
+      if (error) {
+        console.log(error);
+      } else {
+        conexion.query("SELECT * FROM deporte", (error, deportes) => {
+          if (error) {
+            console.log(error);
+          } else {
+            res.render("crearResultados.ejs", { deportes: deportes,equipos:equipos});
+          }
+        });
+      }
+    });
+  });
+
+
+  router.get("/deleteResultados/:id", (req, res) => {
+    const id = req.params.id;
+    conexion.query(
+      "DELETE FROM resultados WHERE id = ?",
+      [id],
+      (error, results) => {
+        if (error) {
+          console.log(error);
+        } else {
+          res.redirect("/resultados");
+        }
+      }
+    );
+  });
+  
+
+
+
+// inicio de LOGIN Y REGISTRO
+
+// Ruta de registro de usuarios
+router.post('/register', async (req, res) => {
+  try {
+    const { usuario, clave } = req.body;
+
+    // Validar que los campos no estén vacíos
+    if (!usuario || !clave) {
+      return res.status(400).json({ msg: 'Por favor, proporcione un nombre de usuario y una contraseña' });
+    }
+
+    // Verificar si el usuario ya existe en la base de datos
+    const existingUser = await User.findOne({ usuario });
+    if (existingUser) {
+      return res.status(400).json({ msg: 'El nombre de usuario ya está en uso' });
+    }
+
+    // Encriptar la contraseña y crear el usuario en la base de datos
+    const salt = await bcrypt.genSalt();
+    const hashedclave = await bcrypt.hash(clave, salt);
+    const user = new User({ usuario, clave: hashedclave });
+    await user.save();
+
+    // Generar un token de sesión y enviarlo en la respuesta
+    const token = jwt.sign({ id: user._id }, 'mi_secreto');
+    res.json({ token });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Ruta de login de usuarios
+router.post('/login', async (req, res) => {
+  try {
+    const { usuario, clave } = req.body;
+
+    console.log(usuario, clave)
+
+    // Validar que los campos no estén vacíos
+    if (!usuario || !clave) {
+      return res.status(400).json({ msg: 'Por favor, proporcione un nombre de usuario y una contraseña' });
+    }
+
+    // Verificar si el usuario existe en la base de datos
+    const user = await User.findOne({ usuario });
+    if (!user) {
+      return res.status(400).json({ msg: 'El nombre de usuario o la contraseña son incorrectos' });
+    }
+
+    // Comparar la contraseña ingresada con la almacenada en la base de datos
+    const isMatch = await bcrypt.compare(clave, user.clave);
+    if (!isMatch) {
+      return res.status(400).json({ msg: 'El nombre de usuario o la contraseña son incorrectos' });
+    }
+
+    // Generar un token de sesión y enviarlo en la respuesta
+    const token = jwt.sign({ id: user._id }, 'mi_secreto');
+    res.json({ token });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+// FIN LOGIN Y REGISTRO
+
+
+// IMAGEN
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+
+
 
 // Guardar registros
 router.post("/saveJugador", mycrud.saveJugador);
+
 router.post("/saveEquipo", mycrud.saveEquipo);
+
 router.post("/saveCarrera", mycrud.saveCarrera);
 router.post("/saveGrupo", mycrud.saveGrupo);
 router.post("/savePartido", mycrud.savePartido);
@@ -1056,6 +1196,9 @@ router.post("/saveJornada", mycrud.saveJornada);
 router.post("/saveDeporte", mycrud.saveDeporte);
 router.post("/saveRI", mycrud.saveRI);
 router.post("/saveRE", mycrud.saveRE);
+router.post("/saveResultados", mycrud.saveResultados);
+
+
 
 // actualizar registros
 router.post("/updateJugador", mycrud.updateJugador);

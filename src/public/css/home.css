@@ -133,4 +133,64 @@ p#tituloLogo{
   opacity: 1; /* Cambiar la opacidad de las flechas al pasar el ratón por encima */
 }
 
+/*Enfrentamiento*/
+.team-logo {
+  display: inline-block;
+  height: 100px;
+  margin-right: 20px;
+  vertical-align: middle;
+}
+.team-name {
+  font-size: 24px;
+  font-weight: bold;
+  vertical-align: middle;
+}
+.date-and-stadium {
+  font-size: 18px;
+  margin-top: 10px;
+}
+.result {
+  font-size: 36px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/*Estilos del tabulador de resultados*/
+
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+.tab button:hover {
+  background-color: #ddd;
+}
+
+.tab button.active {
+  background-color: #ccc;
+}
+
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+.tabcontent.active {
+  display: block;
+}
+
 

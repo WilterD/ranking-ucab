@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <%- include('partials/head.ejs') %>
-    <title>Partidos </title>
+    <title>Resultados</title>
     
 </head>
 <body>
@@ -10,38 +10,42 @@
   <section class="home-section">
     <div class="home-content">
       <i class='bx bx-menu' ></i>
-      >>> Partidos 
+      >>> Resultados
     </div>
     <div class="container">
       <div class="row">
         <div class="">
-          <a href="/crearPartido" class="btn btn-outline-primary fs-2 btn-block ml-auto"> Agregar <i class='bx bxs-plus-circle'></i></a> 
+          <a href="/crearResultados" class="btn btn-outline-primary fs-2 btn-block ml-auto"> Agregar <i class='bx bxs-plus-circle'></i></a> 
         </div> 
         <div class="col-xs-12 mt-3">
           <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
             <thead>
               <tr class="bg-primary text-white">
+                <th scope="col">Jornada</th>
+                <th scope="col">Equipo Local</th>
+                <th scope="col">Puntos Local</th>    
+                <th scope="col">Puntos Visitante</th>           
+                <th scope="col">Equipo Visitante</th>           
                 <th scope="col">Fecha</th>           
-                <th scope="col">Estadio</th>           
-                <th scope="col">Local</th>           
-                <th scope="col">Visitante</th>           
                 <th scope="col">Acciones</th>           
               </tr>
             </thead>
             <tbody>
-              <% for (let i = 0; i < partidos.length; i++) { %>
-             
+              <% resultados.forEach((resultados)=>{ %>
                 <tr>  
-                    <td><%= fecha[i] %></td>  
-                    <td><%= partidos[i].codEstadio %></td>  
-                    <td><%= juegan[i].nombreEquipo1 %></td>  
-                    <td><%= juegan[i].nombreEquipo2 %></td>  
+                    <td><%= resultados.jornada %></td>
+                    <td><%= resultados.nombreEquipo1 %></td>
+                    <td><%= resultados.puntos1 %></td>
+                    <td><%= resultados.puntos2 %></td>
+                    <td><%= resultados.nombreEquipo2 %></td>
+                    <td><%= resultados.fecha %></td>
                     <td>
-                      <a href="/editarPartido/<%= partidos[i].codPartido %>" class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>
-                      <a onclick="confirmar('<%= partidos[i].codPartido %>','deletePartido')" class="btn btn-outline-danger"><i class='bx bxs-trash'></i></a>
+                      <a href="/editarResultados/<%= resultados.id %>" class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>
+                      <a onclick="confirmar('<%= resultados.id %>','deleteResultados')" class="btn btn-outline-danger"><i
+                        class='bx bxs-trash'></i></a>
                     </td>
                 </tr>                                   
-                <% } %>
+             <% }) %>
             </tbody>
           </table>
         </div>
@@ -65,10 +69,11 @@
   
   <%- include('partials/scripts.ejs') %>
   <script>
-      $(document).ready(function() {
-      let tabla = $('#miTabla').DataTable();
-      tabla.order([0, 'asc']).draw();
-      });
+    $(document).ready(function() {
+    let tabla = $('#miTabla').DataTable();
+    tabla.order([8, 'desc']).draw();
+    })
+    
   </script>
 </body>
 </html>
