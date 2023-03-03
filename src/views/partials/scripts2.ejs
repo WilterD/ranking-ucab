@@ -9,6 +9,7 @@
 <script>
     $(document).ready(function () {
    let tabla = $('#miTabla').DataTable({
+      order: [[8, 'desc']],
       pageLength: 10,
       lengthMenu: [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, 'Todos']],
       "language": {
@@ -25,15 +26,16 @@
           "previous": "Anterior"
         }
       }
+      
+      
     });
+    $('.dataTables_filter').hide(); // ocultar el buscador
   });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"
 integrity="sha512-KYU6OC+0xRkAlwksI2FVJyAcnU/7VX9W+u3AXVUZfh6UZsVsfzLbPGowpVl23bjlEGhPkFgC+nD52pwHr00rOA=="
 crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.min.js"
-integrity="sha512-mzSZO+5D5kmvX9WdCfZGKFgx0ekiq+5grN+5N5yv3zNZ5W8n+Y5Yccj/soStQ9XkMNhR4QyFrhq4y4ktJm27gA=="
-crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.min.js"></script>
 
 <script>
 // Agrega un evento de click al botón del navbar-toggler para que se abra y cierre el navbar cuando se hace clic en él

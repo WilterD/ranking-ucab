@@ -999,7 +999,73 @@ router.get("/home", (req, res) => {
             if (error) {
               console.log(error);
             } else {
-              res.render("home.ejs", { deportes: deportes,eliminatoria:eliminatoria,resultados:resultados}); //render muestra el archivo ejs
+              conexion.query("SELECT * FROM partido", (error, partidos) => {
+                if (error) {
+                  console.log(error);
+                } else {
+                  conexion.query("SELECT * FROM juegan", (error, juegan) => {
+                    if (error) {
+                      console.log(error);
+                    } else {
+                      let fechaPartidos = partidos.map((partido) => {
+                        // obtener los dias de la semana
+            
+                        let fechaPartidos = new Date(partido.fecha);
+                        // dia lunes, martes, miercoles, jueves, viernes, sabado, domingo
+                        let dia = fechaPartidos.getDate();
+                        let mes = fechaPartidos.getMonth() + 1;
+                        let anio = fechaPartidos.getFullYear();
+                        let hora = fechaPartidos.getHours();
+                        let minutos = fechaPartidos.getMinutes();
+                        let nombreMes = " ";
+
+                        switch(mes){
+                          case 1:
+                            nombreMes = "Enero";
+                            break;
+                          case 2:
+                            nombreMes = "Febrero";
+                            break;
+                          case 3:
+                            nombreMes = "Marzo";
+                            break;
+                          case 4:
+                            nombreMes = "Abril";
+                            break;
+                          case 5:
+                            nombreMes = "Mayo";
+                            break;
+                          case 6:
+                            nombreMes = "Junio";
+                            break;
+                          case 7:
+                            nombreMes = "Julio";
+                            break;
+                          case 8:
+                            nombreMes = "Agosto";
+                            break;
+                          case 9:
+                            nombreMes = "Septiembre";
+                            break;
+                          case 10:
+                            nombreMes = "Octubre";
+                            break;
+                          case 11:
+                            nombreMes = "Noviembre";
+                            break;
+                          case 12:
+                            nombreMes = "Diciembre";
+                            break;
+                        }
+
+                        return `${dia} de ${nombreMes} - ${hora}:${minutos}`;
+                      });
+
+                      res.render("home.ejs", { deportes: deportes,eliminatoria:eliminatoria,resultados:resultados,partidos:partidos,juegan:juegan,fechaPartidos:fechaPartidos}); //render muestra el archivo ejs
+                    }
+                  });
+                }
+              });
             }
           });
         }
