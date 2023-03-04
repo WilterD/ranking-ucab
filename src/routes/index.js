@@ -288,78 +288,7 @@ router.get("/deleteCarrera/:id", (req, res) => {
 });
 
 router.get("/", (req, res) => {
-  conexion.query(
-    "SELECT COUNT(*) AS cantidadDeportes FROM deporte",
-    (error, deportes) => {
-      if (error) {
-        console.log(error);
-      } else {
-        conexion.query(
-          "SELECT COUNT(*) AS cantidadEquipos FROM equipos",
-          (error, resultadosEquipos) => {
-            if (error) {
-              console.log(error);
-            } else {
-              conexion.query(
-                "SELECT COUNT(*) AS cantidadJugadores FROM jugador",
-                (error, resultadosJugadores) => {
-                  if (error) {
-                    console.log(error);
-                  } else {
-                    conexion.query(
-                      "SELECT COUNT(*) AS cantidadEstadios FROM estadio",
-                      (error, resultadosEstadios) => {
-                        if (error) {
-                          console.log(error);
-                        } else {
-                          conexion.query(
-                            "SELECT COUNT(*) AS cantidadPartidos FROM partido",
-                            (error, resultadosPartidos) => {
-                              if (error) {
-                                console.log(error);
-                              } else {
-                                conexion.query(
-                                  "SELECT COUNT(*) AS cantidadCarreras FROM carreras",
-                                  (error, resultadosCarreras) => {
-                                    if (error) {
-                                      console.log(error);
-                                    } else {
-                                      res.render("dashboard.ejs", {
-                                        cantidadDeportes:
-                                          deportes[0].cantidadDeportes,
-                                        cantidadEquipos:
-                                          resultadosEquipos[0].cantidadEquipos,
-                                        cantidadJugadores:
-                                          resultadosJugadores[0]
-                                            .cantidadJugadores,
-                                        cantidadEstadios:
-                                          resultadosEstadios[0]
-                                            .cantidadEstadios,
-                                        cantidadPartidos:
-                                          resultadosPartidos[0]
-                                            .cantidadPartidos,
-                                        cantidadCarreras:
-                                          resultadosCarreras[0]
-                                            .cantidadCarreras,
-                                      });
-                                    }
-                                  }
-                                );
-                              }
-                            }
-                          );
-                        }
-                      }
-                    );
-                  }
-                }
-              );
-            }
-          }
-        );
-      }
-    }
-  );
+  
 });
 
 router.get("/partidos", (req, res) => {
@@ -1009,12 +938,10 @@ router.get("/home", (req, res) => {
                     } else {
                       let fechaPartidos = partidos.map((partido) => {
                         // obtener los dias de la semana
-            
                         let fechaPartidos = new Date(partido.fecha);
-                        // dia lunes, martes, miercoles, jueves, viernes, sabado, domingo
+
                         let dia = fechaPartidos.getDate();
                         let mes = fechaPartidos.getMonth() + 1;
-                        let anio = fechaPartidos.getFullYear();
                         let hora = fechaPartidos.getHours();
                         let minutos = fechaPartidos.getMinutes();
                         let nombreMes = " ";
@@ -1058,10 +985,68 @@ router.get("/home", (req, res) => {
                             break;
                         }
 
-                        return `${dia} de ${nombreMes} - ${hora}:${minutos}`;
+                        fechaPartidos = `${dia} de ${nombreMes} - ${hora}:${minutos}`
+
+                        return fechaPartidos;
+                        
+                      });
+                        let fechaResultados = resultados.map((resultados) => {
+                          // obtener los dias de la semana
+                          let fechaResultados = new Date(resultados.fecha);
+  
+                          let dia = fechaResultados.getDate();
+                          let mes = fechaResultados.getMonth() + 1;
+                          let nombreMes = " ";
+  
+                          switch(mes){
+                            case 1:
+                              nombreMes = "Enero";
+                              break;
+                            case 2:
+                              nombreMes = "Febrero";
+                              break;
+                            case 3:
+                              nombreMes = "Marzo";
+                              break;
+                            case 4:
+                              nombreMes = "Abril";
+                              break;
+                            case 5:
+                              nombreMes = "Mayo";
+                              break;
+                            case 6:
+                              nombreMes = "Junio";
+                              break;
+                            case 7:
+                              nombreMes = "Julio";
+                              break;
+                            case 8:
+                              nombreMes = "Agosto";
+                              break;
+                            case 9:
+                              nombreMes = "Septiembre";
+                              break;
+                            case 10:
+                              nombreMes = "Octubre";
+                              break;
+                            case 11:
+                              nombreMes = "Noviembre";
+                              break;
+                            case 12:
+                              nombreMes = "Diciembre";
+                              break;
+                          }
+  
+                          fechaResultados = `${dia} de ${nombreMes}`
+  
+                          return fechaResultados;
+
+                       
                       });
 
-                      res.render("home.ejs", { deportes: deportes,eliminatoria:eliminatoria,resultados:resultados,partidos:partidos,juegan:juegan,fechaPartidos:fechaPartidos}); //render muestra el archivo ejs
+                      
+
+                      res.render("home.ejs", { deportes: deportes,eliminatoria:eliminatoria,resultados:resultados,partidos:partidos,juegan:juegan,fechaPartidos:fechaPartidos,fechaResultados:fechaResultados}); //render muestra el archivo ejs
                     }
                   });
                 }
@@ -1168,74 +1153,9 @@ router.get("/admin", (req, res) => {
   });
   
 
+// login y registro 
 
 
-// inicio de LOGIN Y REGISTRO
-
-// Ruta de registro de usuarios
-router.post('/register', async (req, res) => {
-  try {
-    const { usuario, clave } = req.body;
-
-    // Validar que los campos no estén vacíos
-    if (!usuario || !clave) {
-      return res.status(400).json({ msg: 'Por favor, proporcione un nombre de usuario y una contraseña' });
-    }
-
-    // Verificar si el usuario ya existe en la base de datos
-    const existingUser = await User.findOne({ usuario });
-    if (existingUser) {
-      return res.status(400).json({ msg: 'El nombre de usuario ya está en uso' });
-    }
-
-    // Encriptar la contraseña y crear el usuario en la base de datos
-    const salt = await bcrypt.genSalt();
-    const hashedclave = await bcrypt.hash(clave, salt);
-    const user = new User({ usuario, clave: hashedclave });
-    await user.save();
-
-    // Generar un token de sesión y enviarlo en la respuesta
-    const token = jwt.sign({ id: user._id }, 'mi_secreto');
-    res.json({ token });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Ruta de login de usuarios
-router.post('/login', async (req, res) => {
-  try {
-    const { usuario, clave } = req.body;
-
-    console.log(usuario, clave)
-
-    // Validar que los campos no estén vacíos
-    if (!usuario || !clave) {
-      return res.status(400).json({ msg: 'Por favor, proporcione un nombre de usuario y una contraseña' });
-    }
-
-    // Verificar si el usuario existe en la base de datos
-    const user = await User.findOne({ usuario });
-    if (!user) {
-      return res.status(400).json({ msg: 'El nombre de usuario o la contraseña son incorrectos' });
-    }
-
-    // Comparar la contraseña ingresada con la almacenada en la base de datos
-    const isMatch = await bcrypt.compare(clave, user.clave);
-    if (!isMatch) {
-      return res.status(400).json({ msg: 'El nombre de usuario o la contraseña son incorrectos' });
-    }
-
-    // Generar un token de sesión y enviarlo en la respuesta
-    const token = jwt.sign({ id: user._id }, 'mi_secreto');
-    res.json({ token });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-
-// FIN LOGIN Y REGISTRO
 
 
 // IMAGEN

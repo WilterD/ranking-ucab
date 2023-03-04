@@ -8,9 +8,10 @@
 
 <body>
   <%- include('partials/navHome.ejs') %>
-</head>
+    </head>
 
     <body>
+      <div class="preloader"></div>
       <!-- Swiper -->
       <div class="swiper mySwiper">
         <div class="swiper-wrapper">
@@ -54,6 +55,7 @@
         <div class="swiper-button-prev"></div>
         <div class="swiper-pagination"></div>
       </div>
+
 
 
       <!-- tabla de posiciones -->
@@ -111,31 +113,33 @@
           </table>
         </div>
         <% } %>
+          
 
           <!-- Si no hay partidos, no mostrar nada -->
+          <section class="mt-5 mb-5 p-5" style="background-color:#19115e">
           <% if (partidos.length> 0) { %>
-            <h2 class="text-center mt-5 mb-5 text-center">Próximos Partidos ⚽</h2>
+            <h2 class="text-center text-center text-white">Próximos Partidos ⚽</h2>
             <% for (let i=0; i < partidos.length; i++) { %>
               <div class="container text-center mt-5">
                 <div class="row justify-content-center align-items-center mt-5">
                   <div class="col-md-3 col-sm-6 col-xs-12">
                     <img class="team-logo" src="/images/2.jpg" alt="Logo del equipo 1">
-                    <h4>
+                    <h4 class="text-white">
                       <%= juegan[i].nombreEquipo1 %>
                     </h4>
                   </div>
                   <div class="col-md-3 col-sm-6 col-xs-12">
-                    <h1 class="result">VS</h1>
-                    <div class="date-and-stadium">
+                    <h1 class="result text-white">VS</h1>
+                    <div class="date-and-stadium text-white">
                       <%= fechaPartidos[i] %>
                     </div>
-                    <div class="date-and-stadium">
+                    <div class="date-and-stadium text-white">
                       <%= partidos[i].codEstadio %>
                     </div>
                   </div>
                   <div class="col-md-3 col-sm-6 col-xs-12">
                     <img class="team-logo" src="/images/2.jpg" alt="Logo del equipo 2">
-                    <h4>
+                    <h4 class="text-white">
                       <%= juegan[i].nombreEquipo2 %>
                     </h4>
                   </div>
@@ -143,6 +147,7 @@
               </div>
               <% } %>
                 <% } %>
+              </section>
 
                   <!-- Si no hay resultados, no mostrar nada -->
                   <% if (resultados.length> 0) { %>
@@ -162,6 +167,7 @@
                               </button>
                               <% idMap.set(resultado.jornada, true); %>
                                 <% } %>
+                                <% let lastJornada = resultado.jornada %> %>
                                   <% }); %>
                       </div>
 
@@ -185,7 +191,7 @@
                                         <%= resultado.puntos1 %> - <%= resultado.puntos2 %>
                                       </h1>
                                       <div class="date-and-stadium">
-                                        <%= resultado.fecha %>
+                                        <%= fechaResultados[index] %>
                                       </div>
                                     </div>
                                     <div class="col-md-3 col-sm-6 col-xs-12">
@@ -213,10 +219,8 @@
 
                                     function openTab(event, tabId) {
 
-                                      console.log("tabid iniciando la pagina", tabId)
                                       // Ocultamos todos los contenidos de las pestañas
                                       tabContents.forEach(content => content.style.display = 'none');
-                                      console.log(tabContents)
                                       // Quitamos la clase 'active' de todos los botones tabuladores
                                       tabs.forEach(tab => tab.classList.remove('active'));
                                       // Mostramos el contenido de la pestaña seleccionada
@@ -229,7 +233,8 @@
                                         // Obtenemos el último botón tabulador
                                         const lastTab = tabs[tabs.length - 1];
                                         // Obtenemos el id de la última pestaña
-                                        const lastTabId = lastTab.getAttribute('data-tab');
+                                        const lastTabId = lastTab.getAttribute('data-tab-id');
+                                        console.log(lastTabId)
                                         // Agregamos la clase 'active' al último botón tabulador
                                         lastTab.classList.add('active');
                                       }
@@ -247,11 +252,11 @@
                                       }
                                     }
 
-
-                                    let UltimaJornada = tabs.length;
-
+                                    // obtener el id de la ultima jornada
+                                    const lastTab = tabs[tabs.length - 1];
+                                    const lastTabId = lastTab.getAttribute('data-tab-id');
                                     // Mostramos por defecto la última jornada
-                                    openTab(null, UltimaJornada);
+                                    openTab(null,  lastTabId  );
 
 
                                     // Añadimos el evento 'click' a cada botón tabulador
@@ -307,18 +312,37 @@
                                   <script type="text/javascript" language="javascript"
                                     src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap5.min.js"></script>
 
-                                  <script>
-                                    // Agrega un evento de click al botón del navbar-toggler para que se abra y cierre el navbar cuando se hace clic en él
-                                    const navbarToggler = document.querySelector('.navbar-toggler');
-                                    const navbarMenu = document.querySelector('.navbar-collapse');
-
-                                    navbarToggler.addEventListener('click', () => {
-                                      navbarMenu.classList.toggle('show');
-                                    });
-
-
-                                  </script>
+                                  
                                   <%- include('partials/scripts2.ejs') %>
+                                    <script>
+
+                                      $(document).ready(function () {
+                                        let tabla = $('#miTabla').DataTable({
+                                          order: [[8, "desc"]],
+                                          pageLength: 10,
+                                          lengthMenu: [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, 'Todos']],
+                                          "language": {
+                                            "lengthMenu": "Mostrar _MENU_ ",
+                                            "zeroRecords": "No se encontraron registros",
+                                            "info": "",
+                                            "infoEmpty": "No hay registros disponibles",
+                                            "infoFiltered": "",
+                                            "search": "Buscar:",
+                                            "paginate": {
+                                              "first": "Primero",
+                                              "last": "Último",
+                                              "next": "Siguiente",
+                                              "previous": "Anterior"
+                                            }
+                                          }
+
+
+                                        });
+                                        $('.dataTables_filter').hide(); // ocultar el buscador
+
+
+                                      });
+                                    </script>
 
 
 
