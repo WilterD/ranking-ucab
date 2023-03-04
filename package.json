@@ -27,7 +27,8 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
-    "sweetalert2": "^11.6.16"
+    "sweetalert2": "^11.6.16",
+    "swiper": "^9.1.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

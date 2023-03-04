@@ -909,7 +909,7 @@ router.get("/admin/deleteRE/:id", (req, res) => {
   );
 });
 
-router.get("/admin/home", (req, res) => {
+router.get("/", (req, res) => {
   conexion.query("SELECT * FROM deporte", (error, deportes) => {
     if (error) {
       console.log(error);
@@ -1035,7 +1035,7 @@ router.get("/admin/home", (req, res) => {
                         return fechaResultados;
                       });
 
-                      res.render("admin/home.ejs", {
+                      res.render("home.ejs", {
                         deportes: deportes,
                         eliminatoria: eliminatoria,
                         resultados: resultados,
@@ -1056,17 +1056,164 @@ router.get("/admin/home", (req, res) => {
   });
 });
 
-router.get("/admin/rankingE", (req, res) => {
-  conexion.query("SELECT * FROM rankinge", (error, rankinge) => {
+router.get("/home", (req, res) => {
+  conexion.query("SELECT * FROM deporte", (error, deportes) => {
     if (error) {
       console.log(error);
     } else {
-      res.render("admin/rankingE.ejs", { rankinge: rankinge }); //render muestra el archivo ejs
+      conexion.query("SELECT * FROM eliminatorias", (error, eliminatoria) => {
+        if (error) {
+          console.log(error);
+        } else {
+          conexion.query("SELECT * FROM resultados", (error, resultados) => {
+            if (error) {
+              console.log(error);
+            } else {
+              conexion.query("SELECT * FROM partido", (error, partidos) => {
+                if (error) {
+                  console.log(error);
+                } else {
+                  conexion.query("SELECT * FROM juegan", (error, juegan) => {
+                    if (error) {
+                      console.log(error);
+                    } else {
+                      let fechaPartidos = partidos.map((partido) => {
+                        // obtener los dias de la semana
+                        let fechaPartidos = new Date(partido.fecha);
+
+                        let dia = fechaPartidos.getDate();
+                        let mes = fechaPartidos.getMonth() + 1;
+                        let hora = fechaPartidos.getHours();
+                        let minutos = fechaPartidos.getMinutes();
+                        let nombreMes = " ";
+
+                        switch (mes) {
+                          case 1:
+                            nombreMes = "Enero";
+                            break;
+                          case 2:
+                            nombreMes = "Febrero";
+                            break;
+                          case 3:
+                            nombreMes = "Marzo";
+                            break;
+                          case 4:
+                            nombreMes = "Abril";
+                            break;
+                          case 5:
+                            nombreMes = "Mayo";
+                            break;
+                          case 6:
+                            nombreMes = "Junio";
+                            break;
+                          case 7:
+                            nombreMes = "Julio";
+                            break;
+                          case 8:
+                            nombreMes = "Agosto";
+                            break;
+                          case 9:
+                            nombreMes = "Septiembre";
+                            break;
+                          case 10:
+                            nombreMes = "Octubre";
+                            break;
+                          case 11:
+                            nombreMes = "Noviembre";
+                            break;
+                          case 12:
+                            nombreMes = "Diciembre";
+                            break;
+                        }
+
+                        fechaPartidos = `${dia} de ${nombreMes} - ${hora}:${minutos}`;
+
+                        return fechaPartidos;
+                      });
+                      let fechaResultados = resultados.map((resultados) => {
+                        // obtener los dias de la semana
+                        let fechaResultados = new Date(resultados.fecha);
+
+                        let dia = fechaResultados.getDate();
+                        let mes = fechaResultados.getMonth() + 1;
+                        let nombreMes = " ";
+
+                        switch (mes) {
+                          case 1:
+                            nombreMes = "Enero";
+                            break;
+                          case 2:
+                            nombreMes = "Febrero";
+                            break;
+                          case 3:
+                            nombreMes = "Marzo";
+                            break;
+                          case 4:
+                            nombreMes = "Abril";
+                            break;
+                          case 5:
+                            nombreMes = "Mayo";
+                            break;
+                          case 6:
+                            nombreMes = "Junio";
+                            break;
+                          case 7:
+                            nombreMes = "Julio";
+                            break;
+                          case 8:
+                            nombreMes = "Agosto";
+                            break;
+                          case 9:
+                            nombreMes = "Septiembre";
+                            break;
+                          case 10:
+                            nombreMes = "Octubre";
+                            break;
+                          case 11:
+                            nombreMes = "Noviembre";
+                            break;
+                          case 12:
+                            nombreMes = "Diciembre";
+                            break;
+                        }
+
+                        fechaResultados = `${dia} de ${nombreMes}`;
+
+                        return fechaResultados;
+                      });
+
+                      res.render("home.ejs", {
+                        deportes: deportes,
+                        eliminatoria: eliminatoria,
+                        resultados: resultados,
+                        partidos: partidos,
+                        juegan: juegan,
+                        fechaPartidos: fechaPartidos,
+                        fechaResultados: fechaResultados,
+                      }); //render muestra el archivo ejs
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
     }
   });
 });
 
-router.get("/admin/deportes-:id", (req, res) => {
+router.get("/rankingE", (req, res) => {
+  conexion.query("SELECT * FROM rankinge", (error, rankinge) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.render("rankingE.ejs", { rankinge: rankinge }); //render muestra el archivo ejs
+    }
+  });
+});
+
+router.get("/deportes-:id", (req, res) => {
   let id = req.params.id;
   conexion.query("SELECT * FROM rankinge", (error, rankinge) => {
     if (error) {
@@ -1089,13 +1236,13 @@ router.get("/admin/deportes-:id", (req, res) => {
                     throw error;
                   } else {
                     if (deporte[0].tipoDeporte == "Individual") {
-                      res.render("admin/ranking.ejs", {
+                      res.render("ranking.ejs", {
                         ranking: ranking,
                         deportes: deportes,
                         deporte: deporte[0],
                       }); //render muestra el archivo ejs
                     } else if (deporte[0].tipoDeporte == "Equipos") {
-                      res.render("admin/rankingE.ejs", {
+                      res.render("rankingE.ejs", {
                         rankinge: rankinge,
                         deportes: deportes,
                         deporte: deporte[0],
@@ -1211,7 +1358,6 @@ router.get("/admin/dashboard", requireLogin, (req, res) => {
                                   (error, resultadosCarreras) => {
                                     if (error) {
                                       console.log(error);
-                                      console.log("rayos");
                                     } else {
                                       res.render("admin/dashboard", {
                                         cantidadDeportes:
@@ -1321,7 +1467,6 @@ function requireLogin(req, res, next) {
       (error, results) => {
         if (results.length > 0) {
           const user = results[0];
-          console.log(user);
           if (user.status === "active") {
             // El usuario está activo, continuar con la lógica de autenticación
             return next();
@@ -1353,6 +1498,7 @@ router.post("/admin/logout", (req, res) => {
     }
   });
 });
+
 
 // Guardar registros
 router.post("/saveJugador", mycrud.saveJugador);

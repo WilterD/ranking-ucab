@@ -1,35 +1,155 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="/home">
-            <img src="/images/logo.png" alt="Logo" width="60" height="54" class="d-inline-block align-text-top">
-            <p id="tituloLogo" class="text-white">Wolf League</p>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link active text-white" aria-current="page" href="/home">Inicio</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white " href="#" id="navbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Ranking
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <% deportes.forEach((deportes)=>{ %>
-                            <li><a class="dropdown-item" href="deportes-<%= deportes.id  %>">
-                                    <%= deportes.nombreDeporte %>
-                                </a>
-                            </li>
-                            <% }) %>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+<header>
+    <div class="logo">
+        <a href="#">Logo</a>
     </div>
-</nav>
+    <nav>
+        <ul class="menu">
+            <li><a href="#">Inicio</a></li>
+            <li class="dropdown">
+                <a href="#">Ranking</a>
+                <ul>
+                    <% deportes.forEach((deporte)=> { %>
+                        <li><a href="deportes-<%= deporte.id %>">
+                                <%= deporte.nombreDeporte %>
+                            </a></li>
+                        <% }) %>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <button class="menu-toggle"><span></span></button>
+</header>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
 
+    header {
+        background-color: #333;
+        color: #fff;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+    }
 
+    .logo {
+        font-size: 24px;
+    }
+
+    .logo a {
+        color: #fff;
+        text-decoration: none;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .menu {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+    }
+
+    .menu li {
+        margin-left: 20px;
+    }
+
+    .menu a {
+        color: #fff;
+        text-decoration: none;
+        padding: 10px;
+    }
+
+    .dropdown ul {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #333;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        z-index: 1;
+    }
+
+    .dropdown ul li {
+        margin: 0;
+    }
+
+    .dropdown ul li a {
+        display: block;
+        padding: 10px;
+    }
+
+    .menu-toggle {
+        display: none;
+        cursor: pointer;
+        background-color: #333;
+        border: none;
+        padding: 10px;
+        margin-left: 20px;
+    }
+
+    .menu-toggle span {
+        display: block;
+        width: 20px;
+        height: 2px;
+        background-color: #fff;
+        margin-bottom: 4px;
+    }
+
+    @media (max-width: 767px) {
+        .menu {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            padding: 10px;
+            margin: 0;
+        }
+
+        .menu li {
+            margin: 0;
+        }
+
+        .menu a {
+            display: block;
+            padding: 10px 0;
+        }
+
+        .menu-toggle {
+            display: block;
+        }
+
+        .dropdown ul {
+            position: static;
+            display: block;
+            background-color: transparent;
+            margin: 10px 0 0 0;
+            padding: 0;
+        }
+    }
+</style>
+
+<script>
+    // Script para hacer el menú responsive
+    const toggleMenu = document.querySelector('.toggle-menu');
+    const mainMenu = document.querySelector('.main-menu');
+
+    toggleMenu.addEventListener('click', () => {
+        mainMenu.classList.toggle('show');
+    });
+
+</script>

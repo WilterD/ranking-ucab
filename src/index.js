@@ -28,11 +28,20 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 app.set('views', join(__dirname,'views')); 
 app.set('view engine', 'ejs');
 
+// en pruebas
 app.use(session({
-    secret: 'secret',
-    resave: true,
-    saveUninitialized: true
+  secret: 'mysecretkey1',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+      secure: false, // cambiar a true en producción si se utiliza https
+      maxAge: 3600000 // tiempo de vida de la sesión en milisegundos (1 hora)
+  }
 }));
+
+
+
+//hola
 
 app.use(flash());
 

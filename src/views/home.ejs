@@ -7,60 +7,15 @@
 </head>
 
 <body>
+  <div class="preloader"></div>
   <%- include('partials/navHome.ejs') %>
-    </head>
-
-    <body>
-      <div class="preloader"></div>
-      <!-- Swiper -->
-      <div class="swiper mySwiper">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <img src="/images/1.jpg">
-            <div class="slide-content">
-              <h2>Titulo de la diapositiva</h2>
-              <p>Subtítulo de la diapositiva</p>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <img src="/images/2.jpg">
-            <div class="slide-content">
-              <h2>Titulo de la diapositiva</h2>
-              <p>Subtítulo de la diapositiva</p>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <img src="/images/3.jpg">
-            <div class="slide-content">
-              <h2>Titulo de la diapositiva</h2>
-              <p>Subtítulo de la diapositiva</p>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <img src="/images/4.jpg">
-            <div class="slide-content">
-              <h2>Titulo de la diapositiva</h2>
-              <p>Subtítulo de la diapositiva</p>
-            </div>
-          </div>
-          <div class="swiper-slide">
-            <img src="/images/5.jpg">
-            <div class="slide-content">
-              <h2>Titulo de la diapositiva</h2>
-              <p>Subtítulo de la diapositiva</p>
-            </div>
-          </div>
-        </div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-pagination"></div>
-      </div>
-
-
-
-      <!-- tabla de posiciones -->
-      <!-- si no hay tabla, no mostrar nada -->
-      <% if (eliminatoria.length> 0) { %>
+  
+  
+  <!-- tabla de posiciones -->
+  <!-- si no hay tabla, no mostrar nada -->
+  <% if (eliminatoria.length> 0) { %>
+    <div class="container">
+      <div class="row">
         <div class="col-xs-12 col-md-10 col-lg-10 mt-3 mx-auto">
           <h2 class="text-center">Tabla de posiciones ⚽</h2>
           <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
@@ -112,240 +67,196 @@
             </tbody>
           </table>
         </div>
-        <% } %>
-          
+      </div>
+    </div>
+    <% } %>
 
-          <!-- Si no hay partidos, no mostrar nada -->
-          <section class="mt-5 mb-5 p-5" style="background-color:#19115e">
-          <% if (partidos.length> 0) { %>
-            <h2 class="text-center text-center text-white">Próximos Partidos ⚽</h2>
-            <% for (let i=0; i < partidos.length; i++) { %>
-              <div class="container text-center mt-5">
-                <div class="row justify-content-center align-items-center mt-5">
-                  <div class="col-md-3 col-sm-6 col-xs-12">
-                    <img class="team-logo" src="/images/2.jpg" alt="Logo del equipo 1">
-                    <h4 class="text-white">
-                      <%= juegan[i].nombreEquipo1 %>
-                    </h4>
+
+      <!-- Si no hay partidos, no mostrar nada -->
+      <section class="mt-5 mb-5 p-5" style="background-color:#19115e">
+        <% if (partidos.length> 0) { %>
+          <h2 class="text-center text-center text-white">Próximos Partidos ⚽</h2>
+          <% for (let i=0; i < partidos.length; i++) { %>
+            <div class="container text-center mt-5">
+              <div class="row justify-content-center align-items-center mt-5">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                  <img class="team-logo" src="/images/2.jpg" alt="Logo del equipo 1">
+                  <h4 class="text-white">
+                    <%= juegan[i].nombreEquipo1 %>
+                  </h4>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                  <h1 class="result text-white">VS</h1>
+                  <div class="date-and-stadium text-white">
+                    <%= fechaPartidos[i] %>
                   </div>
-                  <div class="col-md-3 col-sm-6 col-xs-12">
-                    <h1 class="result text-white">VS</h1>
-                    <div class="date-and-stadium text-white">
-                      <%= fechaPartidos[i] %>
-                    </div>
-                    <div class="date-and-stadium text-white">
-                      <%= partidos[i].codEstadio %>
-                    </div>
-                  </div>
-                  <div class="col-md-3 col-sm-6 col-xs-12">
-                    <img class="team-logo" src="/images/2.jpg" alt="Logo del equipo 2">
-                    <h4 class="text-white">
-                      <%= juegan[i].nombreEquipo2 %>
-                    </h4>
+                  <div class="date-and-stadium text-white">
+                    <%= partidos[i].codEstadio %>
                   </div>
                 </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                  <img class="team-logo" src="/images/2.jpg" alt="Logo del equipo 2">
+                  <h4 class="text-white">
+                    <%= juegan[i].nombreEquipo2 %>
+                  </h4>
+                </div>
               </div>
+            </div>
+            <% } %>
               <% } %>
-                <% } %>
-              </section>
+      </section>
 
-                  <!-- Si no hay resultados, no mostrar nada -->
-                  <% if (resultados.length> 0) { %>
-                    <div class="container text-center mt-5 mb-5">
-                      <h2 class="text-center">Resultados ⚽</h2>
-                    </div>
+      <!-- Si no hay resultados, no mostrar nada -->
+      <% if (resultados.length> 0) { %>
+        <div class="container text-center mt-5 mb-5">
+          <h2 class="text-center">Resultados ⚽</h2>
+        </div>
+        <% } %>
+
+          <div class="tab">
+            <% const idMap=new Map(); %>
+              <% resultados.forEach((resultado, index)=> { %>
+                <% if (!idMap.has(resultado.jornada)) { %>
+                  <button data-tab-id="<%= resultado.jornada %>"
+                    class="tablinks <%= index === resultados.length - 1 ? 'active' : '' %>"
+                    onclick="openTab(event, '<%= resultado.jornada %>')">
+                    Jornada - <%= resultado.jornada %>
+                  </button>
+                  <% idMap.set(resultado.jornada, true); %>
                     <% } %>
+                      <% let lastJornada=resultado.jornada %> %>
+                        <% }); %>
+          </div>
 
-                      <div class="tab">
-                        <% const idMap=new Map(); %>
-                          <% resultados.forEach((resultado, index)=> { %>
-                            <% if (!idMap.has(resultado.jornada)) { %>
-                              <button data-tab-id="<%= resultado.jornada %>"
-                                class="tablinks <%= index === resultados.length - 1 ? 'active' : '' %>"
-                                onclick="openTab(event, '<%= resultado.jornada %>')">
-                                Jornada - <%= resultado.jornada %>
-                              </button>
-                              <% idMap.set(resultado.jornada, true); %>
-                                <% } %>
-                                <% let lastJornada = resultado.jornada %> %>
-                                  <% }); %>
+          <% let lastJornada=null; %>
+            <% resultados.forEach((resultado, index)=> { %>
+              <% if (resultado.jornada !==lastJornada) { %>
+                <div id="<%= resultado.jornada %>"
+                  class="tabcontent <%= index === resultados.length - 1 ? 'show' : '' %>">
+                  <% } %>
+                    <div class="container text-center mt-5">
+                      <h2 class="text-center">Jornada <%= resultado.jornada %> ⚽</h2>
+                      <div class="row justify-content-center align-items-center mt-5">
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                          <img class="team-logo" src="/images/2.jpg" alt="Logo del equipo 1">
+                          <h4>
+                            <%= resultado.nombreEquipo1 %>
+                          </h4>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                          <h1 class="result">
+                            <%= resultado.puntos1 %> - <%= resultado.puntos2 %>
+                          </h1>
+                          <div class="date-and-stadium">
+                            <%= fechaResultados[index] %>
+                          </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                          <img class="team-logo" src="/images/2.jpg" alt="Logo del equipo 2">
+                          <h4>
+                            <%= resultado.nombreEquipo2 %>
+                          </h4>
+                        </div>
                       </div>
+                    </div>
+                    <% if (index===resultados.length - 1 || resultado.jornada !==resultados[index+1].jornada) { %>
 
-                      <% let lastJornada=null; %>
-                        <% resultados.forEach((resultado, index)=> { %>
-                          <% if (resultado.jornada !==lastJornada) { %>
-                            <div id="<%= resultado.jornada %>"
-                              class="tabcontent <%= index === resultados.length - 1 ? 'show' : '' %>">
-                              <% } %>
-                                <div class="container text-center mt-5">
-                                  <h2 class="text-center">Jornada <%= resultado.jornada %> ⚽</h2>
-                                  <div class="row justify-content-center align-items-center mt-5">
-                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                      <img class="team-logo" src="/images/2.jpg" alt="Logo del equipo 1">
-                                      <h4>
-                                        <%= resultado.nombreEquipo1 %>
-                                      </h4>
-                                    </div>
-                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                      <h1 class="result">
-                                        <%= resultado.puntos1 %> - <%= resultado.puntos2 %>
-                                      </h1>
-                                      <div class="date-and-stadium">
-                                        <%= fechaResultados[index] %>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-6 col-xs-12">
-                                      <img class="team-logo" src="/images/2.jpg" alt="Logo del equipo 2">
-                                      <h4>
-                                        <%= resultado.nombreEquipo2 %>
-                                      </h4>
-                                    </div>
-                                  </div>
-                                </div>
-                                <% if (index===resultados.length - 1 || resultado.jornada
-                                  !==resultados[index+1].jornada) { %>
+                </div>
+                <% } %>
+                  <% lastJornada=resultado.jornada; %>
 
-                            </div>
-                            <% } %>
-                              <% lastJornada=resultado.jornada; %>
-
-                                <% }); %>
+                    <% }); %>
 
 
 
-                                  <script>
-                                    const tabs = document.querySelectorAll('.tablinks');
-                                    const tabContents = document.querySelectorAll('.tabcontent');
+                      <script>
+                        const tabs = document.querySelectorAll('.tablinks');
+                        const tabContents = document.querySelectorAll('.tabcontent');
 
-                                    function openTab(event, tabId) {
+                        function openTab(event, tabId) {
 
-                                      // Ocultamos todos los contenidos de las pestañas
-                                      tabContents.forEach(content => content.style.display = 'none');
-                                      // Quitamos la clase 'active' de todos los botones tabuladores
-                                      tabs.forEach(tab => tab.classList.remove('active'));
-                                      // Mostramos el contenido de la pestaña seleccionada
-                                      document.getElementById(tabId).style.display = 'block';
-                                      // si el event es nulo entonces, se muestra la ultima jornada
-                                      if (event) {
-                                        // Agregamos la clase 'active' al botón tabulador seleccionado
-                                        event.currentTarget.classList.add('active');
-                                      } else {
-                                        // Obtenemos el último botón tabulador
-                                        const lastTab = tabs[tabs.length - 1];
-                                        // Obtenemos el id de la última pestaña
-                                        const lastTabId = lastTab.getAttribute('data-tab-id');
-                                        console.log(lastTabId)
-                                        // Agregamos la clase 'active' al último botón tabulador
-                                        lastTab.classList.add('active');
-                                      }
+                          // Ocultamos todos los contenidos de las pestañas
+                          tabContents.forEach(content => content.style.display = 'none');
+                          // Quitamos la clase 'active' de todos los botones tabuladores
+                          tabs.forEach(tab => tab.classList.remove('active'));
+                          // Mostramos el contenido de la pestaña seleccionada
+                          document.getElementById(tabId).style.display = 'block';
+                          // si el event es nulo entonces, se muestra la ultima jornada
+                          if (event) {
+                            // Agregamos la clase 'active' al botón tabulador seleccionado
+                            event.currentTarget.classList.add('active');
+                          } else {
+                            // Obtenemos el último botón tabulador
+                            const lastTab = tabs[tabs.length - 1];
+                            // Obtenemos el id de la última pestaña
+                            const lastTabId = lastTab.getAttribute('data-tab-id');
+                            console.log(lastTabId)
+                            // Agregamos la clase 'active' al último botón tabulador
+                            lastTab.classList.add('active');
+                          }
 
-                                      // Si no se ha seleccionado ninguna pestaña al inicio, mostramos la última
-                                      if (!tabId) {
-                                        // Obtenemos el último botón tabulador
-                                        const lastTab = tabs[tabs.length - 1];
-                                        // Obtenemos el id de la última pestaña
-                                        const lastTabId = lastTab.getAttribute('data-tab');
-                                        // Mostramos el contenido de la última pestaña
-                                        document.getElementById(lastTabId).style.display = 'block';
-                                        // Agregamos la clase 'active' al último botón tabulador
-                                        lastTab.classList.add('active');
-                                      }
-                                    }
+                          // Si no se ha seleccionado ninguna pestaña al inicio, mostramos la última
+                          if (!tabId) {
+                            // Obtenemos el último botón tabulador
+                            const lastTab = tabs[tabs.length - 1];
+                            // Obtenemos el id de la última pestaña
+                            const lastTabId = lastTab.getAttribute('data-tab');
+                            // Mostramos el contenido de la última pestaña
+                            document.getElementById(lastTabId).style.display = 'block';
+                            // Agregamos la clase 'active' al último botón tabulador
+                            lastTab.classList.add('active');
+                          }
+                        }
 
-                                    // obtener el id de la ultima jornada
-                                    const lastTab = tabs[tabs.length - 1];
-                                    const lastTabId = lastTab.getAttribute('data-tab-id');
-                                    // Mostramos por defecto la última jornada
-                                    openTab(null,  lastTabId  );
-
-
-                                    // Añadimos el evento 'click' a cada botón tabulador
-                                    tabs.forEach(tab => {
-                                      tab.addEventListener('click', event => {
-                                        // Obtenemos el id de la pestaña correspondiente al botón tabulador
-                                        const tabId = event.currentTarget.getAttribute('data-tab-id');
-                                        // Mostramos el contenido de la pestaña correspondiente
-                                        openTab(event, tabId);
-                                      });
-                                    });
+                        // obtener el id de la ultima jornada
+                        const lastTab = tabs[tabs.length - 1];
+                        const lastTabId = lastTab.getAttribute('data-tab-id');
+                        // Mostramos por defecto la última jornada
+                        openTab(null, lastTabId);
 
 
-                                  </script>
+                        // Añadimos el evento 'click' a cada botón tabulador
+                        tabs.forEach(tab => {
+                          tab.addEventListener('click', event => {
+                            // Obtenemos el id de la pestaña correspondiente al botón tabulador
+                            const tabId = event.currentTarget.getAttribute('data-tab-id');
+                            // Mostramos el contenido de la pestaña correspondiente
+                            openTab(event, tabId);
+                          });
+                        });
 
 
+                      </script>
+
+                      <%- include('partials/scripts2.ejs') %>
+                        <script>
+
+                          $(document).ready(function () {
+                            let tabla = $('#miTabla').DataTable({
+                              order: [[8, "desc"]],
+                              pageLength: 10,
+                              lengthMenu: [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, 'Todos']],
+                              "language": {
+                                "lengthMenu": "Mostrar _MENU_ ",
+                                "zeroRecords": "No se encontraron registros",
+                                "info": "",
+                                "infoEmpty": "No hay registros disponibles",
+                                "infoFiltered": "",
+                                "search": "Buscar:",
+                                "paginate": {
+                                  "first": "Primero",
+                                  "last": "Último",
+                                  "next": "Siguiente",
+                                  "previous": "Anterior"
+                                }
+                              }
 
 
+                            });
+                            $('.dataTables_filter').hide(); // ocultar el buscador
 
 
-
-                                  <!-- Swiper JS -->
-                                  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-
-                                  <!-- Initialize Swiper -->
-                                  <script>
-                                    var swiper = new Swiper(".mySwiper", {
-                                      spaceBetween: 30,
-                                      centeredSlides: true,
-                                      autoplay: {
-                                        delay: 2500,
-                                        disableOnInteraction: false,
-                                      },
-                                      pagination: {
-                                        el: ".swiper-pagination",
-                                        clickable: true,
-                                      },
-                                      navigation: {
-                                        nextEl: ".swiper-button-next",
-                                        prevEl: ".swiper-button-prev",
-                                      },
-                                    });
-                                  </script>
-
-                                  <script
-                                    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
-                                  <script
-                                    src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.min.js"></script>
-                                  <script type="text/javascript" language="javascript"
-                                    src="https://code.jquery.com/jquery-3.5.1.js"></script>
-                                  <script type="text/javascript" language="javascript"
-                                    src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-                                  <script type="text/javascript" language="javascript"
-                                    src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap5.min.js"></script>
-
-                                  
-                                  <%- include('partials/scripts2.ejs') %>
-                                    <script>
-
-                                      $(document).ready(function () {
-                                        let tabla = $('#miTabla').DataTable({
-                                          order: [[8, "desc"]],
-                                          pageLength: 10,
-                                          lengthMenu: [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, 'Todos']],
-                                          "language": {
-                                            "lengthMenu": "Mostrar _MENU_ ",
-                                            "zeroRecords": "No se encontraron registros",
-                                            "info": "",
-                                            "infoEmpty": "No hay registros disponibles",
-                                            "infoFiltered": "",
-                                            "search": "Buscar:",
-                                            "paginate": {
-                                              "first": "Primero",
-                                              "last": "Último",
-                                              "next": "Siguiente",
-                                              "previous": "Anterior"
-                                            }
-                                          }
-
-
-                                        });
-                                        $('.dataTables_filter').hide(); // ocultar el buscador
-
-
-                                      });
-                                    </script>
-
-
-
-    </body>
-
+                          });
+                        </script>
+</body>
 </html>

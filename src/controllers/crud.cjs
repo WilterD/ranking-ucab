@@ -72,6 +72,9 @@ exports.saveEquipo = (req, res) => {
   const nombreEquipo = req.body.nombreEquipo;
   const nombreDeporte = req.body.nombreDeporte;
 
+  console.log(nombreEquipo)
+  console.log(nombreDeporte)
+
   // const imagen = req.file.buffer;
 
   conexion.query(
