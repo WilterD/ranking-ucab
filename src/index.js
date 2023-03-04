@@ -64,11 +64,17 @@ app.post('/register',  [
               }else{
               // Si el usuario no existe, se registra en la base de datos
               const hashedPassword =  bcrypt.hash(password, 10);
+
+              const status = {
+                status: 'disabled'
+              }
+
               conexion.query(
                 "INSERT INTO users SET ?",
                 {
                   email: email,
-                  password: password
+                  password: password,
+                  status: status.status
                 },
                 (error, results) => {
                   if (error) {
@@ -89,171 +95,18 @@ app.post('/register',  [
     }
 });
 
-app.post('/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.redirect('/home');
-    }
-  });
-});
-
-
-app.get('/login', (req, res) => {
-    res.render('login', { message: req.flash('message') });
-});
-
-
-app.post('/login', (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    // Buscar el usuario en la base de datos y comparar la contraseña cifrada
-    conexion.query('SELECT * FROM users WHERE email = ?', [email], (error, results) => {
-      if (results.length > 0) {
-        conexion.query('SELECT * FROM users WHERE password = ?', [password], (error, results) => {
-          if (results.length > 0) {
-                const user = results[0];
-                console.log(user)
-                const validPassword = bcrypt.compare(password, user.password);
-                if (validPassword) {
-                  req.session.user = user; // almacenar información del usuario en la sesión
-                  req.session.userId = user.id;
-                  req.session.email = user.email;
-                  req.session.password = user.password;
-                  req.session.loggedin = true;
-                  res.redirect('/dashboard');
-        } else {
-          req.flash('message', 'La contraseña es incorrecta.');
-          res.redirect('/login');
-        }
-        
-      } else {
-        req.flash('message', 'La contraseña es incorrecta.');
-        res.redirect('/login');
-      }
-    });
-  } else {
-    req.flash('message', 'El correo electrónico no está registrado.');
-    res.redirect('/login');
-    
-  }
-});
-} catch (error) {
-  console.error(error);
-  res.render('login');
-}
-});
 
 
 
 
-// Middleware para restringir el acceso a páginas que requieren inicio de sesión
-function requireLogin(req, res, next) {
-  if (req.session && req.session.userId) {
-    // Obtener el usuario de la base de datos
-    conexion.query('SELECT * FROM users WHERE id = ?', [req.session.userId], (error, results) => {
-      if (results.length > 0) {
-        const user = results[0];
-        console.log(user)
-        if (user.status === 'active') {
-          // El usuario está activo, continuar con la lógica de autenticación
-          return next();
-        } else {
-          // El usuario no está activo, redirigir a una página de error o mostrar un mensaje de error
-          req.flash('message', 'Tu cuenta no está activa.');
-          res.redirect('/login');
-        }
-      } else {
-        // No se encontró el usuario en la base de datos, redirigir a una página de error o mostrar un mensaje de error
-        req.flash('Ha ocurrido un error');
-      }
-    });
-  } else {
-    // El usuario no ha iniciado sesión, redirigir a la página de inicio de sesión
-    res.redirect('/login');
-  }
-}
+
+
+
+
 
     
 
-// Ruta de dashboard protegida
-app.get('/dashboard', requireLogin, (req, res) => {
-    // Verificar que el usuario haya iniciado sesión
-    conexion.query(
-    "SELECT COUNT(*) AS cantidadDeportes FROM deporte",
-    (error, deportes) => {
-      if (error) {
-        console.log(error);
-      } else {
-        conexion.query(
-          "SELECT COUNT(*) AS cantidadEquipos FROM equipos",
-          (error, resultadosEquipos) => {
-            if (error) {
-              console.log(error);
-            } else {
-              conexion.query(
-                "SELECT COUNT(*) AS cantidadJugadores FROM jugador",
-                (error, resultadosJugadores) => {
-                  if (error) {
-                    console.log(error);
-                  } else {
-                    conexion.query(
-                      "SELECT COUNT(*) AS cantidadEstadios FROM estadio",
-                      (error, resultadosEstadios) => {
-                        if (error) {
-                          console.log(error);
-                        } else {
-                          conexion.query(
-                            "SELECT COUNT(*) AS cantidadPartidos FROM partido",
-                            (error, resultadosPartidos) => {
-                              if (error) {
-                                console.log(error);
-                              } else {
-                                conexion.query(
-                                  "SELECT COUNT(*) AS cantidadCarreras FROM carreras",
-                                  (error, resultadosCarreras) => {
-                                    if (error) {
-                                      console.log(error);
-                                    } else {
-                                      res.render("dashboard.ejs", {
-                                        cantidadDeportes:
-                                          deportes[0].cantidadDeportes,
-                                        cantidadEquipos:
-                                          resultadosEquipos[0].cantidadEquipos,
-                                        cantidadJugadores:
-                                          resultadosJugadores[0]
-                                            .cantidadJugadores,
-                                        cantidadEstadios:
-                                          resultadosEstadios[0]
-                                            .cantidadEstadios,
-                                        cantidadPartidos:
-                                          resultadosPartidos[0]
-                                            .cantidadPartidos,
-                                        cantidadCarreras:
-                                          resultadosCarreras[0]
-                                            .cantidadCarreras,
-                                      });
-                                    }
-                                  }
-                                );
-                              }
-                            }
-                          );
-                        }
-                      }
-                    );
-                  }
-                }
-              );
-            }
-          }
-        );
-      }
-    }
-  );
-});
+
 
 app.use(express.json());
 

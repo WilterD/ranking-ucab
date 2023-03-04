@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <%- include('partials/head.ejs') %>
+    <title>Equipos</title>
+</head>
+<body>
+   <%- include('partials/navigation.ejs') %>
+   <section class="home-section">
+    <div class="home-content">
+      <i class='bx bx-menu' ></i>
+      >>> Equipos
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="">
+          <a href="/admin/crearEquipo" class="btn btn-outline-primary fs-2 btn-block"> Agregar <i class='bx bxs-plus-circle'></i></a> 
+        </div> 
+        <div class="col-xs-12 mt-3">
+          <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
+            <thead>
+              <tr class="bg-primary text-white">
+                <th scope="col">Nombre</th>
+                <th scope="col">Deporte</th>    
+                <th scope="col">Acciones</th>           
+              </tr>
+          </thead>
+          <tbody>
+            <% for (let i = 0; i < equipos.length; i++) { %>
+        <tr>  
+            <td><%= equipos[i].nombreEquipo %></td>  
+            <td><%= equipos[i].nombreDeporte %></td>  
+            <td>
+              <a href="/admin/editarEquipo/<%= equipos[i].codEquipo %>" class="btn btn-outline-info"><i class='bx bxs-pencil fs-5'></i></a>
+              <a onclick="confirmar('<%= equipos[i].codEquipo %>','/admin/deleteEquipo')" class="btn btn-outline-danger">
+                <i class='bx bxs-trash'></i></a>
+            </td>
+        </tr>                                   
+     <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section> 
+
+  <section class="home-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 mx-auto">
+          <div id="mensajes">
+  <p id="mensaje"></p>
+  <img class="rounded" src="../../images/medioAmbiente.png" width="330" height="230">
+</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <%- include('partials/scripts.ejs') %>
+</body>
+</html>

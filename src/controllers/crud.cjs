@@ -14,7 +14,7 @@ exports.saveGrupo = (req, res) => {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/grupos");
+        res.redirect("/admin/grupos");
       }
     }
   );
@@ -52,7 +52,7 @@ exports.savePartido = (req, res) => {
                     console.log(error);
                     res.status(400).json({ msg: "error" });
                   } else {
-                    res.redirect("/partidos");
+                    res.redirect("/admin/partidos");
                   }
                 }
               );
@@ -86,7 +86,7 @@ exports.saveEquipo = (req, res) => {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/equipos");
+        res.redirect("/admin/equipos");
       }
     }
   );
@@ -105,7 +105,7 @@ exports.updateEquipo = (req, res) => {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/equipos");
+        res.redirect("/admin/equipos");
       }
     }
   );
@@ -130,7 +130,7 @@ exports.saveJugador = (req, res) => {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/jugadores");
+        res.redirect("/admin/jugadores");
       }
     }
   );
@@ -155,7 +155,7 @@ exports.updateJugador = (req, res) => {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/jugadores");
+        res.redirect("/admin/jugadores");
       }
     }
   );
@@ -173,7 +173,7 @@ exports.saveCarrera = (req, res) => {
         conexion.query("INSERT INTO carreras SET ?", {
           nombreCarrera: nombreCarrera,
         });
-        res.redirect("/carreras");
+        res.redirect("/admin/carreras");
       }
     }
   );
@@ -190,7 +190,7 @@ exports.updateCarrera = (req, res) => {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/carreras");
+        res.redirect("/admin/carreras");
       }
     }
   );
@@ -225,7 +225,7 @@ exports.saveEliminatoria = (req, res) => {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/eliminatorias");
+        res.redirect("/admin/eliminatorias");
       }
     }
   );
@@ -262,7 +262,7 @@ exports.updateEliminatoria = (req, res) => {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/eliminatorias");
+        res.redirect("/admin/eliminatorias");
       }
     }
   );
@@ -300,7 +300,7 @@ exports.saveEIndividuales = (req, res) => {
       if (error) {
         console.log(error);
       } else {
-        res.redirect("/estadisticasIndividuales");
+        res.redirect("/admin/estadisticasIndividuales");
       }
     }
   );
@@ -342,7 +342,7 @@ exports.saveEGenerales = (req, res) => {
       if (error) {
         console.log(error);
       } else {
-        res.redirect("/estadisticasGenerales");
+        res.redirect("/admin/estadisticasGenerales");
       }
     }
   );
@@ -398,32 +398,26 @@ exports.updateEstadisticasGenerales = (req, res) => {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/estadisticasGenerales");
+        res.redirect("/admin/estadisticasGenerales");
       }
     }
   );
 };
 
 exports.saveEstadios = (req, res) => {
-  const ubicacion = req.body.ubicacion;
   const nombreEstadio = req.body.nombreEstadio;
-  const capacidad = req.body.capacidad;
-  const nombreCiudad = req.body.nombreCiudad;
 
   conexion.query(
     "INSERT INTO estadio SET ?",
     {
-      ubicacion: ubicacion,
-      nombreEstadio: nombreEstadio,
-      capacidad: capacidad,
-      nombreCiudad: nombreCiudad,
+      nombreEstadio: nombreEstadio
     },
     (error, results) => {
       if (error) {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/estadios");
+        res.redirect("/admin/estadios");
       }
     }
   );
@@ -432,17 +426,11 @@ exports.saveEstadios = (req, res) => {
 exports.updateEstadio = (req, res) => {
   const codEstadio = req.body.codEstadio;
   const nombreEstadio = req.body.nombreEstadio;
-  const ubicacion = req.body.ubicacion;
-  const capacidad = req.body.capacidad;
-  const nombreCiudad = req.body.nombreCiudad;
   conexion.query(
     "UPDATE estadio SET ? WHERE codEstadio = ?",
     [
       {
-        nombreEstadio: nombreEstadio,
-        ubicacion: ubicacion,
-        capacidad: capacidad,
-        nombreCiudad: nombreCiudad,
+        nombreEstadio: nombreEstadio
       },
       codEstadio,
     ],
@@ -451,7 +439,7 @@ exports.updateEstadio = (req, res) => {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/estadios");
+        res.redirect("/admin/estadios");
       }
     }
   );
@@ -469,7 +457,7 @@ exports.saveJornada = (req, res) => {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/jornadas");
+        res.redirect("/admin/jornadas");
       }
     }
   );
@@ -488,7 +476,7 @@ exports.saveDeporte = (req, res) => {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/deportes");
+        res.redirect("/admin/deportes");
       }
     }
   );
@@ -513,7 +501,7 @@ exports.updateDeporte = (req, res) => {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/deportes");
+        res.redirect("/admin/deportes");
       }
     }
   );
@@ -538,7 +526,7 @@ exports.saveRI = (req, res) => {
           console.log(error);
           res.status(400).json({ msg: "error" });
         } else {
-          res.redirect("/rankingIndividual");
+          res.redirect("/admin/rankingIndividual");
         }
       }
     );
@@ -556,7 +544,7 @@ exports.saveRI = (req, res) => {
           console.log(error);
           res.status(400).json({ msg: "error" });
         } else {
-          res.redirect("/rankingIndividual");
+          res.redirect("/admin/rankingIndividual");
         }
       }
     );
@@ -579,7 +567,7 @@ exports.saveRI = (req, res) => {
             console.log(error);
             res.status(400).json({ msg: "error" });
           } else {
-            res.redirect("/rankingEquipos");
+            res.redirect("/admin/rankingEquipos");
           }
         }
       );
@@ -599,7 +587,7 @@ exports.saveRI = (req, res) => {
             console.log(error);
             res.status(400).json({ msg: "error" });
           } else {
-            res.redirect("/rankingEquipos");
+            res.redirect("/admin/rankingEquipos");
           }
         }
       );
@@ -632,7 +620,7 @@ exports.saveRI = (req, res) => {
               console.log(error);
               res.status(400).json({ msg: "error" });
             } else {
-              res.redirect("/resultados");
+              res.redirect("/admin/resultados");
             }
           }
         );

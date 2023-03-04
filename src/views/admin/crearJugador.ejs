@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('partials/head.ejs') %>
+        <link rel="stylesheet" href="/css/main.css">
+        <title>Crear Nuevo Jugador</title>
+</head>
+
+<body>
+    <%- include('partials/navigation.ejs') %>
+        <section class="home-section">
+            <div class="home-content">
+                <i class='bx bx-menu'></i>
+            </div>
+            <div class="container mt-4">
+                <div class="card border-secondary">
+                    <div class="card-header">Nuevo Jugador</div>
+                    <div class="card-body">
+                        <form action="/saveJugador" method="POST">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nombre del Jugador</label>
+                                <input required type="text" class="form-control" id="nombreJugador" name="nombreJugador"
+                                    tabindex="1">
+                            </div>
+                            <div class="mb-3">
+                                <label for="carrera" class="form-label">Equipo</label>
+                                <select name="nombreEquipo" id="nombreEquipo" class="form-select">
+                                    <option disabled selected>Seleccione un equipo</option>
+                                    <% equipo.forEach((equipo)=>{ %>
+                                        <option value="<%= equipo.nombreEquipo %>">
+                                            <%= equipo.nombreEquipo %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="Carrera" class="form-label">Carrera</label>
+                                <select name="nombreCarrera" id="nombreCarrera" class="form-select">
+                                    <option disabled selected>Seleccione una carrera</option>
+                                    <% carrera.forEach((carrera)=>{ %>
+                                        <option value="<%= carrera.nombreCarrera %>">
+                                            <%= carrera.nombreCarrera %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
+                            <a href="/admin/jugadores" class="btn btn-secondary">Cancelar</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="home-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 mx-auto">
+                        <div id="mensajes">
+                            <p id="mensaje"></p>
+                            <img class="rounded" src="../../images/medioAmbiente.png" width="330" height="230">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <%- include('partials/scripts.ejs') %>
+</body>
+
+</html>
