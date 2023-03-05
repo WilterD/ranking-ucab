@@ -1,26 +1,28 @@
-import {
+const {
     DB_HOST,
     DB_USER,
     DB_PASSWORD,
     DB_NAME,
     DB_PORT
-} from './config.js';
-
-const mysql = require('mysql');
-
-const conexion = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'ranking'
-});
-
-conexion.connect((error) =>{
-    if(error){
-        console.error('Error de conexion', error.stack);
-        return
-    }
-    console.log('Conexion exitosa a la bd')
-});
-
-module.exports = conexion;
+  } = require('../config.cjs');
+  
+  const mysql = require('mysql');
+  
+  const conexion = mysql.createConnection({
+      host: DB_HOST,
+      user: DB_USER,
+      password: DB_PASSWORD,
+      database: DB_NAME,
+      port: DB_PORT
+  });
+  
+  conexion.connect((error) =>{
+      if(error){
+          console.error('Error de conexion', error.stack);
+          return;
+      }
+      console.log('Conexion exitosa a la bd');
+  });
+  
+  module.exports = conexion;
+  
