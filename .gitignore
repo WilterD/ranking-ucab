@@ -1,3 +1,23 @@
-node_modules
 fly.toml
 .env
+
+# Archivos generados por Node.js
+node_modules/
+logs/
+*.log
+
+# Archivos generados por el IDE
+.vscode/
+.idea/
+*.iml
+
+# Archivos de configuración
+config.js
+
+# Archivos generados por el servidor
+dist/
+build/
+
+# Otros archivos
+Thumbs.db
+.DS_Store
