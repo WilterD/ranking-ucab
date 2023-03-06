@@ -4,7 +4,7 @@ import {fileURLToPath} from 'url';
 import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
 import indexRoutes from './routes/index.js';
-import conexion from "./database/db.cjs";
+import conexion from "./database/db.js";
 
 import session from 'express-session';
 import flash from 'connect-flash';

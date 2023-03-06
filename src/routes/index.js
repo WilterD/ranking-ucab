@@ -1053,152 +1053,136 @@ router.get("/", async (req, res) => {
 });
 
 
+router.get("/home", async (req, res) => {
+  try {
+    const [deportes, eliminatoria, resultados, partidos, juegan] = await Promise.all([
+      conexion.query("SELECT * FROM deporte"),
+      conexion.query("SELECT * FROM eliminatorias"),
+      conexion.query("SELECT * FROM resultados"),
+      conexion.query("SELECT * FROM partido"),
+      conexion.query("SELECT * FROM juegan")
+    ]);
 
-router.get("/home", (req, res) => {
-  conexion.query("SELECT * FROM deporte", (error, deportes) => {
-    if (error) {
-      console.log(error);
-    } else {
-      conexion.query("SELECT * FROM eliminatorias", (error, eliminatoria) => {
-        if (error) {
-          console.log(error);
-        } else {
-          conexion.query("SELECT * FROM resultados", (error, resultados) => {
-            if (error) {
-              console.log(error);
-            } else {
-              conexion.query("SELECT * FROM partido", (error, partidos) => {
-                if (error) {
-                  console.log(error);
-                } else {
-                  conexion.query("SELECT * FROM juegan", (error, juegan) => {
-                    if (error) {
-                      console.log(error);
-                    } else {
-                      let fechaPartidos = partidos.map((partido) => {
-                        // obtener los dias de la semana
-                        let fechaPartidos = new Date(partido.fecha);
+    let fechaPartidos = partidos.map((partido) => {
+      // obtener los dias de la semana
+      let fechaPartidos = new Date(partido.fecha);
 
-                        let dia = fechaPartidos.getDate();
-                        let mes = fechaPartidos.getMonth() + 1;
-                        let hora = fechaPartidos.getHours();
-                        let minutos = fechaPartidos.getMinutes();
-                        let nombreMes = " ";
+      let dia = fechaPartidos.getDate();
+      let mes = fechaPartidos.getMonth() + 1;
+      let hora = fechaPartidos.getHours();
+      let minutos = fechaPartidos.getMinutes();
+      let nombreMes = " ";
 
-                        switch (mes) {
-                          case 1:
-                            nombreMes = "Enero";
-                            break;
-                          case 2:
-                            nombreMes = "Febrero";
-                            break;
-                          case 3:
-                            nombreMes = "Marzo";
-                            break;
-                          case 4:
-                            nombreMes = "Abril";
-                            break;
-                          case 5:
-                            nombreMes = "Mayo";
-                            break;
-                          case 6:
-                            nombreMes = "Junio";
-                            break;
-                          case 7:
-                            nombreMes = "Julio";
-                            break;
-                          case 8:
-                            nombreMes = "Agosto";
-                            break;
-                          case 9:
-                            nombreMes = "Septiembre";
-                            break;
-                          case 10:
-                            nombreMes = "Octubre";
-                            break;
-                          case 11:
-                            nombreMes = "Noviembre";
-                            break;
-                          case 12:
-                            nombreMes = "Diciembre";
-                            break;
-                        }
+      switch (mes) {
+        case 1:
+          nombreMes = "Enero";
+          break;
+        case 2:
+          nombreMes = "Febrero";
+          break;
+        case 3:
+          nombreMes = "Marzo";
+          break;
+        case 4:
+          nombreMes = "Abril";
+          break;
+        case 5:
+          nombreMes = "Mayo";
+          break;
+        case 6:
+          nombreMes = "Junio";
+          break;
+        case 7:
+          nombreMes = "Julio";
+          break;
+        case 8:
+          nombreMes = "Agosto";
+          break;
+        case 9:
+          nombreMes = "Septiembre";
+          break;
+        case 10:
+          nombreMes = "Octubre";
+          break;
+        case 11:
+          nombreMes = "Noviembre";
+          break;
+        case 12:
+          nombreMes = "Diciembre";
+          break;
+      }
 
-                        fechaPartidos = `${dia} de ${nombreMes} - ${hora}:${minutos}`;
+      fechaPartidos = `${dia} de ${nombreMes} - ${hora}:${minutos}`;
 
-                        return fechaPartidos;
-                      });
-                      let fechaResultados = resultados.map((resultados) => {
-                        // obtener los dias de la semana
-                        let fechaResultados = new Date(resultados.fecha);
+      return fechaPartidos;
+    });
 
-                        let dia = fechaResultados.getDate();
-                        let mes = fechaResultados.getMonth() + 1;
-                        let nombreMes = " ";
+    let fechaResultados = resultados.map((resultados) => {
+      // obtener los dias de la semana
+      let fechaResultados = new Date(resultados.fecha);
 
-                        switch (mes) {
-                          case 1:
-                            nombreMes = "Enero";
-                            break;
-                          case 2:
-                            nombreMes = "Febrero";
-                            break;
-                          case 3:
-                            nombreMes = "Marzo";
-                            break;
-                          case 4:
-                            nombreMes = "Abril";
-                            break;
-                          case 5:
-                            nombreMes = "Mayo";
-                            break;
-                          case 6:
-                            nombreMes = "Junio";
-                            break;
-                          case 7:
-                            nombreMes = "Julio";
-                            break;
-                          case 8:
-                            nombreMes = "Agosto";
-                            break;
-                          case 9:
-                            nombreMes = "Septiembre";
-                            break;
-                          case 10:
-                            nombreMes = "Octubre";
-                            break;
-                          case 11:
-                            nombreMes = "Noviembre";
-                            break;
-                          case 12:
-                            nombreMes = "Diciembre";
-                            break;
-                        }
+      let dia = fechaResultados.getDate();
+      let mes = fechaResultados.getMonth() + 1;
+      let nombreMes = " ";
 
-                        fechaResultados = `${dia} de ${nombreMes}`;
+      switch (mes) {
+        case 1:
+          nombreMes = "Enero";
+          break;
+        case 2:
+          nombreMes = "Febrero";
+          break;
+        case 3:
+          nombreMes = "Marzo";
+          break;
+        case 4:
+          nombreMes = "Abril";
+          break;
+        case 5:
+          nombreMes = "Mayo";
+          break;
+        case 6:
+          nombreMes = "Junio";
+          break;
+        case 7:
+          nombreMes = "Julio";
+          break;
+        case 8:
+          nombreMes = "Agosto";
+          break;
+        case 9:
+          nombreMes = "Septiembre";
+          break;
+        case 10:
+          nombreMes = "Octubre";
+          break;
+        case 11:
+          nombreMes = "Noviembre";
+          break;
+        case 12:
+          nombreMes = "Diciembre";
+          break;
+      }
 
-                        return fechaResultados;
-                      });
+      fechaResultados = `${dia} de ${nombreMes}`;
 
-                      res.render("home.ejs", {
-                        deportes: deportes,
-                        eliminatoria: eliminatoria,
-                        resultados: resultados,
-                        partidos: partidos,
-                        juegan: juegan,
-                        fechaPartidos: fechaPartidos,
-                        fechaResultados: fechaResultados,
-                      }); //render muestra el archivo ejs
-                    }
-                  });
-                }
-              });
-            }
-          });
-        }
-      });
-    }
-  });
+      return fechaResultados;
+    });
+
+    console.log(resultados)
+
+    res.render("home.ejs", {
+      deportes: deportes,
+      eliminatoria: eliminatoria,
+      resultados: resultados,
+      partidos: partidos,
+      juegan: juegan,
+      fechaPartidos: fechaPartidos,
+      fechaResultados: fechaResultados,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 router.get("/rankingE", (req, res) => {

@@ -1,11 +1,8 @@
 import mysql from 'mysql2/promise';
-import {
-  DB_HOST,
-  DB_USER,
-  DB_PASSWORD,
-  DB_NAME,
-  DB_PORT
-} from '../config.js';
+import { PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, DB_PORT } from '../config.js';
+
+// ahora puedes usar las constantes importadas en tu código
+
 
 const connection = await mysql.createConnection({
   host: DB_HOST,
