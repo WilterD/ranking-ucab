@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import conexion from "../database/db.js";
+import conexion from "../database/db.cjs";
 import * as mycrud from "../controllers/crud.cjs";
 // importar moment
 import moment from "moment";
