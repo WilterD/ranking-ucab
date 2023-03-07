@@ -1,11 +1,9 @@
-import mysql from 'mysql2';
-import conexion from '../database/db.js';
-import Swal from 'sweetalert2';
-import bodyParser from 'body-parser';
-import moment from 'moment';
+const conexion = require("../database/db.cjs");
+const Swal = require("sweetalert2");
+const bodyParser = require("body-parser");
+const moment = require('moment');
 
-
-export const saveGrupo = (req, res) => {
+exports.saveGrupo = (req, res) => {
   const letraGrupo = req.body.letraGrupo;
 
   conexion.query(
@@ -22,7 +20,7 @@ export const saveGrupo = (req, res) => {
   );
 };
 
-export const savePartido = (req, res) => {
+exports.savePartido = (req, res) => {
   
   const fecha = moment(req.body.fecha).format('YYYY-MM-DD HH:mm:ss');
   const codEstadio = req.body.codEstadio;
@@ -70,7 +68,7 @@ export const savePartido = (req, res) => {
 
 // Equipos
 
-export const saveEquipo = (req, res) => {
+exports.saveEquipo = (req, res) => {
   const nombreEquipo = req.body.nombreEquipo;
   const nombreDeporte = req.body.nombreDeporte;
 
@@ -97,7 +95,7 @@ export const saveEquipo = (req, res) => {
   );
 };
 
-export const updateEquipo = (req, res) => {
+exports.updateEquipo = (req, res) => {
   const codEquipo = req.body.codEquipo;
   const nombreEquipo = req.body.nombreEquipo;
   const nombreDeporte = req.body.nombreDeporte;
@@ -118,7 +116,7 @@ export const updateEquipo = (req, res) => {
 
 // jugadores
 
-export const saveJugador = (req, res) => {
+exports.saveJugador = (req, res) => {
   const nombreCarrera = req.body.nombreCarrera;
   const nombreJugador = req.body.nombreJugador;
   const nombreEquipo = req.body.nombreEquipo;
@@ -141,7 +139,7 @@ export const saveJugador = (req, res) => {
   );
 };
 
-export const updateJugador = (req, res) => {
+exports.updateJugador = (req, res) => {
   const codJugador = req.body.codJugador;
   const nombreJugador = req.body.nombreJugador;
   const nombreEquipo = req.body.nombreEquipo;
@@ -166,7 +164,7 @@ export const updateJugador = (req, res) => {
   );
 };
 
-export const saveCarrera = (req, res) => {
+exports.saveCarrera = (req, res) => {
   const nombreCarrera = req.body.nombreCarrera;
   conexion.query(
     "SELECT nombreCarrera FROM carreras WHERE nombreCarrera=?",
@@ -184,7 +182,7 @@ export const saveCarrera = (req, res) => {
   );
 };
 
-export const updateCarrera = (req, res) => {
+exports.updateCarrera = (req, res) => {
   const nombreCarrera = req.body.nombreCarrera;
   const id = req.body.id;
   conexion.query(
@@ -201,7 +199,7 @@ export const updateCarrera = (req, res) => {
   );
 };
 
-export const saveEliminatoria = (req, res) => {
+exports.saveEliminatoria = (req, res) => {
   const nombreEquipo = req.body.nombreEquipo;
   const juegos_ganados = req.body.juegos_ganados;
   const juegos_perdidos = req.body.juegos_perdidos;
@@ -236,7 +234,7 @@ export const saveEliminatoria = (req, res) => {
   );
 };
 
-export const updateEliminatoria = (req, res) => {
+exports.updateEliminatoria = (req, res) => {
   const nombreEquipo = req.body.nombreEquipo;
   const juegos_jugados = req.body.juegos_jugados;
   const juegos_ganados = req.body.juegos_ganados;
@@ -273,7 +271,7 @@ export const updateEliminatoria = (req, res) => {
   );
 };
 
-export const saveEIndividuales = (req, res) => {
+exports.saveEIndividuales = (req, res) => {
   const codJugador = req.body.codJugador;
   const codPartido = req.body.codPartido;
   const ataque = req.body.ataque;
@@ -311,7 +309,7 @@ export const saveEIndividuales = (req, res) => {
   );
 };
 
-export const saveEGenerales = (req, res) => {
+exports.saveEGenerales = (req, res) => {
   const codEquipo = req.body.codEquipo;
   console.log(codEquipo);
   console.log("holaa");
@@ -353,7 +351,7 @@ export const saveEGenerales = (req, res) => {
   );
 };
 
-export const updateEstadisticasGenerales = (req, res) => {
+exports.updateEstadisticasGenerales = (req, res) => {
   const codEquipo = req.body.codEquipo;
   const codPartido = req.body.codPartido;
   const posesionBalon = req.body.posesionBalon;
@@ -409,7 +407,7 @@ export const updateEstadisticasGenerales = (req, res) => {
   );
 };
 
-export const saveEstadios = (req, res) => {
+exports.saveEstadios = (req, res) => {
   const nombreEstadio = req.body.nombreEstadio;
 
   conexion.query(
@@ -428,7 +426,7 @@ export const saveEstadios = (req, res) => {
   );
 };
 
-export const updateEstadio = (req, res) => {
+exports.updateEstadio = (req, res) => {
   const codEstadio = req.body.codEstadio;
   const nombreEstadio = req.body.nombreEstadio;
   conexion.query(
@@ -450,7 +448,7 @@ export const updateEstadio = (req, res) => {
   );
 };
 
-export const saveJornada = (req, res) => {
+exports.saveJornada = (req, res) => {
   const fecha = moment(req.body.fecha).format('YYYY-MM-DD HH:mm:ss');
   
 
@@ -469,7 +467,7 @@ export const saveJornada = (req, res) => {
 };
 
 
-export const saveDeporte = (req, res) => {
+exports.saveDeporte = (req, res) => {
   const nombreDeporte = req.body.nombreDeporte;
   const tipoDeporte = req.body.tipoDeporte;
 
@@ -487,7 +485,7 @@ export const saveDeporte = (req, res) => {
   );
 };
 
-export const updateDeporte = (req, res) => {
+exports.updateDeporte = (req, res) => {
   const nombreDeporte = req.body.nombreDeporte;
   const tipoDeporte = req.body.tipoDeporte;
   const id = req.body.id;
@@ -512,7 +510,7 @@ export const updateDeporte = (req, res) => {
   );
 };
 
-export const saveRI = (req, res) => {
+exports.saveRI = (req, res) => {
   const nombreJugador = req.body.nombreJugador;
   const puntos = req.body.puntos;
   const nombreDeporte = req.body.nombreDeporte;
@@ -537,7 +535,7 @@ export const saveRI = (req, res) => {
     );
 
   })};
-  export const updateRI = (req, res) => {
+  exports.updateRI = (req, res) => {
     const id = req.body.id;
     const puntos = req.body.puntos;
   
@@ -555,7 +553,7 @@ export const saveRI = (req, res) => {
     );
   };
 
-  export const saveRE = (req, res) => {
+  exports.saveRE = (req, res) => {
     const nombreEquipo = req.body.nombreEquipo;
     const puntos = req.body.puntos;
     const nombreDeporte = req.body.nombreDeporte;
@@ -580,7 +578,7 @@ export const saveRI = (req, res) => {
   
   
   
-    export const updateRE = (req, res) => {
+    exports.updateRE = (req, res) => {
       const id = req.body.id;
       const puntos = req.body.puntos;
     
@@ -600,7 +598,7 @@ export const saveRI = (req, res) => {
   
 
 
-    export const saveResultados = (req, res) => {
+    exports.saveResultados = (req, res) => {
       const nombreDeporte = req.body.nombreDeporte;
       const fecha = moment(req.body.fecha).format('YYYY-MM-DD');
       const jornada = req.body.jornada;

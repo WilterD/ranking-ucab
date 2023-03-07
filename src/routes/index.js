@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 import conexion from "../database/db.js";
-import * as mycrud from "../controllers/crud.js";
+import * as mycrud from "../controllers/crud.cjs";
 // importar moment
 import moment from "moment";
 import multer from "multer";
