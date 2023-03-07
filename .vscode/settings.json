@@ -1,3 +1,9 @@
 {
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/9ae36f6f-0435-40a5-b7b0-932f97bf6e97/resourceGroups/Wolf-League/providers/Microsoft.Web/sites/rankingucab",
+    "appService.deploySubpath": "."
 }
