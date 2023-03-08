@@ -28,7 +28,7 @@ router.get("/admin/deleteEstadio/:codEstadio", (req, res) => {
   );
 });
 
-router.get("/admin/equipos", (req, res) => {
+router.get("/admin/equipos", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM equipos", (error, equipos) => {
     if (error) {
       console.log(error);
@@ -47,7 +47,7 @@ router.get("/admin/equipos", (req, res) => {
   });
 });
 
-router.get("/admin/crearEquipo", (req, res) => {
+router.get("/admin/crearEquipo", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM deporte", (error, deporte) => {
     if (error) {
       console.log(error);
@@ -96,7 +96,7 @@ router.get("/admin/deleteEquipo/:codEquipo", (req, res) => {
   );
 });
 
-router.get("/admin/jugadores", (req, res) => {
+router.get("/admin/jugadores", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM jugador", (error, jugadores) => {
     if (error) {
       console.log(error);
@@ -115,7 +115,7 @@ router.get("/admin/jugadores", (req, res) => {
   });
 });
 
-router.get("/admin/crearJugador", (req, res) => {
+router.get("/admin/crearJugador", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM jugador", (error, jugador) => {
     if (error) {
       console.log(error);
@@ -141,7 +141,7 @@ router.get("/admin/crearJugador", (req, res) => {
   });
 });
 
-router.get("/admin/editarJugador/:codJugador", (req, res) => {
+router.get("/admin/editarJugador/:codJugador", requireLogin, (req, res) => {
   const codJugador = req.params.codJugador;
 
   conexion.query(
@@ -173,7 +173,7 @@ router.get("/admin/editarJugador/:codJugador", (req, res) => {
   );
 });
 
-router.get("/admin/deleteJugador/:codJugador", (req, res) => {
+router.get("/admin/deleteJugador/:codJugador", requireLogin, (req, res) => {
   const codJugador = req.params.codJugador;
   conexion.query(
     "DELETE FROM jugador WHERE codJugador = ?",
@@ -188,31 +188,11 @@ router.get("/admin/deleteJugador/:codJugador", (req, res) => {
   );
 });
 
-router.get("/admin/confederaciones", (req, res) => {
-  conexion.query("SELECT * FROM confederacion", (error, conf) => {
-    if (error) {
-      console.log(error);
-    } else {
-      res.render("admin/confederaciones.ejs", { conf: conf });
-    }
-  });
-});
-
-router.get("/admin/crearConfederacion", (req, res) => {
-  conexion.query("SELECT * FROM confederacion", (error, conf) => {
-    if (error) {
-      console.log(error);
-    } else {
-      res.render("admin/crearConfederacion.ejs", { conf: conf });
-    }
-  });
-});
-
-router.get("/admin/crearGrupo", (req, res) => {
+router.get("/admin/crearGrupo", requireLogin, (req, res) => {
   res.render("admin/crearGrupo.ejs");
 });
 
-router.get("/admin/crearJugador", (req, res) => {
+router.get("/admin/crearJugador", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM jugador", (error, jugador) => {
     if (error) {
       console.log(error);
@@ -222,38 +202,7 @@ router.get("/admin/crearJugador", (req, res) => {
   });
 });
 
-// Editar un registro
-router.get("/admin/editarConfederacion/:siglasConf", (req, res) => {
-  const siglasConf = req.params.siglasConf;
-  conexion.query(
-    "SELECT * FROM confederacion WHERE siglasConf=?",
-    [siglasConf],
-    (error, conf) => {
-      if (error) {
-        throw error;
-      } else {
-        res.render("admin/editarConfederacion.ejs", { conf: conf[0] });
-      }
-    }
-  );
-});
-
-router.get("/admin/deleteConfederacion/:nombreConf", (req, res) => {
-  const nombreConf = req.params.nombreConf;
-  conexion.query(
-    "DELETE FROM confederacion WHERE nombreConf = ?",
-    [nombreConf],
-    (error, results) => {
-      if (error) {
-        console.log(error);
-      } else {
-        res.redirect("/admin/confederaciones");
-      }
-    }
-  );
-});
-
-router.get("/admin/carreras", (req, res) => {
+router.get("/admin/carreras", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM carreras", (error, resultados) => {
     if (error) {
       console.log(error);
@@ -263,11 +212,11 @@ router.get("/admin/carreras", (req, res) => {
   });
 });
 
-router.get("/admin/crearCarrera", (req, res) => {
+router.get("/admin/crearCarrera", requireLogin, (req, res) => {
   res.render("admin/crearCarrera.ejs");
 });
 
-router.get("/admin/editarCarrera/:id", (req, res) => {
+router.get("/admin/editarCarrera/:id", requireLogin, (req, res) => {
   const id = req.params.id;
   conexion.query(
     "SELECT * FROM carreras WHERE id=?",
@@ -282,7 +231,7 @@ router.get("/admin/editarCarrera/:id", (req, res) => {
   );
 });
 
-router.get("/admin/deleteCarrera/:id", (req, res) => {
+router.get("/admin/deleteCarrera/:id", requireLogin, (req, res) => {
   const id = req.params.id;
   conexion.query(
     "DELETE FROM carreras WHERE id = ?",
@@ -297,9 +246,9 @@ router.get("/admin/deleteCarrera/:id", (req, res) => {
   );
 });
 
-router.get("/admin/", (req, res) => {});
+router.get("/admin/", requireLogin, (req, res) => {});
 
-router.get("/admin/partidos", (req, res) => {
+router.get("/admin/partidos", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM partido", (error, partidos) => {
     if (error) {
       console.log(error);
@@ -333,7 +282,7 @@ router.get("/admin/partidos", (req, res) => {
   });
 });
 
-router.get("/admin/crearPartido", (req, res) => {
+router.get("/admin/crearPartido", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM jornadas", (error, jornadas) => {
     if (error) {
       console.log(error);
@@ -383,7 +332,7 @@ router.get("/admin/crearPartido", (req, res) => {
   });
 });
 
-router.get("/admin/editarPartido/:codPartido", (req, res) => {
+router.get("/admin/editarPartido/:codPartido", requireLogin, (req, res) => {
   const codPartido = req.params.codPartido;
   conexion.query(
     "SELECT * FROM partido WHERE codPartido=?",
@@ -421,7 +370,7 @@ router.get("/admin/editarPartido/:codPartido", (req, res) => {
   );
 });
 
-router.get("/admin/deletePartido/:codPartido", (req, res) => {
+router.get("/admin/deletePartido/:codPartido", requireLogin, (req, res) => {
   const codPartido = req.params.codPartido;
   conexion.query(
     "DELETE FROM partido WHERE codPartido = ?",
@@ -436,7 +385,7 @@ router.get("/admin/deletePartido/:codPartido", (req, res) => {
   );
 });
 
-router.get("/admin/crearGrupo", (req, res) => {
+router.get("/admin/crearGrupo", requireLogin, (req, res) => {
   res.render("admin/crearGrupo.ejs");
 });
 
@@ -450,7 +399,7 @@ router.get("/admin/grupos", requireLogin, (req, res) => {
   });
 });
 
-router.get("/admin/deleteGrupo/:letraGrupo", (req, res) => {
+router.get("/admin/deleteGrupo/:letraGrupo", requireLogin, (req, res) => {
   const letraGrupo = req.params.letraGrupo;
   conexion.query(
     "DELETE FROM grupo WHERE letraGrupo = ?",
@@ -465,7 +414,7 @@ router.get("/admin/deleteGrupo/:letraGrupo", (req, res) => {
   );
 });
 
-router.get("/admin/eliminatorias", (req, res) => {
+router.get("/admin/eliminatorias", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM eliminatorias", (error, eliminatoria) => {
     if (error) {
       console.log(error);
@@ -475,7 +424,7 @@ router.get("/admin/eliminatorias", (req, res) => {
   });
 });
 
-router.get("/admin/crearEliminatoria", (req, res) => {
+router.get("/admin/crearEliminatoria", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM equipos", (error, equipos) => {
     if (error) {
       console.log(error);
@@ -485,7 +434,7 @@ router.get("/admin/crearEliminatoria", (req, res) => {
   });
 });
 
-router.get("/admin/deleteEliminatoria/:codEquipo", (req, res) => {
+router.get("/admin/deleteEliminatoria/:codEquipo", requireLogin, (req, res) => {
   const codEquipo = req.params.codEquipo;
   console.log(codEquipo);
   conexion.query(
@@ -501,7 +450,7 @@ router.get("/admin/deleteEliminatoria/:codEquipo", (req, res) => {
   );
 });
 
-router.get("/admin/editarEliminatoria/:codEquipo", (req, res) => {
+router.get("/admin/editarEliminatoria/:codEquipo", requireLogin, (req, res) => {
   const codEquipo = req.params.codEquipo;
   conexion.query(
     "SELECT * FROM eliminatorias WHERE codEquipo=?",
@@ -518,7 +467,7 @@ router.get("/admin/editarEliminatoria/:codEquipo", (req, res) => {
   );
 });
 
-router.get("/admin/crearEIndividuales", (req, res) => {
+router.get("/admin/crearEIndividuales", requireLogin, (req, res) => {
   conexion.query(
     "SELECT * FROM estadisticasIndividuales",
     (error, individuales) => {
@@ -547,31 +496,35 @@ router.get("/admin/crearEIndividuales", (req, res) => {
   );
 });
 
-router.get("/admin/editarEIndividuales/:CodJugador+CodPartida", (req, res) => {
-  const codJugador = req.params.codJugador;
-  conexion.query(
-    "SELECT * FROM estadisticasIndividuales WHERE codJugador=?",
-    [codJugador],
-    (error, CJugador) => {
-      if (error) {
-        throw error;
-      } else {
-        conexion.query("SELECT codJugador FROM jugador", (error, estI) => {
-          if (error) {
-            console.log(error);
-          } else {
-            res.render("admin/editarEIndividuales.ejs", {
-              CJugador: CJugador[0],
-              estI: estI,
-            });
-          }
-        });
+router.get(
+  "/admin/editarEIndividuales/:CodJugador+CodPartida",
+  requireLogin,
+  (req, res) => {
+    const codJugador = req.params.codJugador;
+    conexion.query(
+      "SELECT * FROM estadisticasIndividuales WHERE codJugador=?",
+      [codJugador],
+      (error, CJugador) => {
+        if (error) {
+          throw error;
+        } else {
+          conexion.query("SELECT codJugador FROM jugador", (error, estI) => {
+            if (error) {
+              console.log(error);
+            } else {
+              res.render("admin/editarEIndividuales.ejs", {
+                CJugador: CJugador[0],
+                estI: estI,
+              });
+            }
+          });
+        }
       }
-    }
-  );
-});
+    );
+  }
+);
 
-router.get("/admin/estadisticasGenerales", (req, res) => {
+router.get("/admin/estadisticasGenerales", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM estadisticasGenerales", (error, generales) => {
     if (error) {
       console.log(error);
@@ -581,7 +534,7 @@ router.get("/admin/estadisticasGenerales", (req, res) => {
   });
 });
 
-router.get("/admin/crearEGenerales", (req, res) => {
+router.get("/admin/crearEGenerales", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM estadisticasGenerales", (error, generales) => {
     if (error) {
       console.log(error);
@@ -609,6 +562,7 @@ router.get("/admin/crearEGenerales", (req, res) => {
 
 router.get(
   "/deleteEstadisticasGenerales/:codEquipo-:codPartido",
+  requireLogin,
   (req, res) => {
     const codEquipo = req.params.codEquipo;
     const codPartido = req.params.codPartido;
@@ -626,7 +580,7 @@ router.get(
   }
 );
 
-router.get("/admin/estadisticasIndividuales", (req, res) => {
+router.get("/admin/estadisticasIndividuales", requireLogin, (req, res) => {
   conexion.query(
     "SELECT * FROM estadisticasIndividuales",
     (error, individuales) => {
@@ -642,7 +596,7 @@ router.get("/admin/estadisticasIndividuales", (req, res) => {
 });
 
 router.get(
-  "/admin/editarEstadisticasGenerales/:codEquipo-:codPartido",
+  "/admin/editarEstadisticasGenerales/:codEquipo-:codPartido", requireLogin,
   (req, res) => {
     const codEquipo = req.params.codEquipo;
     const codPartido = req.params.codPartido;
@@ -663,7 +617,7 @@ router.get(
   }
 );
 
-router.get("/admin/estadios", (req, res) => {
+router.get("/admin/estadios", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM estadio", (error, estadios) => {
     if (error) {
       console.log(error);
@@ -673,7 +627,7 @@ router.get("/admin/estadios", (req, res) => {
   });
 });
 
-router.get("/admin/crearEstadio", (req, res) => {
+router.get("/admin/crearEstadio", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM estadio", (error, estadios) => {
     if (error) {
       console.log(error);
@@ -685,7 +639,7 @@ router.get("/admin/crearEstadio", (req, res) => {
   });
 });
 
-router.get("/admin/editarEstadio/:codEstadio", (req, res) => {
+router.get("/admin/editarEstadio/:codEstadio", requireLogin, (req, res) => {
   const codEstadio = req.params.codEstadio;
   conexion.query(
     "SELECT * FROM estadio WHERE codEstadio=?",
@@ -702,7 +656,7 @@ router.get("/admin/editarEstadio/:codEstadio", (req, res) => {
   );
 });
 
-router.get("/admin/jornadas", (req, res) => {
+router.get("/admin/jornadas", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM jornadas", (error, jornadas) => {
     if (error) {
       console.log(error);
@@ -733,11 +687,11 @@ router.get("/admin/jornadas", (req, res) => {
   });
 });
 
-router.get("/admin/crearJornada", (req, res) => {
+router.get("/admin/crearJornada", requireLogin, (req, res) => {
   res.render("admin/crearJornada.ejs");
 });
 
-router.get("/admin/deleteJornadas/:fecha", (req, res) => {
+router.get("/admin/deleteJornadas/:fecha", requireLogin, (req, res) => {
   const fecha = req.params.fecha;
   conexion.query(
     "DELETE FROM jornadas WHERE fecha = ?",
@@ -752,7 +706,7 @@ router.get("/admin/deleteJornadas/:fecha", (req, res) => {
   );
 });
 
-router.get("/admin/deportes", (req, res) => {
+router.get("/admin/deportes", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM deporte", (error, deporte) => {
     if (error) {
       console.log(error);
@@ -762,11 +716,11 @@ router.get("/admin/deportes", (req, res) => {
   });
 });
 
-router.get("/admin/crearDeporte", (req, res) => {
+router.get("/admin/crearDeporte", requireLogin, (req, res) => {
   res.render("admin/crearDeporte.ejs");
 });
 
-router.get("/admin/editarDeporte/:id", (req, res) => {
+router.get("/admin/editarDeporte/:id", requireLogin, (req, res) => {
   const id = req.params.id;
 
   conexion.query("SELECT * FROM deporte WHERE id=?", [id], (error, deporte) => {
@@ -778,7 +732,7 @@ router.get("/admin/editarDeporte/:id", (req, res) => {
   });
 });
 
-router.get("/admin/deleteDeporte/:id", (req, res) => {
+router.get("/admin/deleteDeporte/:id", requireLogin, (req, res) => {
   const id = req.params.id;
   conexion.query("DELETE FROM deporte WHERE id = ?", [id], (error, results) => {
     if (error) {
@@ -789,7 +743,7 @@ router.get("/admin/deleteDeporte/:id", (req, res) => {
   });
 });
 
-router.get("/admin/rankingIndividual", (req, res) => {
+router.get("/admin/rankingIndividual", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM rankini", (error, rankini) => {
     if (error) {
       console.log(error);
@@ -799,7 +753,7 @@ router.get("/admin/rankingIndividual", (req, res) => {
   });
 });
 
-router.get("/admin/crearRankingIndividual", (req, res) => {
+router.get("/admin/crearRankingIndividual", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM jugador", (error, jugadores) => {
     if (error) {
       console.log(error);
@@ -818,7 +772,7 @@ router.get("/admin/crearRankingIndividual", (req, res) => {
   });
 });
 
-router.get("/admin/editarRankingRI/:id", (req, res) => {
+router.get("/admin/editarRankingRI/:id", requireLogin, (req, res) => {
   const id = req.params.id;
   conexion.query(
     "SELECT * FROM rankini WHERE id=?",
@@ -835,7 +789,7 @@ router.get("/admin/editarRankingRI/:id", (req, res) => {
   );
 });
 
-router.get("/admin/deleteRI/:id", (req, res) => {
+router.get("/admin/deleteRI/:id", requireLogin, (req, res) => {
   const id = req.params.id;
   conexion.query("DELETE FROM rankini WHERE id = ?", [id], (error, results) => {
     if (error) {
@@ -848,7 +802,7 @@ router.get("/admin/deleteRI/:id", (req, res) => {
 
 // Ranking Equipos
 
-router.get("/admin/rankingEquipos", (req, res) => {
+router.get("/admin/rankingEquipos", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM rankinge", (error, rankinge) => {
     if (error) {
       console.log(error);
@@ -858,7 +812,7 @@ router.get("/admin/rankingEquipos", (req, res) => {
   });
 });
 
-router.get("/admin/crearRankingEquipos", (req, res) => {
+router.get("/admin/crearRankingEquipos", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM equipos", (error, equipos) => {
     if (error) {
       console.log(error);
@@ -877,7 +831,7 @@ router.get("/admin/crearRankingEquipos", (req, res) => {
   });
 });
 
-router.get("/admin/editarRankingRE/:id", (req, res) => {
+router.get("/admin/editarRankingRE/:id", requireLogin, (req, res) => {
   const id = req.params.id;
   conexion.query(
     "SELECT * FROM rankinge WHERE id=?",
@@ -894,7 +848,7 @@ router.get("/admin/editarRankingRE/:id", (req, res) => {
   );
 });
 
-router.get("/admin/deleteRE/:id", (req, res) => {
+router.get("/admin/deleteRE/:id", requireLogin, (req, res) => {
   const id = req.params.id;
   conexion.query(
     "DELETE FROM rankinge WHERE id = ?",
@@ -920,6 +874,147 @@ function queryDatabase(sql) {
     });
   });
 }
+
+
+
+router.get("/admin/resultados", requireLogin, (req, res) => {
+  conexion.query("SELECT * FROM resultados", (error, resultados) => {
+    if (error) {
+      console.log(error);
+    } else {
+      let fechaResultados = resultados.map((resultados) => {
+        // obtener los dias de la semana
+        let fechaResultados = new Date(resultados.fecha);
+
+        let dia = fechaResultados.getDate();
+        let mes = fechaResultados.getMonth() + 1;
+        let anio = fechaResultados.getFullYear();
+
+        fechaResultados = `${dia}/${mes}/${anio}`;
+
+        return fechaResultados;
+      });
+      res.render("admin/resultados.ejs", {
+        resultados: resultados,
+        fechaResultados: fechaResultados,
+      });
+    }
+  });
+});
+
+router.get("/admin/CrearResultados", requireLogin, (req, res) => {
+  conexion.query("SELECT * FROM equipos", (error, equipos) => {
+    if (error) {
+      console.log(error);
+    } else {
+      conexion.query("SELECT * FROM deporte", (error, deportes) => {
+        if (error) {
+          console.log(error);
+        } else {
+          res.render("admin/crearResultados.ejs", {
+            deportes: deportes,
+            equipos: equipos,
+          });
+        }
+      });
+    }
+  });
+});
+
+router.get("/admin/deleteResultados/:id", requireLogin, (req, res) => {
+  const id = req.params.id;
+  conexion.query(
+    "DELETE FROM resultados WHERE id = ?",
+    [id],
+    (error, results) => {
+      if (error) {
+        console.log(error);
+      } else {
+        res.redirect("/admin/resultados");
+      }
+    }
+  );
+});
+
+// login y registro
+
+// Ruta de dashboard protegida
+router.get("/admin/dashboard", requireLogin, (req, res) => {
+  // Verificar que el usuario haya iniciado sesión
+  conexion.query(
+    "SELECT COUNT(*) AS cantidadDeportes FROM deporte",
+    (error, deportes) => {
+      if (error) {
+        console.log(error);
+      } else {
+        conexion.query(
+          "SELECT COUNT(*) AS cantidadEquipos FROM equipos",
+          (error, resultadosEquipos) => {
+            if (error) {
+              console.log(error);
+            } else {
+              conexion.query(
+                "SELECT COUNT(*) AS cantidadJugadores FROM jugador",
+                (error, resultadosJugadores) => {
+                  if (error) {
+                    console.log(error);
+                  } else {
+                    conexion.query(
+                      "SELECT COUNT(*) AS cantidadEstadios FROM estadio",
+                      (error, resultadosEstadios) => {
+                        if (error) {
+                          console.log(error);
+                        } else {
+                          conexion.query(
+                            "SELECT COUNT(*) AS cantidadPartidos FROM partido",
+                            (error, resultadosPartidos) => {
+                              if (error) {
+                                console.log(error);
+                              } else {
+                                conexion.query(
+                                  "SELECT COUNT(*) AS cantidadCarreras FROM carreras",
+                                  (error, resultadosCarreras) => {
+                                    if (error) {
+                                      console.log(error);
+                                    } else {
+                                      res.render("admin/dashboard", {
+                                        cantidadDeportes:
+                                          deportes[0].cantidadDeportes,
+                                        cantidadEquipos:
+                                          resultadosEquipos[0].cantidadEquipos,
+                                        cantidadJugadores:
+                                          resultadosJugadores[0]
+                                            .cantidadJugadores,
+                                        cantidadEstadios:
+                                          resultadosEstadios[0]
+                                            .cantidadEstadios,
+                                        cantidadPartidos:
+                                          resultadosPartidos[0]
+                                            .cantidadPartidos,
+                                        cantidadCarreras:
+                                          resultadosCarreras[0]
+                                            .cantidadCarreras,
+                                      });
+                                    }
+                                  }
+                                );
+                              }
+                            }
+                          );
+                        }
+                      }
+                    );
+                  }
+                }
+              );
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
 
 router.get("/", (req, res) => {
   conexion.query("SELECT * FROM deporte", (error, deportes) => {
@@ -1271,143 +1366,7 @@ router.get("/deportes-:id", (req, res) => {
   });
 });
 
-router.get("/admin/resultados", (req, res) => {
-  conexion.query("SELECT * FROM resultados", (error, resultados) => {
-    if (error) {
-      console.log(error);
-    } else {
-      let fechaResultados = resultados.map((resultados) => {
-        // obtener los dias de la semana
-        let fechaResultados = new Date(resultados.fecha);
 
-        let dia = fechaResultados.getDate();
-        let mes = fechaResultados.getMonth() + 1;
-        let anio = fechaResultados.getFullYear();
-
-        fechaResultados = `${dia}/${mes}/${anio}`;
-
-        return fechaResultados;
-      });
-      res.render("admin/resultados.ejs", {
-        resultados: resultados,
-        fechaResultados: fechaResultados,
-      });
-    }
-  });
-});
-
-router.get("/admin/CrearResultados", (req, res) => {
-  conexion.query("SELECT * FROM equipos", (error, equipos) => {
-    if (error) {
-      console.log(error);
-    } else {
-      conexion.query("SELECT * FROM deporte", (error, deportes) => {
-        if (error) {
-          console.log(error);
-        } else {
-          res.render("admin/crearResultados.ejs", {
-            deportes: deportes,
-            equipos: equipos,
-          });
-        }
-      });
-    }
-  });
-});
-
-router.get("/admin/deleteResultados/:id", (req, res) => {
-  const id = req.params.id;
-  conexion.query(
-    "DELETE FROM resultados WHERE id = ?",
-    [id],
-    (error, results) => {
-      if (error) {
-        console.log(error);
-      } else {
-        res.redirect("/admin/resultados");
-      }
-    }
-  );
-});
-
-// login y registro
-
-// Ruta de dashboard protegida
-router.get("/admin/dashboard", requireLogin, (req, res) => {
-  // Verificar que el usuario haya iniciado sesión
-  conexion.query(
-    "SELECT COUNT(*) AS cantidadDeportes FROM deporte",
-    (error, deportes) => {
-      if (error) {
-        console.log(error);
-      } else {
-        conexion.query(
-          "SELECT COUNT(*) AS cantidadEquipos FROM equipos",
-          (error, resultadosEquipos) => {
-            if (error) {
-              console.log(error);
-            } else {
-              conexion.query(
-                "SELECT COUNT(*) AS cantidadJugadores FROM jugador",
-                (error, resultadosJugadores) => {
-                  if (error) {
-                    console.log(error);
-                  } else {
-                    conexion.query(
-                      "SELECT COUNT(*) AS cantidadEstadios FROM estadio",
-                      (error, resultadosEstadios) => {
-                        if (error) {
-                          console.log(error);
-                        } else {
-                          conexion.query(
-                            "SELECT COUNT(*) AS cantidadPartidos FROM partido",
-                            (error, resultadosPartidos) => {
-                              if (error) {
-                                console.log(error);
-                              } else {
-                                conexion.query(
-                                  "SELECT COUNT(*) AS cantidadCarreras FROM carreras",
-                                  (error, resultadosCarreras) => {
-                                    if (error) {
-                                      console.log(error);
-                                    } else {
-                                      res.render("admin/dashboard", {
-                                        cantidadDeportes:
-                                          deportes[0].cantidadDeportes,
-                                        cantidadEquipos:
-                                          resultadosEquipos[0].cantidadEquipos,
-                                        cantidadJugadores:
-                                          resultadosJugadores[0]
-                                            .cantidadJugadores,
-                                        cantidadEstadios:
-                                          resultadosEstadios[0]
-                                            .cantidadEstadios,
-                                        cantidadPartidos:
-                                          resultadosPartidos[0]
-                                            .cantidadPartidos,
-                                        cantidadCarreras:
-                                          resultadosCarreras[0]
-                                            .cantidadCarreras,
-                                      });
-                                    }
-                                  }
-                                );
-                              }
-                            }
-                          );
-                        }
-                      }
-                    );
-                  }
-                }
-              );
-            }
-          }
-        );
-      }
-    }
-  );
-});
 
 // IMAGEN
 
@@ -1436,7 +1395,6 @@ router.post("/login", (req, res) => {
             (error, results) => {
               if (results.length > 0) {
                 const user = results[0];
-                console.log(user);
                 const validPassword = bcrypt.compare(password, user.password);
                 if (validPassword) {
                   req.session.user = user; // almacenar información del usuario en la sesión
@@ -1510,7 +1468,6 @@ router.post("/admin/logout", (req, res) => {
     }
   });
 });
-
 
 // Guardar registros
 router.post("/saveGrupo", mycrud.saveGrupo);
