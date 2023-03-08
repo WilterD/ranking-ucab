@@ -11,38 +11,40 @@
 
         <div class="col-xs-12 col-md-10 col-lg-11 mx-auto mt-3">
             <div class="row">
-                <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
-                    <thead>
-                        <tr class="bg-primary text-white">
-                            <th scope="col">#</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Carrera</th>
-                            <th scope="col">Deporte</th>
-                            <th scope="col">Puntos</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% ranking.forEach((ranking)=>{ %>
-                            <tr>
-                                <td>
-
-                                </td>
-                                <td>
-                                    <%= ranking.nombreJugador %>
-                                </td>
-                                <td>
-                                    <%= ranking.nombreCarrera %>
-                                </td>
-                                <td>
-                                    <%= ranking.nombreDeporte %>
-                                </td>
-                                <td>
-                                    <%= ranking.puntos %>
-                                </td>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
+                        <thead>
+                            <tr class="bg-primary text-white">
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Carrera</th>
+                                <th scope="col">Deporte</th>
+                                <th scope="col">Puntos</th>
                             </tr>
-                            <% }) %>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <% ranking.forEach((ranking)=>{ %>
+                                <tr>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <%= ranking.nombreJugador %>
+                                    </td>
+                                    <td>
+                                        <%= ranking.nombreCarrera %>
+                                    </td>
+                                    <td>
+                                        <%= ranking.nombreDeporte %>
+                                    </td>
+                                    <td>
+                                        <%= ranking.puntos %>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <%- include('partials/scripts2.ejs') %>

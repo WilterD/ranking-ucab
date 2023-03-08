@@ -16,95 +16,104 @@
   <% if (eliminatoria.length> 0) { %>
     <div class="container">
       <div class="row">
-        <div class="col-xs-12 col-md-10 col-lg-10 mt-3 mx-auto">
+        <div class="col-12 col-md-10 col-lg-10 mt-3 mx-auto">
           <h2 class="text-center">Tabla de posiciones ⚽</h2>
-          <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
-            <thead>
-              <tr class="bg-primary text-white">
-                <th scope="col">Equipo</th>
-                <th scope="col">PJ</th>
-                <th scope="col">PG</th>
-                <th scope="col">PE</th>
-                <th scope="col">PP</th>
-                <th scope="col">GF</th>
-                <th scope="col">GC</th>
-                <th scope="col">DIF</th>
-                <th scope="col">PTS</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% eliminatoria.forEach((elim)=>{ %>
-                <tr>
-                  <td>
-                    <%= elim.nombreEquipo %>
-                  </td>
-                  <td>
-                    <%= elim.juegos_jugados %>
-                  </td>
-                  <td>
-                    <%= elim.juegos_ganados %>
-                  </td>
-                  <td>
-                    <%= elim.juegos_empate %>
-                  </td>
-                  <td>
-                    <%= elim.juegos_perdidos %>
-                  </td>
-                  <td>
-                    <%= elim.goles_a_favor %>
-                  </td>
-                  <td>
-                    <%= elim.goles_en_contra %>
-                  </td>
-                  <td>
-                    <%= elim.diferencia_goles%>
-                  </td>
-                  <td>
-                    <%= elim.puntos%>
-                  </td>
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
+              <thead>
+                <tr class="bg-primary text-white">
+                  <th scope="col">Equipo</th>
+                  <th scope="col">PJ</th>
+                  <th scope="col">PG</th>
+                  <th scope="col">PE</th>
+                  <th scope="col">PP</th>
+                  <th scope="col">GF</th>
+                  <th scope="col">GC</th>
+                  <th scope="col">DIF</th>
+                  <th scope="col">PTS</th>
                 </tr>
+              </thead>
+              <tbody>
+                <% eliminatoria.forEach((elim)=>{ %>
+                  <tr>
+                    <td>
+                      <%= elim.nombreEquipo %>
+                    </td>
+                    <td>
+                      <%= elim.juegos_jugados %>
+                    </td>
+                    <td>
+                      <%= elim.juegos_ganados %>
+                    </td>
+                    <td>
+                      <%= elim.juegos_empate %>
+                    </td>
+                    <td>
+                      <%= elim.juegos_perdidos %>
+                    </td>
+                    <td>
+                      <%= elim.goles_a_favor %>
+                    </td>
+                    <td>
+                      <%= elim.goles_en_contra %>
+                    </td>
+                    <td>
+                      <%= elim.diferencia_goles%>
+                    </td>
+                    <td>
+                      <%= elim.puntos%>
+                    </td>
+                  </tr>
                 <% }) %>
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-    <% } %>
+<% } %>
+
 
 
       <!-- Si no hay partidos, no mostrar nada -->
       <section class="mt-5 mb-5 p-5" style="background-color:#19115e">
-        <% if (partidos.length> 0) { %>
-          <h2 class="text-center text-center text-white">Próximos Partidos ⚽</h2>
-          <% for (let i=0; i < partidos.length; i++) { %>
-            <div class="container text-center mt-5">
+        <% if (partidos.length > 0) { %>
+          <h2 class="text-center text-white">Próximos Partidos ⚽</h2>
+          <div class="container">
+            <% for (let i=0; i < partidos.length; i++) { %>
               <div class="row justify-content-center align-items-center mt-5">
-                <div class="col-md-3 col-sm-6 col-xs-12">
-                  <img class="team-logo" src="/images/2.jpg" alt="Logo del equipo 1">
+                <div class="col-md-3 col-sm-6 col-12 text-center order-1">
+                  <img class="team-logo img-fluid" src="/images/2.jpg" alt="Logo del equipo 1">
                   <h4 class="text-white">
                     <%= juegan[i].nombreEquipo1 %>
                   </h4>
                 </div>
-                <div class="col-md-3 col-sm-6 col-xs-12">
+                <div class="col-md-3 col-sm-6 col-12 text-center order-2 order-sm-2 order-md-2">
                   <h1 class="result text-white">VS</h1>
-                  <div class="date-and-stadium text-white">
-                    <%= fechaPartidos[i] %>
-                  </div>
-                  <div class="date-and-stadium text-white">
-                    <%= partidos[i].codEstadio %>
-                  </div>
                 </div>
-                <div class="col-md-3 col-sm-6 col-xs-12">
-                  <img class="team-logo" src="/images/2.jpg" alt="Logo del equipo 2">
+                <div class="col-md-3 col-sm-6 col-12 text-center order-2 order-md-3">
+                  <img class="team-logo img-fluid" src="/images/2.jpg" alt="Logo del equipo 2">
                   <h4 class="text-white">
                     <%= juegan[i].nombreEquipo2 %>
                   </h4>
                 </div>
+                <div class="col-md-12 col-sm-12 text-center order-3">
+                  <div class="date-and-stadium text-white">
+                    <%= fechaPartidos[i] %>
+                    <i class='bx bxs-calendar'></i>
+                  </div>
+                  <div class="date-and-stadium text-white">
+                    <%= partidos[i].codEstadio %> <i class='bx bxs-map-pin'></i>
+                  </div>
+                </div>
               </div>
-            </div>
             <% } %>
-              <% } %>
+          </div>
+        <% } %>
       </section>
+      
+      
+      
 
       <!-- Si no hay resultados, no mostrar nada -->
       <% if (resultados.length> 0) { %>
@@ -135,16 +144,16 @@
                   class="tabcontent <%= index === resultados.length - 1 ? 'show' : '' %>">
                   <% } %>
                     <div class="container text-center mt-5">
-                      <h2 class="text-center">Jornada <%= resultado.jornada %> ⚽</h2>
+                      <h2 class="text-center">Jornada <%= resultado.jornada %></h2>
                       <div class="row justify-content-center align-items-center mt-5">
                         <div class="col-md-3 col-sm-6 col-xs-12">
-                          <img class="team-logo" src="/images/2.jpg" alt="Logo del equipo 1">
+                          <img class="team-logo img-fluid" src="/images/2.jpg" alt="Logo del equipo 1">
                           <h4>
                             <%= resultado.nombreEquipo1 %>
                           </h4>
                         </div>
                         <div class="col-md-3 col-sm-6 col-xs-12">
-                          <h1 class="result">
+                          <h1 class="result text-nowrap">
                             <%= resultado.puntos1 %> - <%= resultado.puntos2 %>
                           </h1>
                           <div class="date-and-stadium">
@@ -152,7 +161,7 @@
                           </div>
                         </div>
                         <div class="col-md-3 col-sm-6 col-xs-12">
-                          <img class="team-logo" src="/images/2.jpg" alt="Logo del equipo 2">
+                          <img class="team-logo img-fluid" src="/images/2.jpg" alt="Logo del equipo 2">
                           <h4>
                             <%= resultado.nombreEquipo2 %>
                           </h4>

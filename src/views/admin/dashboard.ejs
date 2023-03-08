@@ -1,101 +1,116 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <%- include('partials/head.ejs') %>
     <title>Dashboard Wolf League</title>
 </head>
+
 <body>
-   <%- include('partials/navigation.ejs') %>
-   <section class="home-section">
-    <div class="home-content">
-      <i class='bx bx-menu' ></i>
-      >>> Dashboard
-    </div>
-    <div class="container">
-        <h1>Dashboard Wolf League</h1>
-        <div class="row mt-5">
-          <a href="/deportes">
-          <div class="col-4">
-            <div class="card shadow-lg" id="deportes">
-              <div class="card-body">
-                <h5 class="card-title">Deportes</h5>
-                <p class="card-text"><%= cantidadDeportes %> <i class='bx bx-world'></i></p>
-              </div>
-            </div>
-          </a>
+  <%- include('partials/navigation.ejs') %>
+    <section class="home-section">
+      <div class="home-content">
+        <i class='bx bx-menu'></i>
+        >>> Dashboard
+      </div>
+      <div class="container">
+        <div class="row">
+          <h1>Dashboard Wolf League</h1>
+          <div class="col-xs-4 col-md-4 col-lg-4 mt-5">
+            <a href="/deportes">
+                <div class="card shadow-lg" id="deportes">
+                  <div class="card-body">
+                    <h5 class="card-title">Deportes</h5>
+                    <p class="card-text">
+                      <%= cantidadDeportes %> <i class='bx bx-world'></i>
+                    </p>
+                  </div>
+                </div>
+            </a>
           </div>
-          <div class="col-4">
+          <div class="col-xs-4 col-md-4 col-lg-4 mt-5">
             <a href="/equipos">
-            <div class="card shadow-lg" id="equipos" >
-              <div class="card-body shadow-lg">
-                <h5 class="card-title">Equipos </h5>
-                <p class="card-text"><%= cantidadEquipos %> <i class='bx bx-football'></i></p>
-              </div>
-            </div>
-          </a>
-          </div>
-          <div class="col-4">
-            <div class="card shadow-lg" id="jugadores">
-              <a href="/jugadores">
-              <div class="card-body shadow-lg">
-                <h5 class="card-title">Jugadores </h5>
-                <p class="card-text"><%= cantidadJugadores %> <i class='bx bxs-user-badge'></i></p>
+              <div class="card shadow-lg" id="equipos">
+                <div class="card-body shadow-lg">
+                  <h5 class="card-title">Equipos </h5>
+                  <p class="card-text">
+                    <%= cantidadEquipos %> <i class='bx bx-football'></i>
+                  </p>
+                </div>
               </div>
             </a>
+          </div>
+          <div class="col-xs-4 col-md-4 col-lg-4 mt-5">
+            <div class="card shadow-lg" id="jugadores">
+              <a href="/jugadores">
+                <div class="card-body shadow-lg">
+                  <h5 class="card-title">Jugadores </h5>
+                  <p class="card-text">
+                    <%= cantidadJugadores %> <i class='bx bxs-user-badge'></i>
+                  </p>
+                </div>
+              </a>
             </div>
           </div>
-         
-          <div class="col-4 mt-5">
+
+          <div class="col-xs-4 col-md-4 col-lg-4 mt-5">
             <a href="/estadios">
-            <div class="card shadow-lg" id="estadios">
-              <div class="card-body shadow-lg">
-                <h5 class="card-title">Estadios </h5>
-                <p class="card-text"><%= cantidadEstadios %> <i class='bx bx-sitemap'></i></p>
+              <div class="card shadow-lg" id="estadios">
+                <div class="card-body shadow-lg">
+                  <h5 class="card-title">Estadios </h5>
+                  <p class="card-text">
+                    <%= cantidadEstadios %> <i class='bx bx-sitemap'></i>
+                  </p>
+                </div>
               </div>
-            </div>
-          </a>
+            </a>
           </div>
 
-          <div class="col-4 mt-5">
+          <div class="col-xs-12 col-md-4 col-lg-4 mt-5">
             <a href="/partidos">
-            <div class="card shadow-lg" id="partidos">
-              <div class="card-body shadow-lg">
-                <h5 class="card-title">Partidos</h5>
-                <p class="card-text"><%= cantidadPartidos %> <i class='bx bx-sitemap'></i></p>
+              <div class="card shadow-lg" id="partidos">
+                <div class="card-body shadow-lg">
+                  <h5 class="card-title">Partidos</h5>
+                  <p class="card-text">
+                    <%= cantidadPartidos %> <i class='bx bx-sitemap'></i>
+                  </p>
+                </div>
               </div>
-            </div>
-          </a>
+            </a>
           </div>
 
-          <div class="col-4 mt-5">
+          <div class="col-xs-12 col-md-4 col-lg-4 mt-5">
             <a href="/carreras">
-            <div class="card shadow-lg" id="carreras">
-              <div class="card-body shadow-lg">
-                <h5 class="card-title">Carreras / Unidades </h5>
-                <p class="card-text"><%= cantidadCarreras %> <i class='bx bx-sitemap'></i></p>
+              <div class="card shadow-lg" id="carreras">
+                <div class="card-body shadow-lg">
+                  <h5 class="card-title">Carreras / Unidades </h5>
+                  <p class="card-text">
+                    <%= cantidadCarreras %> <i class='bx bx-sitemap'></i>
+                  </p>
+                </div>
               </div>
-            </div>
-          </a>
+            </a>
           </div>
-       
+
         </div>
       </div>
-  </section> 
+    </section>
 
-  <section class="home-section">
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-12 mx-auto  mt-3">
-          <div id="mensajes">
-  <p id="mensaje"></p>
-  <img class="rounded" src="../../images/medioAmbiente.png" width="330" height="230">
-</div>
+    <section class="home-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12 mx-auto  mt-3">
+            <div id="mensajes">
+              <p id="mensaje"></p>
+              <img class="rounded" src="../../images/medioAmbiente.png" width="330" height="230">
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  
-  <%- include('partials/scripts.ejs') %>
+
+    <%- include('partials/scripts.ejs') %>
 </body>
+
 </html>
