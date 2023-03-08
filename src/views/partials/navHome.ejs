@@ -1,109 +1,26 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="#">Logo</a>
-        <button class="navbar-toggler" type="button" aria-controls="navbarCollapse" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <i class='bx bx-menu'></i>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/home"><img class="img-fluid" src="images/logo.png" width="70" height="30" /> Wolf League</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Acerca de</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Servicios</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contacto</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Ranking
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <% deportes.forEach((deportes)=>{ %>
+                            <li><a class="dropdown-item" href="/deportes-<%= deportes.id %>">
+                                    <%= deportes.nombreDeporte %>
+                                </a></li>
+                            <% }) %>
+                    </ul>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
-
-<style>
-    .navbar {
-    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
-}
-
-.navbar-brand {
-    font-weight: bold;
-}
-
-.navbar-nav .nav-link {
-    font-size: 18px;
-}
-
-.navbar-toggler {
-    border: none;
-    background-color: transparent;
-}
-
-.navbar-toggler i {
-    font-size: 28px;
-}
-
-@media (max-width: 768px) {
-    .navbar-nav {
-        margin-top: 50px;
-    }
-
-    .navbar-collapse {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #333;
-        z-index: 999;
-        padding-top: 80px;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        transform: translateY(-100%);
-        height: 100%;
-        transition: transform 0.3s ease-in-out;
-    }
-
-    .navbar-collapse.active {
-        transform: translateY(0%);
-        height: 100%;
-        transition: transform 0.3s ease-in-out;
-        background-color: red;
-        z-index: 9999;
-    }
-
-    .navbar-nav li {
-        display: block;
-        margin: 10px 0;
-    }
-
-    .navbar-nav li a {
-        display: block;
-        text-align: center;
-        font-size: 22px;
-        color: #fff;
-    }
-}
-
-.active {
-    display: block;
-}
-
-</style>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.min.js"></script>
-
-<script>
-    const navbarToggler = document.querySelector('.navbar-toggler');
-const navbarCollapse = document.querySelector('.navbar-collapse');
-
-navbarToggler.addEventListener('click', () => {
-    navbarCollapse.classList.toggle('active');
-    navbarToggler.classList.toggle('active');
-});
-
-</script>

@@ -24,6 +24,7 @@
               <thead>
                 <tr class="bg-primary text-white">
                   <th scope="col">Nombre</th>
+                  <th scope="col">Juegan</th>
                   <th scope="col">Acciones</th>
                 </tr>
               </thead>
@@ -32,6 +33,9 @@
                   <tr>
                     <td>
                       <%= deporte.nombreDeporte %>
+                    </td>
+                    <td>
+                      <%= deporte.tipoDeporte %>
                     </td>
                     <td>
                       <a href="/admin/editarDeporte/<%= deporte.id %>" class="btn btn-outline-info"> <i

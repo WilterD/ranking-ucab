@@ -1,18 +1,10 @@
-// const {
-//     DB_HOST,
-//     DB_USER,
-//     DB_PASSWORD,
-//     DB_NAME,
-//     DB_PORT
-//   } = require('../config.cjs');
-  
   const mysql = require('mysql');
   
   const conexion = mysql.createConnection({
-      host: 'rankingucab.mysql.database.azure.com',
-      user: 'wilterd',
-      password: 'Hugo1234$',
-      database: 'rankingucab',
+      host: 'localhost',
+      user: 'root',
+      password: '',
+      database: 'ranking',
       port: 3306
   });
   

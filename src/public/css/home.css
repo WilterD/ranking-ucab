@@ -1,144 +1,116 @@
-      body {
-        background: #eee;
-        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-        font-size: 14px;
-        color: #000;
-        margin: 0;
-        padding: 0;
-      }
-
-      .swiper {
-        width: 100%;
-        height: 100%;
-      }
-
-      .swiper-slide {
-        text-align: center;
-        font-size: 18px;
-        background: #fff;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .swiper-slide img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-body{
-    background-color: #E4E9F7;
-    font-size: 16px;
-    color: #333;
-    line-height: 1.5;
-    margin: 0;
-    padding: 0;
+body {
+  background-color: #e4e9f7;
+  font-size: 16px;
+  color: #333;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
 }
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
+}
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 a:link {
-    text-decoration: none;
-  }
-  a:visited {
-    text-decoration: none;
-  }
-  a:link, a:visited {
-    text-decoration: none;
-  }
-  
-  
-p#tituloLogo{
-    position: absolute; 
-    bottom: 10px; 
-    left: 200px;
-  }
-  @media (max-width: 991px) {
-    p#tituloLogo{
-      position: relative;
-      bottom: -15px; 
-      left: 0;
-      display: inline;
-    } 
-  }
-  
-  /*Sub menu Home*/
-  
-  /* Estilo para el submenú desplegable de Ranking */
-  .dropdown-menu {
-    display: none; /* Oculta el submenú por defecto */
-  }
-  
-  /* Estilo para mostrar el submenú cuando se hace clic en el enlace "Ranking" */
-  .nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-    
-  }
-  
-  /* Estilo para ocultar el submenú cuando se cierra */
-  .dropdown-menu {
-    position: absolute;
-  }
-  
-  /* Ajuste del ancho del submenú desplegable */
-  .dropdown-menu {
-    width: auto;
-  }
-  
-  /*Preloader*/
-  .preloader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #fff;
-    z-index: 9999;
-  }
-  .preloader.hidden {
-    display: none;
-  }
+  text-decoration: none;
+}
+a:visited {
+  text-decoration: none;
+}
+a:link,
+a:visited {
+  text-decoration: none;
+}
 
-  /*Estilos Swipers Slider*/
-  
-  .slide-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: #fff;
-    z-index: 1;
-  }
-  
-  .slide-content h2 {
-    font-size: 3rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .slide-content p {
-    font-size: 1.5rem;
-  }
-  
-  .swiper-slide img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
+/* Estilo para el submenú desplegable de Ranking */
+.dropdown-menu {
+  display: none; /* Oculta el submenú por defecto */
+}
 
-    max-height: 80vh; /* Cambiar el valor según se desee */
-    object-fit: cover;
-    object-position: center;
-  }
-  
-  /* CSS */
+/* Estilo para mostrar el submenú cuando se hace clic en el enlace "Ranking" */
+.nav-item.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+/* Estilo para ocultar el submenú cuando se cierra */
+.dropdown-menu {
+  position: absolute;
+}
+
+/* Ajuste del ancho del submenú desplegable */
+.dropdown-menu {
+  width: auto;
+}
+
+/*Preloader*/
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  z-index: 9999;
+}
+.preloader.hidden {
+  display: none;
+}
+
+/*Estilos Swipers Slider*/
+
+.slide-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff;
+  z-index: 1;
+}
+
+.slide-content h2 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.slide-content p {
+  font-size: 1.5rem;
+}
+
+.swiper-slide img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+
+  max-height: 80vh; /* Cambiar el valor según se desee */
+  object-fit: cover;
+  object-position: center;
+}
+
+/* CSS */
 .swiper-container {
   position: absolute;
   top: 80px; /* Cambiar el valor según se desee */
@@ -147,7 +119,6 @@ p#tituloLogo{
   bottom: 0;
   overflow: hidden;
 }
-
 
 /* CSS */
 .swiper-button-prev,
@@ -259,4 +230,63 @@ p#tituloLogo{
   font-size: 18px;
   color: #666;
   margin-top: 10px;
+}
+
+/*Estilos Swiper*/
+
+.swiper-container {
+  width: 100%;
+  height: 400px;
+  position: relative;
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tablaPosiciones {
+  position: relative;
+  margin-top: 100px;
+}
+
+/*distintos rankings*/
+
+@media (max-width: 584px) {
+  .card:hover {
+    transform: normal;
+    background-color: #000;
+  }
+}
+
+.card {
+  background: linear-gradient(45deg, #06005e, #683cfa);
+  transition: 0.5s;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  margin-top: 20px;
+}
+
+.card:hover {
+  transform: scale(1.1);
+  background: linear-gradient(45deg, #07013d, #230194);
+  transition: 0.5s;
+}
+
+.icon {
+  font-size: 5rem;
+  color: #fff;
+}
+
+.card-title {
+  margin-top: 1rem;
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.card-text {
+  margin-top: 1rem;
+  font-size: 1rem;
 }
