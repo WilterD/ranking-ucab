@@ -45,7 +45,7 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      - run: |
+        run: |
         az webapp list --query "[?state=='Running']"
 
       - name: Download artifact from build job
