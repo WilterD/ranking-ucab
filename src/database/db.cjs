@@ -1,10 +1,10 @@
   const mysql = require('mysql');
   
   const conexion = mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: '',
-      database: 'ranking',
+      host: 'rankingucab.mysql.database.azure.com',
+      user: 'wilterd',
+      password: 'Hugo1234$',
+      database: 'rankingucab',
       port: 3306
   });
   
