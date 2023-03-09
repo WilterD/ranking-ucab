@@ -26,7 +26,7 @@ exports.savePartido = (req, res) => {
   const codEstadio = req.body.codEstadio;
   const nombreEquipo1 = req.body.nombreEquipo1;
   const nombreEquipo2 = req.body.nombreEquipo2;
-  const nombreDeporte = req.body.nombreDeporte;
+
   
   conexion.query(
     "INSERT INTO partido SET ?",
@@ -44,18 +44,7 @@ exports.savePartido = (req, res) => {
               console.log(error);
               res.status(400).json({ msg: "error" });
             } else {
-              conexion.query(
-                "INSERT INTO jornadas SET ?",
-                { fecha: fecha, nombreDeporte:nombreDeporte },
-                (error, results) => {
-                  if (error) {
-                    console.log(error);
-                    res.status(400).json({ msg: "error" });
-                  } else {
-                    res.redirect("/admin/partidos");
-                  }
-                }
-              );
+              res.redirect("/admin/partidos");
             }
           }
         );
@@ -71,12 +60,6 @@ exports.savePartido = (req, res) => {
 exports.saveEquipo = (req, res) => {
   const nombreEquipo = req.body.nombreEquipo;
   const nombreDeporte = req.body.nombreDeporte;
-
-  console.log(nombreEquipo)
-  console.log(nombreDeporte)
-
-  // const imagen = req.file.buffer;
-
   conexion.query(
     "INSERT INTO equipos SET ?",
     {
