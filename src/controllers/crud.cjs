@@ -26,11 +26,11 @@ exports.savePartido = (req, res) => {
   const codEstadio = req.body.codEstadio;
   const nombreEquipo1 = req.body.nombreEquipo1;
   const nombreEquipo2 = req.body.nombreEquipo2;
+  const nombreDeporte = req.body.nombreDeporte;
 
-  
   conexion.query(
     "INSERT INTO partido SET ?",
-    { fecha: fecha, codEstadio: codEstadio },
+    { fecha: fecha, codEstadio: codEstadio,nombreDeporte:nombreDeporte },
     (error, results) => {
       if (error) {
         console.log(error);

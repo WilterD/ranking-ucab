@@ -115,7 +115,8 @@
               <% for (let i=0; i < partidos.length; i++) { %>
                 <div class="row justify-content-center align-items-center mt-5">
                   <div class="col-md-3 col-sm-6 col-12 text-center order-1">
-                    <img class="team-logo img-fluid" src="<%= juegan[i].nombreEquipo1 %>" alt="Logo del equipo 1">
+                    <img class="team-logo img-fluid" src="<%= juegan[i].imagen1 ? juegan[i].imagen1 : 'images/logo-wolfleague.png' %>" alt="Logo del equipo 1">
+
                     <h4 class="text-white">
                       <%= juegan[i].nombreEquipo1 %>
                     </h4>
@@ -124,7 +125,7 @@
                     <h1 class="result text-white">VS</h1>
                   </div>
                   <div class="col-md-3 col-sm-6 col-12 text-center order-2 order-md-3">
-                    <img class="team-logo img-fluid" src="/images/2.jpg" alt="Logo del equipo 2">
+                    <img class="team-logo img-fluid" src="<%= juegan[i].imagen2 ? juegan[i].imagen2 : 'images/logo-wolfleague.png' %>" alt="Logo del equipo 2">
                     <h4 class="text-white">
                       <%= juegan[i].nombreEquipo2 %>
                     </h4>
@@ -181,7 +182,7 @@
                             </h2>
                             <div class="row justify-content-center align-items-center mt-5">
                               <div class="col-md-3 col-sm-6 col-xs-12">
-                                <img class="team-logo img-fluid" src="/images/2.jpg" alt="Logo del equipo 1">
+                                <img class="team-logo img-fluid" src="<%= resultado.imagen1 ? resultado.imagen1 : 'images/logo-wolfleague.png' %>" alt="Logo del equipo 1">
                                 <h4>
                                   <%= resultado.nombreEquipo1 %>
                                 </h4>
@@ -195,7 +196,7 @@
                                 </div>
                               </div>
                               <div class="col-md-3 col-sm-6 col-xs-12">
-                                <img class="team-logo img-fluid" src="/images/2.jpg" alt="Logo del equipo 2">
+                                <img class="team-logo img-fluid" src="<%= resultado.imagen2 ? resultado.imagen2 : 'images/logo-wolfleague.png' %>" alt="Logo del equipo 2">
                                 <h4>
                                   <%= resultado.nombreEquipo2 %>
                                 </h4>

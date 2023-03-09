@@ -6,7 +6,7 @@ name: Build and deploy Node.js app to Azure Web App - rankingucab
 on:
   push:
     branches:
-      - master
+      - pruebaswilter
   workflow_dispatch:
 
 jobs:
