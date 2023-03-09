@@ -6,7 +6,7 @@ name: Build and deploy Node.js app to Azure Web App - rankingucab
 on:
   push:
     branches:
-      - pruebaswilter
+      pruebaswilter
   workflow_dispatch:
 
 jobs:
@@ -14,8 +14,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      uses: actions/checkout@v2
 
       - name: Set up Node.js version
         uses: actions/setup-node@v1
@@ -51,7 +50,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     
-      - run: |
+      run: |
         az webapp list --query "[?state=='Running']"
 
 
