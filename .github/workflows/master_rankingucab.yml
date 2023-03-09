@@ -6,7 +6,7 @@ name: Build and deploy Node.js app to Azure Web App - rankingucab
 on:
   push:
     branches:
-      pruebaswilter
+      - pruebaswilter
   workflow_dispatch:
 
 jobs:
@@ -50,9 +50,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: List running web apps
-        run: |
-          az webapp list --query "[?state=='Running']"
+    
+      - run: |
+        az webapp list --query "[?state=='Running']"
 
 
 >>>>>>> fb045b1 (2do intento yml)
