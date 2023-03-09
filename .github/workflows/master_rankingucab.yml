@@ -6,7 +6,7 @@ name: Build and deploy Node.js app to Azure Web App - rankingucab
 on:
   push:
     branches:
-      - master
+      - ci-cd
   workflow_dispatch:
 
 jobs:
@@ -42,13 +42,11 @@ jobs:
 
     steps:  
       - name: login 
-      - uses: azure/login@v1
-            with:
-             creds: ${{ secrets.AZURE_CREDENTIALS }}
-    
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - run: |
         az webapp list --query "[?state=='Running']"
-
 
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
