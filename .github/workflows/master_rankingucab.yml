@@ -12,6 +12,9 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+        environment:
+            name: 'Production'
+            url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
         steps:
             - uses: actions/checkout@v2
@@ -27,38 +30,11 @@ jobs:
                   npm run build --if-present
                   npm run test --if-present
 
-            - name: Upload artifact for deployment job
-              uses: actions/upload-artifact@v2
-              with:
-                  name: node-app
-                  path: .
-
-    deploy:
-        runs-on: ubuntu-latest
-        needs: build
-        environment:
-            name: 'production'
-            url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-        steps:
-            - name: login
-              uses: azure/login@v1
-              with:
-                  creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-            # - name: run az
-            #   run: az webapp list --query "[?state=='Running']"
-
-            - name: Download artifact from build job
-              uses: actions/download-artifact@v2
-              with:
-                  name: node-app
-
             - name: 'Deploy to Azure Web App'
               id: deploy-to-webapp
               uses: azure/webapps-deploy@v2
               with:
                   app-name: 'rankingucab'
-                  slot-name: 'production'
-                  publish-profile: ${{ secrets.AzureAppService_PublishProfile_57114e0dfc0641d3a0212bec0a6094e6 }}
+                  slot-name: 'Production'
+                  publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8E3B9AF12EAF4FD18666AAD1107624A9 }}
                   package: .
