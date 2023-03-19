@@ -13,6 +13,8 @@ import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 dotenv.config();
 
+import { uploadImg } from '../helpers/imgUploader';
+
 router.get("/admin/deleteEstadio/:codEstadio", (req, res) => {
   const codEstadio = req.params.codEstadio;
   conexion.query(
@@ -1473,7 +1475,7 @@ router.post("/admin/logout", (req, res) => {
 router.post("/saveGrupo", mycrud.saveGrupo);
 router.post("/saveJugador", mycrud.saveJugador);
 
-router.post("/saveEquipo", mycrud.saveEquipo);
+router.post("/saveEquipo", uploadImg, mycrud.saveEquipo);
 
 router.post("/saveCarrera", mycrud.saveCarrera);
 router.post("/savePartido", mycrud.savePartido);
