@@ -1,7 +1,9 @@
 const conexion = require("../database/db.cjs");
-const Swal = require("sweetalert2");
-const bodyParser = require("body-parser");
-const moment = require("moment");
+
+// Hector estuvo aqui c:
+const getImageUrl = require('../helpers/get-image-url');
+const moment = require('moment');
+
 
 exports.saveGrupo = (req, res) => {
   const letraGrupo = req.body.letraGrupo;
@@ -57,6 +59,7 @@ exports.savePartido = (req, res) => {
     }
   );
 };
+
 exports.updatePartido = (req, res) => {
   // Función para actualizar un partido
   function actualizarPartido(
@@ -100,17 +103,24 @@ exports.updatePartido = (req, res) => {
   }
 };
 
+
 // Equipos
 
 exports.saveEquipo = (req, res) => {
-  const nombreEquipo = req.body.nombreEquipo;
-  const nombreDeporte = req.body.nombreDeporte;
+  const { nombreEquipo, nombreDeporte } = req.body;
+
+  if (!req.file?.path) {
+    res.status(400).json({ msg: "No se ha subido la imagen" });
+  }
+
+  const filePath = getImageUrl(req.file.filename);
+
   conexion.query(
     "INSERT INTO equipos SET ?",
     {
-      nombreEquipo: nombreEquipo,
-      nombreDeporte: nombreDeporte,
-      // imagen: imagen,
+      nombreEquipo,
+      nombreDeporte,
+      imagen: filePath,
     },
     (error, results) => {
       if (error) {
