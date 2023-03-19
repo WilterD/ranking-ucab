@@ -4,7 +4,7 @@
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'ranking',
+    database: 'ranking2',
     port: 3306
 });
   

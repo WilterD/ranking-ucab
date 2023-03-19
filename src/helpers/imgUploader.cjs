@@ -2,7 +2,7 @@ const multer = require('multer');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
-const { imgDir } = require('./fileManager')
+const { imgDir } = require('./fileManager.cjs');
 const mimetypes = ['image/jpeg', 'image/png'];
 
 const imgStorage = multer.diskStorage({
@@ -37,4 +37,7 @@ const makeUploadImg = (fileName) => {
   return imgUploader.single(fileName);
 }
 
-module.exports = { uploadImg, makeUploadImg };
+module.exports = {
+  uploadImg,
+  makeUploadImg
+}

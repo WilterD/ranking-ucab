@@ -13,9 +13,11 @@ import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 dotenv.config();
 
+import { imgDir } from "./helpers/fileManager.cjs";
 
 
 const app = express(); // referenciar a express
+
 
 
 app.use(bodyParser.json());

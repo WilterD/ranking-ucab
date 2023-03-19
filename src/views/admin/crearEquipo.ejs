@@ -34,7 +34,7 @@
             <div class="card border-secondary">  
                 <div class="card-header">Nuevo Equipo</div>
                 <div class="card-body">
-                    <form action="/saveEquipo" method="POST">
+                    <form action="/saveEquipo" method="POST" enctype="multipart/form-data">
 
                       <div class="mb-3">
                         <label for="deporte" class="form-label">Deporte</label>
@@ -50,10 +50,10 @@
                                 <input type="text" required class="form-control" id="nombreEquipo" name="nombreEquipo" tabindex="1">
                          </div>
 
-                         <!-- <div class="mb-3">
+                         <div class="mb-3">
                           <label for="imagen" class="form-label">Imagen Equipo</label>
-                          <input type="file" name="imagen" />
-                         </div> -->
+                          <input type="file" name="file" />
+                         </div>
                          
                           
                          
@@ -63,6 +63,7 @@
                 </div>
             </div>        
       </div>
+      
     </section>
     <section class="home-section">
       <div class="container">

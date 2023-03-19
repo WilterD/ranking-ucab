@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { static as estatico } from "express";
 const router = Router();
 import conexion from "../database/db.cjs";
 import * as mycrud from "../controllers/crud.cjs";
@@ -10,10 +11,9 @@ import session from "express-session";
 import flash from "connect-flash";
 import { check, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
-import dotenv from "dotenv";
-dotenv.config();
 
-import { uploadImg } from '../helpers/imgUploader';
+import { uploadImg } from "../helpers/imgUploader.cjs";
+import { publicDir } from "../helpers/fileManager.cjs";
 
 router.get("/admin/deleteEstadio/:codEstadio", (req, res) => {
   const codEstadio = req.params.codEstadio;

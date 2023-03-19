@@ -3,18 +3,23 @@ const fse = require('fs-extra');
 
 const currentDir = path.dirname(__filename);
 const srcDir = path.join(currentDir, '..');
+const publicDir = path.join(srcDir, 'public');
+const publicRelativeDir = path.relative(srcDir, publicDir);
+
 const uploadsDir = path.join(srcDir, 'public', 'uploads');
-const uploadsRelativeDir = path.relative(srcDir, uploadsDir);
+const uploadsRelativeDir = path.relative(publicDir, uploadsDir);
 const imgDir = path.join(uploadsDir, 'img');
-const imgRelativeDir = path.relative(srcDir, imgDir);
+const imgRelativeDir = path.relative(publicDir, imgDir);
 
 /* Creating a directory called uploads in the root directory of the project. */
 async function initFileManager() {
   try {
+    await fse.ensureDir(publicDir);
+    console.log("public created!");
     await fse.ensureDir(uploadsDir);
-    console.log("uploads created!");
+    console.log("public/uploads created!");
     await fse.ensureDir(imgDir);
-    console.log("uploads/img created!");
+    console.log("public/uploads/img created!");
   } catch (err) {
     console.error(err);
   }
@@ -32,6 +37,11 @@ const deleteFile = async (path, filename) => {
 initFileManager();
 
 module.exports = {
-  deleteFile, uploadsRelativeDir,
-  imgRelativeDir, uploadsDir, imgDir
+  deleteFile: deleteFile,
+  uploadsRelativeDir: uploadsRelativeDir,
+  imgRelativeDir: imgRelativeDir,
+  uploadsDir: uploadsDir,
+  imgDir: imgDir,
+  publicDir,
+  publicRelativeDir
 }

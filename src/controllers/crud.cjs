@@ -1,9 +1,8 @@
 const conexion = require("../database/db.cjs");
 
 // Hector estuvo aqui c:
-const getImageUrl = require('../helpers/get-image-url');
+const { getImageUrl } = require('../helpers/get-image-url.cjs');
 const moment = require('moment');
-
 
 exports.saveGrupo = (req, res) => {
   const letraGrupo = req.body.letraGrupo;
