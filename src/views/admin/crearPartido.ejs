@@ -21,12 +21,30 @@
               <div class="mb-3">
                 <label for="fecha" class="form-label">Fecha del partido</label>
                 <input required type="datetime-local" class="form-control" id="fecha" name="fecha" tabindex="1">
-
                 </select>
               </div>
               <div class="mb-3">
-                <label for="codEstadio" class="form-label">Estadio</label>
-                <select id="codEstadio" name="codEstadio" class="form-select" aria-label="Default select example"
+                <label for="name" class="form-label">Nombre del Partido</label>
+                <input type="text" class="form-control" id="nombrePartido" name="nombrePartido" tabindex="1">
+              </div>
+              
+
+              <div class="mb-3">
+                <label for="nombreDeporte" class="form-label">Nombre Deporte</label>
+                <select id="nombreDeporte" name="nombreDeporte" class="form-select" aria-label="Default select example"
+                  tabindex="2" required>
+                  <% deporte.forEach((deporte)=>{ %>
+                    <option value="<%= deporte.nombreDeporte %>">
+                      <%= deporte.nombreDeporte %> %>
+                    </option>
+                    <% }) %>
+                </select>
+              </div>
+
+
+              <div class="mb-3">
+                <label for="nombreEstadio" class="form-label">Estadio</label>
+                <select id="nombreEstadio" name="nombreEstadio" class="form-select" aria-label="Default select example"
                   tabindex="2" required>
                   <option disabled selected>Seleccione un estadio</option>
                   <% estadios.forEach((estadio)=>{ %>
@@ -36,16 +54,13 @@
                     <% }) %>
                 </select>
               </div>
-
-
-
               <div class="mb-3">
                 <label for="codEquipo1" class="form-label">Equipo Local</label>
-                <select id="codEquipo1" name="nombreEquipo1" class="form-select" aria-label="Default select example"
+                <select id="codEquipo1" name="codEquipo1" class="form-select" aria-label="Default select example"
                   tabindex="2" required>
                   <option disabled selected>Seleccione un equipo</option>
                   <% equipos.forEach((equipo)=>{ %>
-                    <option value="<%= equipo.nombreEquipo %>">
+                    <option value="<%= equipo.codEquipo %>">
                       <%= equipo.nombreEquipo %> %>
                     </option>
                     <% }) %>
@@ -53,11 +68,11 @@
               </div>
               <div class="mb-3">
                 <label for="codEquipo2" class="form-label">Equipo Visitante</label>
-                <select id="codEquipo2" name="nombreEquipo2" class="form-select" aria-label="Default select example"
+                <select id="codEquipo2" name="codEquipo2" class="form-select" aria-label="Default select example"
                   tabindex="2" required>
                   <option disabled selected>Seleccione un equipo</option>
                   <% equipos.forEach((equipo)=>{ %>
-                    <option value="<%= equipo.nombreEquipo %>">
+                    <option value="<%= equipo.codEquipo %>">
                       <%= equipo.nombreEquipo %>
                     </option>
                     <% }) %>

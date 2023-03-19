@@ -250,33 +250,87 @@ router.get("/admin/deleteCarrera/:id", requireLogin, (req, res) => {
 
 router.get("/admin/", requireLogin, (req, res) => {});
 
+// Ruta para mostrar el enfrentamiento entre dos equipos
 router.get("/admin/partidos", requireLogin, (req, res) => {
-  conexion.query("SELECT * FROM partido", (error, partidos) => {
+  // Realizar la consulta SQL
+  const sql = `SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, p.nombrePartido, p.fecha, p.nombreEstadio, p.nombreDeporte, p.codPartido
+               FROM juegan j
+               INNER JOIN equipos e1 ON j.codEquipo1 = e1.codEquipo
+               INNER JOIN equipos e2 ON j.codEquipo2 = e2.codEquipo
+               INNER JOIN partido p ON j.codPartido = p.codPartido
+               `;
+
+  conexion.query(sql, (error, partidos) => {
     if (error) {
-      console.log(error);
+      console.error(error);
+      res.status(500).send("Error al obtener los partidos");
     } else {
-      conexion.query("SELECT * FROM juegan", (error, juegan) => {
+      console.log(partidos);
+
+      let fecha = partidos.map((partido) => {
+        // obtener los dias de la semana
+
+        let fecha = new Date(partido.fecha);
+        // dia lunes, martes, miercoles, jueves, viernes, sabado, domingo
+        let dia = fecha.getDate();
+        let mes = fecha.getMonth() + 1;
+        let anio = fecha.getFullYear();
+        let hora = fecha.getHours();
+        let minutos = fecha.getMinutes();
+        return `${dia}/${mes}/${anio} ${hora}:${minutos}`;
+      });
+
+      res.render("admin/partidos.ejs", {
+        partidos: partidos,
+        fecha: fecha,
+      });
+    }
+  });
+});
+
+router.get("/admin/editarPartido/:codPartido", (req, res) => {
+  const codPartido = req.params.codPartido;
+  // Realizar la consulta SQL
+  const sql = `SELECT e1.nombreEquipo AS equipo1,e1.codEquipo AS codEquipo1, e2.codEquipo AS codEquipo2, e2.nombreEquipo AS equipo2, p.nombrePartido, p.fecha, p.nombreEstadio, p.nombreDeporte, p.codPartido
+                 FROM juegan j
+                 INNER JOIN equipos e1 ON j.codEquipo1 = e1.codEquipo
+                 INNER JOIN equipos e2 ON j.codEquipo2 = e2.codEquipo
+                 INNER JOIN partido p ON j.codPartido = p.codPartido
+                  WHERE p.codPartido = ?`;
+
+  conexion.query(sql, [codPartido], (error, partidos) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send("Error al obtener los partidos");
+    } else {
+      let fecha = partidos.map((partido) => {
+        // obtener los dias de la semana
+
+        let fecha = new Date(partido.fecha);
+        // dia lunes, martes, miercoles, jueves, viernes, sabado, domingo
+        let dia = fecha.getDate();
+        let mes = fecha.getMonth() + 1;
+        let anio = fecha.getFullYear();
+        let hora = fecha.getHours();
+        let minutos = fecha.getMinutes();
+        return `${dia}/${mes}/${anio} ${hora}:${minutos}`;
+      });
+
+      conexion.query("SELECT * FROM equipos", (error, equipos) => {
         if (error) {
           console.log(error);
         } else {
-          // formatear fecha del objeto partidos
-
-          let fecha = partidos.map((partido) => {
-            // obtener los dias de la semana
-
-            let fecha = new Date(partido.fecha);
-            // dia lunes, martes, miercoles, jueves, viernes, sabado, domingo
-            let dia = fecha.getDate();
-            let mes = fecha.getMonth() + 1;
-            let anio = fecha.getFullYear();
-            let hora = fecha.getHours();
-            let minutos = fecha.getMinutes();
-            return `${dia}/${mes}/${anio} ${hora}:${minutos}`;
-          });
-          res.render("admin/partidos.ejs", {
-            partidos: partidos,
-            juegan: juegan,
-            fecha: fecha,
+          conexion.query("SELECT * FROM estadio", (error, estadios) => {
+            if (error) {
+              console.log(error);
+            } else {
+              res.render("admin/editarPartido.ejs", {
+                partidos: partidos,
+                fecha: fecha,
+                equipos: equipos,
+                estadios: estadios,
+              });
+            }
           });
         }
       });
@@ -332,44 +386,6 @@ router.get("/admin/crearPartido", requireLogin, (req, res) => {
       });
     }
   });
-});
-
-router.get("/admin/editarPartido/:codPartido", requireLogin, (req, res) => {
-  const codPartido = req.params.codPartido;
-  conexion.query(
-    "SELECT * FROM partido WHERE codPartido=?",
-    [codPartido],
-    (error, partidos) => {
-      if (error) {
-        throw error;
-      } else {
-        conexion.query("SELECT * FROM equipo", (error, equipos) => {
-          if (error) {
-            console.log(error);
-          } else {
-            conexion.query("SELECT * FROM pais", (error, paises) => {
-              if (error) {
-                console.log(error);
-              } else {
-                conexion.query("SELECT * FROM estadio", (error, estadios) => {
-                  if (error) {
-                    console.log(error);
-                  } else {
-                    res.render("admin/editarPartido.ejs", {
-                      partidos: partidos[0],
-                      equipos: equipos,
-                      paises: paises,
-                      estadios: estadios,
-                    });
-                  }
-                });
-              }
-            });
-          }
-        });
-      }
-    }
-  );
 });
 
 router.get("/admin/deletePartido/:codPartido", requireLogin, (req, res) => {
@@ -598,7 +614,8 @@ router.get("/admin/estadisticasIndividuales", requireLogin, (req, res) => {
 });
 
 router.get(
-  "/admin/editarEstadisticasGenerales/:codEquipo-:codPartido", requireLogin,
+  "/admin/editarEstadisticasGenerales/:codEquipo-:codPartido",
+  requireLogin,
   (req, res) => {
     const codEquipo = req.params.codEquipo;
     const codPartido = req.params.codPartido;
@@ -877,8 +894,6 @@ function queryDatabase(sql) {
   });
 }
 
-
-
 router.get("/admin/resultados", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM resultados", (error, resultados) => {
     if (error) {
@@ -1016,7 +1031,6 @@ router.get("/admin/dashboard", requireLogin, (req, res) => {
     }
   );
 });
-
 
 router.get("/", (req, res) => {
   conexion.query("SELECT * FROM deporte", (error, deportes) => {
@@ -1165,6 +1179,21 @@ router.get("/", (req, res) => {
   });
 });
 
+router.get("/pruebas", (req, res) => {
+  conexion.query(
+    "SELECT equipos.nombreEquipo AS equipo, juegan.codEquipo AS codEquipo FROM equipos INNER JOIN Juegan ON equipos.codEquipo = juegan.codEquipo",
+    (error, juegan) => {
+      if (error) {
+        console.log(error);
+      } else {
+        res.render("pruebas.ejs", {
+          juegan: juegan,
+        });
+      }
+    }
+  );
+});
+
 router.get("/home", (req, res) => {
   conexion.query("SELECT * FROM deporte", (error, deportes) => {
     if (error) {
@@ -1298,7 +1327,7 @@ router.get("/home", (req, res) => {
                         partidos: partidos,
                         juegan: juegan,
                         fechaPartidos: fechaPartidos,
-                        fechaResultados: fechaResultados,
+                        fechaResultados: fechaResultados
                       }); //render muestra el archivo ejs
                     }
                   });
@@ -1367,8 +1396,6 @@ router.get("/deportes-:id", (req, res) => {
     }
   });
 });
-
-
 
 // IMAGEN
 
@@ -1493,6 +1520,7 @@ router.post("/saveResultados", mycrud.saveResultados);
 router.post("/updateJugador", mycrud.updateJugador);
 router.post("/updateEquipo", mycrud.updateEquipo);
 router.post("/updateCarrera", mycrud.updateCarrera);
+router.post("/updatePartido", mycrud.updatePartido);
 router.post("/updateEliminatoria", mycrud.updateEliminatoria);
 router.post("/updateEstadio", mycrud.updateEstadio);
 router.post("/updateEstadisticasGenerales", mycrud.updateEstadisticasGenerales);

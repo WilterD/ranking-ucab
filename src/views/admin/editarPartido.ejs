@@ -1,75 +1,111 @@
-
-
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <%- include('partials/head.ejs') %>
-  <link rel="stylesheet" href="/css/main.css">
-    <title>Editar</title>
+    <%- include('partials/head.ejs') %>
+        <link rel="stylesheet" href="/css/main.css">
+        <title>Editar</title>
 </head>
+
 <body>
     <%- include('partials/navigation.ejs') %>
-    <section class="home-section">
-        <div class="home-content">
-          <i class='bx bx-menu' ></i>
-        </div>
+        <section class="home-section">
+            <div class="home-content">
+                <i class='bx bx-menu'></i>
+            </div>
 
-      <div class="container mt-4">          
-          <div class="card border-secondary">  
-                <div class="card-header">Editar Partido</div>
-                <div class="card-body">
-                    <form action="/updatePartido" method="POST">
-                        <div class="mb-3">
-                            <label for="fecha" class="form-label">Fecha del partido</label>
-                            <input required type="datetime-local" class="form-control" id="fecha" name="fecha" value="<%= partidos.fecha %>" tabindex="1">
-                        </div>
-
-                    <label for="codEstadio" class="form-label">Seleccione estadio</label>
-                    <select id="codEstadio" name="codEstadio" class="form-select" aria-label="Default select example"  tabindex="2" required>
-                        <option selected value="Selecciona un estadio" disabled>Selecciona un estadio</option>
-                        <% estadios.forEach((estadio)=>{ %>
-                            <option value="<%= estadio.codEstadio %>"><%= estadio.codEstadio %> - <%= estadio.nombreEstadio %></option>
-                        <% }) %>
-                    </select>
-                    <label for="codEquipo1" class="form-label">Equipo Local</label>
-                    <select id="codEquipo1" name="codEquipo1" class="form-select" aria-label="Default select example" tabindex="2" required>
-                        <% equipos.forEach((equipo)=>{ %>
-                            <option value="<%= equipo.codEquipo %>"><%= equipo.codEquipo %> </option>
-                        <% }) %>
-                    </select>
-                    <label for="codEquipo2" class="form-label">Equipo Visitante</label>
-                    <select id="codEquipo2" name="codEquipo2" class="form-select" aria-label="Default select example" tabindex="2" required selected="">
-                        <% equipos.forEach((equipo)=>{ %>
-                            <option value="<%= equipo.codEquipo %>"><%= equipo.codEquipo %> </option>
-                        <% }) %>
-                    </select>
-                    <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
-                    <a href="/partidos" class="btn btn-secondary">Cancelar</a>
-                    </form>      
-                </div>
-            </div>     
-      </div>
-    </section>
-
-     <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
-                        <a href="/admin/arbitros" class="btn btn-secondary">Cancelar</a>
-                </form>
-
-                <section class="home-section">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-xs-12 mx-auto">
-                                <div id="mensajes">
-                                    <p id="mensaje"></p>
-                                    <img class="rounded" src="../../images/medioAmbiente.png" width="330" height="230">
+            <div class="container mt-4">
+                <div class="card border-secondary">
+                    <div class="card-header">Editar Partido del <%= fecha[0] %>
+                    </div>
+                    <div class="card-body">
+                        <form action="/updatePartido" method="POST">
+                            <input type="hidden" class="form-control" id="codPartido" name="codPartido" tabindex="1" value="<% partidos.forEach((partidos)=>{ %> <%= partidos.codPartido %> <% }) %>" />
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Nombre Partido</label>
+                                    <input type="text" class="form-control" id="nombrePartido" name="nombrePartido" tabindex="1" value="<% partidos.forEach((partidos)=>{ %> <%= partidos.nombrePartido %> <% }) %>" />
                                 </div>
+                            <div class="mb-3">
+                                <label for="fecha" class="form-label">Fecha del partido</label>
+                                <input required type="datetime-local" class="form-control" id="fecha" name="fecha"
+                                    value="<%= fecha[0] %>" tabindex="1" />
                             </div>
+                            <div class="mb-3">
+                                <label for="nombreEstadio" class="form-label">Seleccione estadio</label>
+                                <select id="nombreEstadio" name="nombreEstadio" class="form-select"
+                                    aria-label="Default select example" tabindex="2" required>
+                                    <% partidos.forEach((partidos)=>{ %>
+                                        <option selected value="<%= partidos.nombreEstadio %>">
+                                            <%= partidos.nombreEstadio %>
+                                        </option>
+                                        <% }) %>
+                                            <% estadios.forEach((estadios)=>{ %>
+                                                <option value="<%= estadios.nombreEstadio %>">
+                                                    <%= estadios.nombreEstadio %>
+                                                </option>
+                                                <% }) %>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="codEquipo1" class="form-label">Equipo Local <% partidos.forEach((partidos)=>{ %> <%= equipos.codEquipo1 %> <% }) %></label>
+                                <select id="codEquipo1" name="codEquipo1" class="form-select"
+                                    aria-label="Default select example" tabindex="2" required>
+                                    <% partidos.forEach((partidos)=>{ %>
+                                        <option selected value="<%= partidos.equipo1 %>">
+                                            <%= partidos.equipo1 %>
+                                        </option>
+                                        <% }) %>
+                                            <% equipos.forEach((equipos)=>{ %>
+                                                <option value="<%= equipos.nombreEquipo %>">
+                                                    <%= equipos.nombreEquipo %>
+                                                </option>
+                                                <% }) %>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="codEquipo2" class="form-label">Equipo Visitante</label>
+                                <select id="codEquipo2" name="codEquipo2" class="form-select"
+                                    aria-label="Default select example" tabindex="2" required>
+                                    <% partidos.forEach((partidos)=>{ %>
+                                        <option selected value="<%= partidos.equipo2 %>">
+                                            <%= partidos.equipo2 %>
+                                        </option>
+                                        <% }) %>
+                                            <% equipos.forEach((equipos)=>{ %>
+                                                <option value="<%= equipos.nombreEquipo %>">
+                                                    <%= equipos.nombreEquipo %>
+                                                </option>
+                                                <% }) %>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <button id="submit-btn" type="submit" class="btn btn-primary"
+                                    tabindex="5">Guardar</button>
+                                <a href="/admin/partidos" class="btn btn-secondary">Cancelar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </form>
+
+        <section class="home-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12 mx-auto">
+                        <div id="mensajes">
+                            <p id="mensaje"></p>
+                            <img class="rounded" src="../../images/medioAmbiente.png" width="330" height="230">
                         </div>
                     </div>
-                </section>
+                </div>
+            </div>
+        </section>
 
-      <%- include('partials/scripts.ejs') %>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+        <%- include('partials/scripts.ejs') %>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>

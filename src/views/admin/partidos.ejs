@@ -21,27 +21,31 @@
           <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
             <thead>
               <tr class="bg-primary text-white">
-                <th scope="col">Fecha</th>           
+                <th scope="col">Nombre</th>           
                 <th scope="col">Estadio</th>           
                 <th scope="col">Local</th>           
                 <th scope="col">Visitante</th>           
+                <th scope="col">Deporte</th>           
+                <th scope="col">Fecha</th>           
                 <th scope="col">Acciones</th>           
               </tr>
             </thead>
             <tbody>
-              <% for (let i = 0; i < partidos.length; i++) { %>
+              <% partidos.forEach((partidos,i)=>{ %>
              
                 <tr>  
-                    <td><%= fecha[i] %></td>  
-                    <td><%= partidos[i].codEstadio %></td>  
-                    <td><%= juegan[i].nombreEquipo1 %></td>  
-                    <td><%= juegan[i].nombreEquipo2 %></td>  
+                  <td><%= partidos.nombrePartido %></td>  
+                  <td><%= partidos.nombreEstadio %></td>  
+                  <td><%= partidos.equipo1 %></td>  
+                  <td><%= partidos.equipo2 %></td>  
+                  <td><%= partidos.nombreDeporte %></td>  
+                  <td><%= fecha[i] %></td>  
                     <td>
-                      <a href="/admin/editarPartido/<%= partidos[i].codPartido %>" class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>
-                      <a onclick="confirmar('<%= partidos[i].codPartido %>','/admin/deletePartido')" class="btn btn-outline-danger"><i class='bx bxs-trash'></i></a>
+                      <a href="/admin/editarPartido/<%= partidos.codPartido %>" class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>
+                      <a onclick="confirmar('<%= partidos.codPartido %>','/admin/deletePartido')" class="btn btn-outline-danger"><i class='bx bxs-trash'></i></a>
                     </td>
                 </tr>                                   
-                <% } %>
+                <% }) %>
             </tbody>
           </table>
         </div>
@@ -67,7 +71,7 @@
   <script>
       $(document).ready(function() {
       let tabla = $('#miTabla').DataTable();
-      tabla.order([0, 'asc']).draw();
+      tabla.order([5, 'desc']).draw();
       });
   </script>
 </body>
