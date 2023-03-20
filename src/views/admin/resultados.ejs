@@ -34,10 +34,10 @@
               <% resultados.forEach((resultados,i)=>{ %>
                 <tr>  
                     <td><%= resultados.jornada %></td>
-                    <td><%= resultados.nombreEquipo1 %></td>
+                    <td><%= resultados.equipo1 %></td>
                     <td><%= resultados.puntos1 %></td>
                     <td><%= resultados.puntos2 %></td>
-                    <td><%= resultados.nombreEquipo2 %></td>
+                    <td><%= resultados.equipo2 %></td>
                     <td><%= fechaResultados[i] %></td>
                     <td>
                       <a href="/admin/editarResultados/<%= resultados.id %>" class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>

@@ -265,11 +265,8 @@ router.get("/admin/partidos", requireLogin, (req, res) => {
       console.error(error);
       res.status(500).send("Error al obtener los partidos");
     } else {
-      console.log(partidos);
-
       let fecha = partidos.map((partido) => {
         // obtener los dias de la semana
-
         let fecha = new Date(partido.fecha);
         // dia lunes, martes, miercoles, jueves, viernes, sabado, domingo
         let dia = fecha.getDate();
@@ -894,29 +891,32 @@ function queryDatabase(sql) {
   });
 }
 
-router.get("/admin/resultados", requireLogin, (req, res) => {
-  conexion.query("SELECT * FROM resultados", (error, resultados) => {
-    if (error) {
-      console.log(error);
-    } else {
-      let fechaResultados = resultados.map((resultados) => {
-        // obtener los dias de la semana
-        let fechaResultados = new Date(resultados.fecha);
+//WHERE (e1.nombreEquipo = 'NombreEquipo1' AND e2.nombreEquipo = 'NombreEquipo2') OR (e1.nombreEquipo = 'NombreEquipo2' AND e2.nombreEquipo = 'NombreEquipo1')
+router.get("/admin/resultados", requireLogin,(req, res) => {
+  conexion.query("SELECT r.fecha, r.jornada, e1.nombreEquipo AS equipo1, r.puntos1, e2.nombreEquipo AS equipo2, r.puntos2  FROM resultados r INNER JOIN equipos e1 ON r.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON r.codEquipo2 = e2.codEquipo",
+    (error, resultados) => {
+      if (error) {
+        console.log(error);
+      } else {
+        let fechaResultados = resultados.map((resultados) => {
+          // obtener los dias de la semana
+          let fechaResultados = new Date(resultados.fecha);
 
-        let dia = fechaResultados.getDate();
-        let mes = fechaResultados.getMonth() + 1;
-        let anio = fechaResultados.getFullYear();
+          let dia = fechaResultados.getDate();
+          let mes = fechaResultados.getMonth() + 1;
+          let anio = fechaResultados.getFullYear();
 
-        fechaResultados = `${dia}/${mes}/${anio}`;
+          fechaResultados = `${dia}/${mes}/${anio}`;
 
-        return fechaResultados;
-      });
-      res.render("admin/resultados.ejs", {
-        resultados: resultados,
-        fechaResultados: fechaResultados,
-      });
+          return fechaResultados;
+        });
+        res.render("admin/resultados.ejs", {
+          resultados: resultados,
+          fechaResultados: fechaResultados,
+        });
+      }
     }
-  });
+  );
 });
 
 router.get("/admin/CrearResultados", requireLogin, (req, res) => {
@@ -1032,313 +1032,167 @@ router.get("/admin/dashboard", requireLogin, (req, res) => {
   );
 });
 
-router.get("/", (req, res) => {
-  conexion.query("SELECT * FROM deporte", (error, deportes) => {
-    if (error) {
-      console.log(error);
-    } else {
-      conexion.query("SELECT * FROM eliminatorias", (error, eliminatoria) => {
-        if (error) {
-          console.log(error);
-        } else {
-          conexion.query("SELECT * FROM resultados", (error, resultados) => {
-            if (error) {
-              console.log(error);
-            } else {
-              conexion.query("SELECT * FROM partido", (error, partidos) => {
-                if (error) {
-                  console.log(error);
-                } else {
-                  conexion.query("SELECT * FROM juegan", (error, juegan) => {
-                    if (error) {
-                      console.log(error);
-                    } else {
-                      let fechaPartidos = partidos.map((partido) => {
-                        // obtener los dias de la semana
-                        let fechaPartidos = new Date(partido.fecha);
 
-                        let dia = fechaPartidos.getDate();
-                        let mes = fechaPartidos.getMonth() + 1;
-                        let hora = fechaPartidos.getHours();
-                        let minutos = fechaPartidos.getMinutes();
-                        let nombreMes = " ";
-
-                        switch (mes) {
-                          case 1:
-                            nombreMes = "Enero";
-                            break;
-                          case 2:
-                            nombreMes = "Febrero";
-                            break;
-                          case 3:
-                            nombreMes = "Marzo";
-                            break;
-                          case 4:
-                            nombreMes = "Abril";
-                            break;
-                          case 5:
-                            nombreMes = "Mayo";
-                            break;
-                          case 6:
-                            nombreMes = "Junio";
-                            break;
-                          case 7:
-                            nombreMes = "Julio";
-                            break;
-                          case 8:
-                            nombreMes = "Agosto";
-                            break;
-                          case 9:
-                            nombreMes = "Septiembre";
-                            break;
-                          case 10:
-                            nombreMes = "Octubre";
-                            break;
-                          case 11:
-                            nombreMes = "Noviembre";
-                            break;
-                          case 12:
-                            nombreMes = "Diciembre";
-                            break;
-                        }
-
-                        fechaPartidos = `${dia} de ${nombreMes} - ${hora}:${minutos}`;
-
-                        return fechaPartidos;
-                      });
-                      let fechaResultados = resultados.map((resultados) => {
-                        // obtener los dias de la semana
-                        let fechaResultados = new Date(resultados.fecha);
-
-                        let dia = fechaResultados.getDate();
-                        let mes = fechaResultados.getMonth() + 1;
-                        let nombreMes = " ";
-
-                        switch (mes) {
-                          case 1:
-                            nombreMes = "Enero";
-                            break;
-                          case 2:
-                            nombreMes = "Febrero";
-                            break;
-                          case 3:
-                            nombreMes = "Marzo";
-                            break;
-                          case 4:
-                            nombreMes = "Abril";
-                            break;
-                          case 5:
-                            nombreMes = "Mayo";
-                            break;
-                          case 6:
-                            nombreMes = "Junio";
-                            break;
-                          case 7:
-                            nombreMes = "Julio";
-                            break;
-                          case 8:
-                            nombreMes = "Agosto";
-                            break;
-                          case 9:
-                            nombreMes = "Septiembre";
-                            break;
-                          case 10:
-                            nombreMes = "Octubre";
-                            break;
-                          case 11:
-                            nombreMes = "Noviembre";
-                            break;
-                          case 12:
-                            nombreMes = "Diciembre";
-                            break;
-                        }
-
-                        fechaResultados = `${dia} de ${nombreMes}`;
-
-                        return fechaResultados;
-                      });
-
-                      res.render("home.ejs", {
-                        deportes: deportes,
-                        eliminatoria: eliminatoria,
-                        resultados: resultados,
-                        partidos: partidos,
-                        juegan: juegan,
-                        fechaPartidos: fechaPartidos,
-                        fechaResultados: fechaResultados,
-                      }); //render muestra el archivo ejs
-                    }
-                  });
-                }
-              });
-            }
-          });
-        }
-      });
-    }
-  });
-});
-
-router.get("/pruebas", (req, res) => {
+router.get(['/', '/home'], (req, res) => {
   conexion.query(
-    "SELECT equipos.nombreEquipo AS equipo, juegan.codEquipo AS codEquipo FROM equipos INNER JOIN Juegan ON equipos.codEquipo = juegan.codEquipo",
-    (error, juegan) => {
+    "SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2,e1.imagen AS imagen1, e2.imagen AS imagen2, p.nombrePartido, p.fecha, p.nombreEstadio, p.nombreDeporte, p.codPartido FROM juegan j INNER JOIN equipos e1 ON j.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON j.codEquipo2 = e2.codEquipo INNER JOIN partido p ON j.codPartido = p.codPartido",
+    (error, partidos) => {
       if (error) {
         console.log(error);
       } else {
-        res.render("pruebas.ejs", {
-          juegan: juegan,
+        conexion.query("SELECT * FROM deporte", (error, deportes) => {
+          if (error) {
+            console.log(error);
+          } else {
+            conexion.query(
+              "SELECT * FROM eliminatorias",
+              (error, eliminatoria) => {
+                if (error) {
+                  console.log(error);
+                } else {
+                  conexion.query(
+                    "SELECT r.fecha, r.jornada, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, r.puntos1, e2.nombreEquipo AS equipo2, r.puntos2  FROM resultados r INNER JOIN equipos e1 ON r.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON r.codEquipo2 = e2.codEquipo",
+                    (error, resultados) => {
+                      if (error) {
+                        console.log(error);
+                      } else {
+                        conexion.query(
+                          "SELECT * FROM juegan",
+                          (error, juegan) => {
+                            if (error) {
+                              console.log(error);
+                            } else {
+                              let fechaPartidos = partidos.map((partido) => {
+                                // obtener los dias de la semana
+                                let fechaPartidos = new Date(partido.fecha);
+
+                                let dia = fechaPartidos.getDate();
+                                let mes = fechaPartidos.getMonth() + 1;
+                                let hora = fechaPartidos.getHours();
+                                let minutos = fechaPartidos.getMinutes();
+                                let nombreMes = " ";
+
+                                switch (mes) {
+                                  case 1:
+                                    nombreMes = "Enero";
+                                    break;
+                                  case 2:
+                                    nombreMes = "Febrero";
+                                    break;
+                                  case 3:
+                                    nombreMes = "Marzo";
+                                    break;
+                                  case 4:
+                                    nombreMes = "Abril";
+                                    break;
+                                  case 5:
+                                    nombreMes = "Mayo";
+                                    break;
+                                  case 6:
+                                    nombreMes = "Junio";
+                                    break;
+                                  case 7:
+                                    nombreMes = "Julio";
+                                    break;
+                                  case 8:
+                                    nombreMes = "Agosto";
+                                    break;
+                                  case 9:
+                                    nombreMes = "Septiembre";
+                                    break;
+                                  case 10:
+                                    nombreMes = "Octubre";
+                                    break;
+                                  case 11:
+                                    nombreMes = "Noviembre";
+                                    break;
+                                  case 12:
+                                    nombreMes = "Diciembre";
+                                    break;
+                                }
+
+                                fechaPartidos = `${dia} de ${nombreMes} - ${hora}:${minutos}`;
+
+                                return fechaPartidos;
+                              });
+                              let fechaResultados = resultados.map(
+                                (resultados) => {
+                                  // obtener los dias de la semana
+                                  let fechaResultados = new Date(
+                                    resultados.fecha
+                                  );
+
+                                  let dia = fechaResultados.getDate();
+                                  let mes = fechaResultados.getMonth() + 1;
+                                  let nombreMes = " ";
+
+                                  switch (mes) {
+                                    case 1:
+                                      nombreMes = "Enero";
+                                      break;
+                                    case 2:
+                                      nombreMes = "Febrero";
+                                      break;
+                                    case 3:
+                                      nombreMes = "Marzo";
+                                      break;
+                                    case 4:
+                                      nombreMes = "Abril";
+                                      break;
+                                    case 5:
+                                      nombreMes = "Mayo";
+                                      break;
+                                    case 6:
+                                      nombreMes = "Junio";
+                                      break;
+                                    case 7:
+                                      nombreMes = "Julio";
+                                      break;
+                                    case 8:
+                                      nombreMes = "Agosto";
+                                      break;
+                                    case 9:
+                                      nombreMes = "Septiembre";
+                                      break;
+                                    case 10:
+                                      nombreMes = "Octubre";
+                                      break;
+                                    case 11:
+                                      nombreMes = "Noviembre";
+                                      break;
+                                    case 12:
+                                      nombreMes = "Diciembre";
+                                      break;
+                                  }
+
+                                  fechaResultados = `${dia} de ${nombreMes}`;
+
+                                  return fechaResultados;
+                                }
+                              );
+                              res.render("home.ejs", {
+                                deportes: deportes,
+                                eliminatoria: eliminatoria,
+                                resultados: resultados,
+                                partidos: partidos,
+                                juegan: juegan,
+                                fechaPartidos: fechaPartidos,
+                                fechaResultados: fechaResultados,
+                              }); //render muestra el archivo ejs
+                            }
+                          }
+                        );
+                      }
+                    }
+                  );
+                }
+              }
+            );
+          }
         });
       }
     }
   );
-});
-
-router.get("/home", (req, res) => {
-  conexion.query("SELECT * FROM deporte", (error, deportes) => {
-    if (error) {
-      console.log(error);
-    } else {
-      conexion.query("SELECT * FROM eliminatorias", (error, eliminatoria) => {
-        if (error) {
-          console.log(error);
-        } else {
-          conexion.query("SELECT * FROM resultados", (error, resultados) => {
-            if (error) {
-              console.log(error);
-            } else {
-              conexion.query("SELECT * FROM partido", (error, partidos) => {
-                if (error) {
-                  console.log(error);
-                } else {
-                  conexion.query("SELECT * FROM juegan", (error, juegan) => {
-                    if (error) {
-                      console.log(error);
-                    } else {
-                      let fechaPartidos = partidos.map((partido) => {
-                        // obtener los dias de la semana
-                        let fechaPartidos = new Date(partido.fecha);
-
-                        let dia = fechaPartidos.getDate();
-                        let mes = fechaPartidos.getMonth() + 1;
-                        let hora = fechaPartidos.getHours();
-                        let minutos = fechaPartidos.getMinutes();
-                        let nombreMes = " ";
-
-                        switch (mes) {
-                          case 1:
-                            nombreMes = "Enero";
-                            break;
-                          case 2:
-                            nombreMes = "Febrero";
-                            break;
-                          case 3:
-                            nombreMes = "Marzo";
-                            break;
-                          case 4:
-                            nombreMes = "Abril";
-                            break;
-                          case 5:
-                            nombreMes = "Mayo";
-                            break;
-                          case 6:
-                            nombreMes = "Junio";
-                            break;
-                          case 7:
-                            nombreMes = "Julio";
-                            break;
-                          case 8:
-                            nombreMes = "Agosto";
-                            break;
-                          case 9:
-                            nombreMes = "Septiembre";
-                            break;
-                          case 10:
-                            nombreMes = "Octubre";
-                            break;
-                          case 11:
-                            nombreMes = "Noviembre";
-                            break;
-                          case 12:
-                            nombreMes = "Diciembre";
-                            break;
-                        }
-
-                        fechaPartidos = `${dia} de ${nombreMes} - ${hora}:${minutos}`;
-
-                        return fechaPartidos;
-                      });
-                      let fechaResultados = resultados.map((resultados) => {
-                        // obtener los dias de la semana
-                        let fechaResultados = new Date(resultados.fecha);
-
-                        let dia = fechaResultados.getDate();
-                        let mes = fechaResultados.getMonth() + 1;
-                        let nombreMes = " ";
-
-                        switch (mes) {
-                          case 1:
-                            nombreMes = "Enero";
-                            break;
-                          case 2:
-                            nombreMes = "Febrero";
-                            break;
-                          case 3:
-                            nombreMes = "Marzo";
-                            break;
-                          case 4:
-                            nombreMes = "Abril";
-                            break;
-                          case 5:
-                            nombreMes = "Mayo";
-                            break;
-                          case 6:
-                            nombreMes = "Junio";
-                            break;
-                          case 7:
-                            nombreMes = "Julio";
-                            break;
-                          case 8:
-                            nombreMes = "Agosto";
-                            break;
-                          case 9:
-                            nombreMes = "Septiembre";
-                            break;
-                          case 10:
-                            nombreMes = "Octubre";
-                            break;
-                          case 11:
-                            nombreMes = "Noviembre";
-                            break;
-                          case 12:
-                            nombreMes = "Diciembre";
-                            break;
-                        }
-
-                        fechaResultados = `${dia} de ${nombreMes}`;
-
-                        return fechaResultados;
-                      });
-
-                      res.render("home.ejs", {
-                        deportes: deportes,
-                        eliminatoria: eliminatoria,
-                        resultados: resultados,
-                        partidos: partidos,
-                        juegan: juegan,
-                        fechaPartidos: fechaPartidos,
-                        fechaResultados: fechaResultados
-                      }); //render muestra el archivo ejs
-                    }
-                  });
-                }
-              });
-            }
-          });
-        }
-      });
-    }
-  });
 });
 
 router.get("/rankingE", (req, res) => {

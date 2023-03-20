@@ -17,6 +17,7 @@ config.js
 # Archivos generados por el servidor
 dist/
 build/
+respaldo/
 
 # Otros archivos
 Thumbs.db

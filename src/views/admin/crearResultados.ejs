@@ -40,11 +40,11 @@
               </div>
               <div class="mb-3">
                 <label for="nombreEquipo1" class="form-label">Equipo Local</label>
-                <select id="nombreEquipo1" name="nombreEquipo1" class="form-select" aria-label="Default select example"
+                <select id="nombreEquipo1" name="codEquipo1" class="form-select" aria-label="Default select example"
                   tabindex="2" required>
                   <option value="" disabled selected>Seleccione un Equipo</option>
                   <% equipos.forEach((equipos)=>{ %>
-                    <option value="<%= equipos.nombreEquipo %>">
+                    <option value="<%= equipos.codEquipo %>">
                       <%= equipos.nombreEquipo %>
                     </option>
                     <% }) %>
@@ -56,11 +56,11 @@
               </div>
               <div class="mb-3">
                 <label for="nombreEquipo2" class="form-label">Equipo Visitante</label>
-                <select id="nombreEquipo2" name="nombreEquipo2" class="form-select" aria-label="Default select example"
+                <select id="nombreEquipo2" name="codEquipo2" class="form-select" aria-label="Default select example"
                   tabindex="2" required>
                   <option value="" disabled selected>Seleccione un Equipo</option>
                   <% equipos.forEach((equipos)=>{ %>
-                    <option value="<%= equipos.nombreEquipo %>">
+                    <option value="<%= equipos.codEquipo %>">
                       <%= equipos.nombreEquipo %>
                     </option>
                     <% }) %>

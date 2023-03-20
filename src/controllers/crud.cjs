@@ -110,6 +110,7 @@ exports.saveEquipo = (req, res) => {
 
   if (!req.file?.path) {
     res.status(400).json({ msg: "No se ha subido la imagen" });
+    return;
   }
 
   const filePath = getImageUrl(req.file.filename);
@@ -638,21 +639,21 @@ exports.saveResultados = (req, res) => {
   const nombreDeporte = req.body.nombreDeporte;
   const fecha = moment(req.body.fecha).format("YYYY-MM-DD");
   const jornada = req.body.jornada;
-  const nombreEquipo1 = req.body.nombreEquipo1;
+  const codEquipo1 = req.body.codEquipo1;
+  const codEquipo2 = req.body.codEquipo2;
   const puntos1 = req.body.puntos1;
-  const nombreEquipo2 = req.body.nombreEquipo2;
   const puntos2 = req.body.puntos2;
 
   conexion.query(
     "INSERT INTO resultados SET ?",
     {
-      nombreDeporte: nombreDeporte,
-      fecha: fecha,
-      jornada: jornada,
-      nombreEquipo1: nombreEquipo1,
-      puntos1: puntos1,
-      nombreEquipo2: nombreEquipo2,
-      puntos2: puntos2,
+       nombreDeporte,
+       fecha,
+       jornada,
+       codEquipo1,
+       codEquipo2,
+       puntos1,
+       puntos2,
     },
     (error, results) => {
       if (error) {

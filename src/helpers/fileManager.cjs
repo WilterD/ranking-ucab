@@ -15,11 +15,8 @@ const imgRelativeDir = path.relative(publicDir, imgDir);
 async function initFileManager() {
   try {
     await fse.ensureDir(publicDir);
-    console.log("public created!");
     await fse.ensureDir(uploadsDir);
-    console.log("public/uploads created!");
     await fse.ensureDir(imgDir);
-    console.log("public/uploads/img created!");
   } catch (err) {
     console.error(err);
   }
