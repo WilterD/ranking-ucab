@@ -893,7 +893,7 @@ function queryDatabase(sql) {
 
 //WHERE (e1.nombreEquipo = 'NombreEquipo1' AND e2.nombreEquipo = 'NombreEquipo2') OR (e1.nombreEquipo = 'NombreEquipo2' AND e2.nombreEquipo = 'NombreEquipo1')
 router.get("/admin/resultados", requireLogin,(req, res) => {
-  conexion.query("SELECT r.fecha, r.jornada, e1.nombreEquipo AS equipo1, r.puntos1, e2.nombreEquipo AS equipo2, r.puntos2  FROM resultados r INNER JOIN equipos e1 ON r.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON r.codEquipo2 = e2.codEquipo",
+  conexion.query("SELECT r.fecha, r.jornada, r.id, e1.nombreEquipo AS equipo1, r.puntos1, e2.nombreEquipo AS equipo2, r.puntos2  FROM resultados r INNER JOIN equipos e1 ON r.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON r.codEquipo2 = e2.codEquipo",
     (error, resultados) => {
       if (error) {
         console.log(error);
@@ -914,6 +914,21 @@ router.get("/admin/resultados", requireLogin,(req, res) => {
           resultados: resultados,
           fechaResultados: fechaResultados,
         });
+      }
+    }
+  );
+});
+
+router.get("/admin/deleteResultados/:id", (req, res) => {
+  const id = req.params.id;
+  conexion.query(
+    "DELETE FROM resultados WHERE id = ?",
+    [id],
+    (error, results) => {
+      if (error) {
+        console.log(error);
+      } else {
+        res.redirect("/admin/resultados");
       }
     }
   );
