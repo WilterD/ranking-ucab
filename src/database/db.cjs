@@ -1,11 +1,12 @@
   const mysql = require('mysql');
   
   const conexion = mysql.createConnection({
-    host: 'rankingucab.mysql.database.azure.com',
-    user: 'wilterd',
-    password: 'Hugo1234$',
-    database: 'rankingucab',
-    port: 3306
+    // colocar variables de entorno
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_NAME,
+    port: DB_PORT
 });
   
   conexion.connect((error) =>{

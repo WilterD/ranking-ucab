@@ -23,6 +23,7 @@ exports.saveGrupo = (req, res) => {
 
 exports.savePartido = (req, res) => {
   const fecha = moment(req.body.fecha).format("YYYY-MM-DD HH:mm:ss");
+  console.log(fecha)
   const nombreEstadio = req.body.nombreEstadio;
   const nombrePartido = req.body.nombrePartido;
   const codEquipo1 = req.body.codEquipo1;

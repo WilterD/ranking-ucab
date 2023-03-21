@@ -18,6 +18,8 @@ import { imgDir } from "./helpers/fileManager.cjs";
 
 const app = express(); // referenciar a express
 
+console.log(DOMAIN)
+
 
 
 app.use(bodyParser.json());
