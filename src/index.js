@@ -15,12 +15,9 @@ dotenv.config();
 
 import { imgDir } from "./helpers/fileManager.cjs";
 
-
 const app = express(); // referenciar a express
 
-console.log(DOMAIN)
-
-
+console.log(process.env.DOMAIN)
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
