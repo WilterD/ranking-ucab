@@ -1273,55 +1273,7 @@ const upload = multer({ storage: storage });
 
 // login
 
-router.get("/login", (req, res) => {
-  res.render("login", { message: req.flash("message") });
-});
 
-router.post("/login", (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    // Buscar el usuario en la base de datos y comparar la contraseña cifrada
-    conexion.query(
-      "SELECT * FROM users WHERE email = ?",
-      [email],
-      (error, results) => {
-        if (results.length > 0) {
-          conexion.query(
-            "SELECT * FROM users WHERE password = ?",
-            [password],
-            (error, results) => {
-              if (results.length > 0) {
-                const user = results[0];
-                const validPassword = bcrypt.compare(password, user.password);
-                if (validPassword) {
-                  req.session.user = user; // almacenar información del usuario en la sesión
-                  req.session.userId = user.id;
-                  req.session.email = user.email;
-                  req.session.password = user.password;
-                  req.session.loggedin = true;
-                  res.redirect("/admin/dashboard");
-                } else {
-                  req.flash("message", "La contraseña es incorrecta.");
-                  res.redirect("/login");
-                }
-              } else {
-                req.flash("message", "La contraseña es incorrecta.");
-                res.redirect("/login");
-              }
-            }
-          );
-        } else {
-          req.flash("message", "El correo electrónico no está registrado.");
-          res.redirect("/login");
-        }
-      }
-    );
-  } catch (error) {
-    console.error(error);
-    res.render("login");
-  }
-});
 
 //registro
 
