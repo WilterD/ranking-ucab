@@ -113,7 +113,6 @@ a:visited {
 /* CSS */
 .swiper-container {
   position: absolute;
-  top: 80px; /* Cambiar el valor según se desee */
   left: 0;
   right: 0;
   bottom: 0;
