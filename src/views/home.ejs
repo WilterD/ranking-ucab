@@ -50,7 +50,7 @@
         <!-- tabla de posiciones -->
         <!-- si no hay tabla, no mostrar nada -->
         <% if (eliminatoria.length> 0) { %>
-          <div class="container tablaPosiciones">
+          <div class="container mt-3 mb-3">
             <div class="row">
               <div class="col-12 col-md-10 col-lg-10 mt-3 mx-auto">
                 <h2 class="text-center">Tabla de posiciones ⚽</h2>
@@ -113,7 +113,7 @@
 
             <!-- Si no hay partidos, no mostrar nada aquii  -->
             <% if (partidos.length> 0) { %>
-              <section class="mt-5 mb-5 p-5" style="background-color:#19115e">
+              <section class="mb-5 p-5" style="background-color:#19115e">
                 <h2 class="text-center text-white">Próximos Partidos ⚽</h2>
                 <% partidos.forEach((partidos,i)=>{ %>
                   <h3 class="text-white text-center mt-5">
@@ -285,6 +285,8 @@
 
                                     $(document).ready(function () {
                                       let tabla = $('#miTabla').DataTable({
+                                        "paging": true,
+                                        "pagingType": "simple",
                                         order: [[8, "desc"]],
                                         lengthChange: false,
                                         pageLength: 10,
@@ -299,8 +301,8 @@
                                           "paginate": {
                                             "first": "Primero",
                                             "last": "Último",
-                                            "next": "Siguiente",
-                                            "previous": "Anterior"
+                                            "next": "",
+                                            "previous": ""
                                           }
                                         }
 
