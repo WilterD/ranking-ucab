@@ -1055,7 +1055,7 @@ router.get(['/', '/home'], (req, res) => {
       if (error) {
         console.log(error);
       } else {
-        conexion.query("SELECT DISTINCT d.nombreDeporte FROM deporte d LEFT JOIN rankini r ON d.nombreDeporte = r.nombreDeporte LEFT JOIN rankinge re ON d.nombreDeporte = re.nombreDeporte WHERE r.nombreJugador IS NOT NULL OR re.nombreEquipo IS NOT NULL;", (error, deportes) => {
+        conexion.query("SELECT DISTINCT d.nombreDeporte ,d.id FROM deporte d LEFT JOIN rankini r ON d.nombreDeporte = r.nombreDeporte LEFT JOIN rankinge re ON d.nombreDeporte = re.nombreDeporte WHERE r.nombreJugador IS NOT NULL OR re.nombreEquipo IS NOT NULL;", (error, deportes) => {
           if (error) {
             console.log(error);
           } else {
