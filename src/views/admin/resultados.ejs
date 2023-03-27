@@ -40,7 +40,7 @@
                     <td><%= resultados.equipo2 %></td>
                     <td><%= fechaResultados[i] %></td>
                     <td>
-                      <a href="/admin/editarResultados/<%= resultados.id %>" class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>
+                      <a style="visibility: hidden;" href="/admin/editarResultados/<%= resultados.id %>" class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>
                       <a onclick="confirmar('<%= resultados.id %>','/admin/deleteResultados')" class="btn btn-outline-danger"><i
                         class='bx bxs-trash'></i></a>
                     </td>
