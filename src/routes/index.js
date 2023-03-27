@@ -321,6 +321,7 @@ router.get("/admin/editarPartido/:codPartido", (req, res) => {
             if (error) {
               console.log(error);
             } else {
+              
               res.render("admin/editarPartido.ejs", {
                 partidos: partidos,
                 fecha: fecha,
@@ -1185,7 +1186,6 @@ router.get(['/', '/home'], (req, res) => {
                                   return fechaResultados;
                                 }
                               );
-                              console.log(fechaPartidos)
                               res.render("home.ejs", {
                                 deportes: deportes,
                                 eliminatoria: eliminatoria,
@@ -1310,7 +1310,7 @@ function requireLogin(req, res, next) {
 
 router.use("/admin", requireLogin);
 
-router.post("/admin/logout", (req, res) => {
+router.get("/admin/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.log(err);

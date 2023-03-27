@@ -60,48 +60,41 @@ exports.savePartido = (req, res) => {
 };
 
 exports.updatePartido = (req, res) => {
-  // Función para actualizar un partido
-  function actualizarPartido(
-    codPartido,
-    nombrePartido,
-    fecha,
-    codEstadio,
-    codEquipo1,
-    codEquipo2,
-    callback
-  ) {
-    // Realizar la actualización en la tabla "partido"
-    const sqlPartido =
-      "UPDATE partido SET nombrePartido = ?, fecha = ?, codEstadio = ? WHERE codPartido = ?";
-    connection.query(
-      sqlPartido,
-      [nombrePartido, fecha, codEstadio, codPartido],
-      (error, results, fields) => {
-        if (error) {
-          console.error(error);
-          callback(error);
-        } else {
-          // Si la actualización en la tabla "partido" fue exitosa, realizar la actualización en la tabla "juegan"
-          const sqlJuegan =
-            "UPDATE juegan SET codEquipo1 = ?, codEquipo2 = ? WHERE codPartido = ?";
-          connection.query(
-            sqlJuegan,
-            [codEquipo1, codEquipo2, codPartido],
-            (error, results, fields) => {
-              if (error) {
-                console.error(error);
-                callback(error);
-              } else {
-                callback(null, "Partido actualizado exitosamente.");
-              }
-            }
-          );
-        }
-      }
-    );
-  }
-};
+  const codPartido = req.body.codPartido;
+  const nombrePartido = req.body.nombrePartido;
+  const nombreDeporte = req.body.nombreDeporte;
+  const fecha = req.body.fecha;
+  const nombreEstadio = req.body.nombreEstadio;
+  const codEquipo1 = req.body.codEquipo1;
+  const codEquipo2 = req.body.codEquipo2;
 
+  console.log(req)
+
+
+  conexion.query(
+    "UPDATE partido SET ? WHERE codPartido = ?",
+    [{ nombrePartido: nombrePartido, fecha: fecha,nombreEstadio:nombreEstadio,nombreDeporte:nombreDeporte }, codPartido],
+    (error, results) => {
+      if (error) {
+        console.log(error);
+        res.status(400).json({ msg: "error" });
+      } else {
+        conexion.query(
+          "UPDATE juegan SET ? WHERE codPartido = ?",
+          [{ codEquipo1: codEquipo1, codEquipo2: codEquipo2 }, codPartido],
+          (error, results) => {
+            if (error) {
+              console.log(error);
+              res.status(400).json({ msg: "error" });
+            } else {
+              res.redirect("/admin/partidos");
+            }
+          }
+        );
+      }
+    }
+  );
+};
 
 // Equipos
 

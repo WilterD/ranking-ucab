@@ -33,6 +33,9 @@
                 <label for="nombreDeporte" class="form-label">Nombre Deporte</label>
                 <select id="nombreDeporte" name="nombreDeporte" class="form-select" aria-label="Default select example"
                   tabindex="2" required>
+                  <option selected disabled>
+                    Seleccione un deporte
+                  </option>
                   <% deporte.forEach((deporte)=>{ %>
                     <option value="<%= deporte.nombreDeporte %>">
                       <%= deporte.nombreDeporte %> %>

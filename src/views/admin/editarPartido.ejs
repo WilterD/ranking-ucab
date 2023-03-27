@@ -16,19 +16,22 @@
 
             <div class="container mt-4">
                 <div class="card border-secondary">
-                    <div class="card-header">Editar Partido del <%= fecha[0] %>
+                    <div class="card-header">Editar Partido del <u><%= fecha[0] %></u>
                     </div>
                     <div class="card-body">
                         <form action="/updatePartido" method="POST">
-                            <input type="hidden" class="form-control" id="codPartido" name="codPartido" tabindex="1" value="<% partidos.forEach((partidos)=>{ %> <%= partidos.codPartido %> <% }) %>" />
-                                <div class="mb-3">
-                                    <label for="name" class="form-label">Nombre Partido</label>
-                                    <input type="text" class="form-control" id="nombrePartido" name="nombrePartido" tabindex="1" value="<% partidos.forEach((partidos)=>{ %> <%= partidos.nombrePartido %> <% }) %>" />
-                                </div>
+                            <input type="hidden" class="form-control" id="codPartido" name="codPartido" tabindex="1"
+                                value="<% partidos.forEach((partidos)=>{ %> <%= partidos.codPartido %> <% }) %>" />
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Nombre Partido</label>
+                                <input type="text" class="form-control" id="nombrePartido" name="nombrePartido"
+                                    tabindex="1"
+                                    value="<% partidos.forEach((partidos)=>{ %> <%= partidos.nombrePartido %> <% }) %>" />
+                            </div>
                             <div class="mb-3">
                                 <label for="fecha" class="form-label">Fecha del partido</label>
                                 <input required type="datetime-local" class="form-control" id="fecha" name="fecha"
-                                    value="<%= fecha[0] %>" tabindex="1" />
+                                    tabindex="1"/>
                             </div>
                             <div class="mb-3">
                                 <label for="nombreEstadio" class="form-label">Seleccione estadio</label>
@@ -47,11 +50,13 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="codEquipo1" class="form-label">Equipo Local <% partidos.forEach((partidos)=>{ %> <%= equipos.codEquipo1 %> <% }) %></label>
+                                <label for="codEquipo1" class="form-label">Equipo Local <% partidos.forEach((partidos)=>
+                                        { %> <%= equipos.codEquipo1 %>
+                                            <% }) %></label>
                                 <select id="codEquipo1" name="codEquipo1" class="form-select"
                                     aria-label="Default select example" tabindex="2" required>
                                     <% partidos.forEach((partidos)=>{ %>
-                                        <option selected value="<%= partidos.equipo1 %>">
+                                        <option selected value="<%= partidos.codEquipo1 %>">
                                             <%= partidos.equipo1 %>
                                         </option>
                                         <% }) %>
@@ -67,7 +72,7 @@
                                 <select id="codEquipo2" name="codEquipo2" class="form-select"
                                     aria-label="Default select example" tabindex="2" required>
                                     <% partidos.forEach((partidos)=>{ %>
-                                        <option selected value="<%= partidos.equipo2 %>">
+                                        <option selected value="<%= partidos.codEquipo2 %>">
                                             <%= partidos.equipo2 %>
                                         </option>
                                         <% }) %>
