@@ -31,7 +31,7 @@
         <tr>  
             <td><%= equipos[i].nombreEquipo %></td>  
             <td><%= equipos[i].nombreDeporte %></td>  
-            <td><img class="img-fluid text-center mx-auto" src="<%= equipos[i].imagen %>" width="55px" height="55px" /></td>  
+            <td><img class="img-fluid text-center mx-auto" src="<%= equipos[i].imagen ? equipos[i].imagen : '../images/logo-wolfleague.png' %>              " width="55px" height="55px" /></td>  
             <td>
               <a href="/admin/editarEquipo/<%= equipos[i].codEquipo %>" class="btn btn-outline-info"><i class='bx bxs-pencil fs-5'></i></a>
               <a onclick="confirmar('<%= equipos[i].codEquipo %>','/admin/deleteEquipo')" class="btn btn-outline-danger">

@@ -102,28 +102,40 @@ exports.saveEquipo = (req, res) => {
   const { nombreEquipo, nombreDeporte } = req.body;
 
   if (!req.file?.path) {
-    res.status(400).json({ msg: "No se ha subido la imagen" });
-    return;
-  }
-
-  const filePath = getImageUrl(req.file.filename);
-
-  conexion.query(
-    "INSERT INTO equipos SET ?",
-    {
-      nombreEquipo,
-      nombreDeporte,
-      imagen: filePath,
-    },
-    (error, results) => {
-      if (error) {
-        console.log(error);
-        res.status(400).json({ msg: "error" });
-      } else {
-        res.redirect("/admin/equipos");
+    conexion.query(
+      "INSERT INTO equipos SET ?",
+      {
+        nombreEquipo,
+        nombreDeporte,
+      },
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(400).json({ msg: "error" });
+        } else {
+          res.redirect("/admin/equipos");
+        }
       }
-    }
-  );
+    );
+  }else{
+    const filePath = getImageUrl(req.file.filename);
+    conexion.query(
+      "INSERT INTO equipos SET ?",
+      {
+        nombreEquipo,
+        nombreDeporte,
+        imagen: filePath,
+      },
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(400).json({ msg: "error" });
+        } else {
+          res.redirect("/admin/equipos");
+        }
+      }
+    );
+  }
 };
 
 exports.updateEquipo = (req, res) => {
