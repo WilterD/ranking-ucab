@@ -1,7 +1,6 @@
 body {
   background-color: #e4e9f7;
   font-size: 16px;
-  color: #333;
   line-height: 1.5;
   margin: 0;
   padding: 0;
@@ -287,4 +286,13 @@ a:visited {
 .card-text {
   margin-top: 1rem;
   font-size: 1rem;
+}
+
+
+ ul li a.colablinks:hover{
+  color:#007bff;
+  transition: .5s;
+  background-color: blue;
+  padding: 3px;
+  border-radius: 5px;
 }
