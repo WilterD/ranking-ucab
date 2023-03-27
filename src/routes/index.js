@@ -1185,6 +1185,7 @@ router.get(['/', '/home'], (req, res) => {
                                   return fechaResultados;
                                 }
                               );
+                              console.log(fechaPartidos)
                               res.render("home.ejs", {
                                 deportes: deportes,
                                 eliminatoria: eliminatoria,

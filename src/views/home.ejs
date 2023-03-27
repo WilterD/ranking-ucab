@@ -129,7 +129,7 @@
                     <%= partidos.nombrePartido %>
                   </h3>
                   <div class="d-flex flex-nowrap mt-5 justify-content-center align-items-center">
-                    <div class="text-center order-1">
+                    <div class="text-center order-1" style="max-width: 200px; max-height: 200px;">
                       <img width="200px" height="200px" class="team-logo img-fluid"
                         src="<%= partidos.imagen1 ? partidos.imagen1 : 'images/logo-wolfleague.png' %>"
                         alt="Logo del equipo 1">
@@ -140,7 +140,7 @@
                     <div class="text-center order-2 order-sm-2 order-md-2">
                       <h1 class="result text-white">VS</h1>
                     </div>
-                    <div class="text-center order-2 order-md-3">
+                    <div class="text-center order-2 order-md-3" style="max-width: 200px; max-height: 200px;">
                       <img width="200px" height="200px" class="team-logo img-fluid"
                         src="<%= partidos.imagen2 ? partidos.imagen2 : 'images/logo-wolfleague.png' %>"
                         alt="Logo del equipo 2">
@@ -149,9 +149,10 @@
                       </h4>
                     </div>
                   </div>
-                  <div class="text-center order-3">
-                    <div class="date-and-stadium text-white">
-                      <i class='bx bxs-calendar'></i>
+
+                  <div  class="text-center order-3 mt-5">
+                    <div class="date-and-stadium text-white mt-5 p-4">
+                      <%= fechaPartidos[i] %> <i class='bx bxs-calendar'></i>
                     </div>
                     <div class="date-and-stadium text-white">
                       <%= partidos.nombreEstadio %> <i class='bx bxs-map-pin'></i>
@@ -192,9 +193,8 @@
                             <% } %>
                               <h2 class="text-center">Jornada <%= resultado.jornada %>
                               </h2>
-                              <div
-                                class="text-center mt-5 d-flex flex-nowrap justify-content-center align-items-center mt-5">
-                                <div class="">
+                              <div class="text-center mt-5 d-flex flex-nowrap justify-content-center align-items-center">
+                                <div style="max-width: 200px; max-height: 200px;" class="">
                                   <img width="200px" height="200px" class="team-logo img-fluid"
                                     src="<%= resultado.imagen1 ? resultado.imagen1 : 'images/logo-wolfleague.png' %>"
                                     alt="Logo del equipo 1">
@@ -210,7 +210,7 @@
                                     <%= fechaResultados[index] %>
                                   </div>
                                 </div>
-                                <div class="">
+                                <div style="max-width: 200px; max-height: 200px;" class="">
                                   <img width="200px" height="200px" class="team-logo img-fluid"
                                     src="<%= resultado.imagen2 ? resultado.imagen2 : 'images/logo-wolfleague.png' %>"
                                     alt="Logo del equipo 2">

@@ -151,7 +151,7 @@ a:visited {
 }
 .date-and-stadium {
   font-size: 18px;
-  margin-top: 10px;
+  /* margin-top: 10px; */
 }
 .result {
   font-size: 36px;
