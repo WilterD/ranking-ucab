@@ -452,7 +452,6 @@ router.get("/admin/crearEliminatoria", requireLogin, (req, res) => {
 
 router.get("/admin/deleteEliminatoria/:codEquipo", requireLogin, (req, res) => {
   const codEquipo = req.params.codEquipo;
-  console.log(codEquipo);
   conexion.query(
     "DELETE FROM eliminatorias WHERE codEquipo = ?",
     [codEquipo],
