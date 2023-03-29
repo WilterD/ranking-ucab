@@ -16,7 +16,8 @@
             <div class="container">
                 <div class="row">
                     <div class="">
-                        <a href="/admin/crearRankingEquipos" class="btn btn-outline-primary fs-2 btn-block ml-auto"> Agregar
+                        <a href="/admin/crearRankingEquipos" class="btn btn-outline-primary fs-2 btn-block ml-auto">
+                            Agregar
                             <i class='bx bxs-plus-circle'></i></a>
                     </div>
                     <div class="col-xs-12 mt-3 table-responsive">
@@ -44,7 +45,8 @@
                                             <%= rankinge.puntos %>
                                         </td>
                                         <td>
-                                            <a href="/admin/editarRankingRE/<%= rankinge.id %>" class="btn btn-outline-info">
+                                            <a href="/admin/editarRankingRE/<%= rankinge.id %>"
+                                                class="btn btn-outline-info">
                                                 <i class='bx bxs-pencil fs-5'></i></a>
 
                                             <a onclick="confirmar('<%= rankinge.id %>','/admin/deleteRE')"
@@ -79,14 +81,9 @@
                     }
                     var tabla = $('#miTabla').DataTable({
                         "order": [[3, "desc"]], // Ordenar por la columna de Puntos en orden descendente
-                        "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                            var index = iDisplayIndex + 1; // Obtener el índice de la fila después de filtrar y sumar 1
-                            $('td:eq(0)', nRow).html(index); // Agregar el número de posición en la primera columna
-                            return nRow;
-                        },
                         columnDefs: [{
                             orderable: false,
-                            targets: [0,1,2,4], 
+                            targets: [0, 1, 2, 4] // deshabilitar ordenamiento en la columna "Acciones"
                         }],
                         "language": {
                             "lengthMenu": "Mostrar _MENU_ ",
@@ -101,10 +98,31 @@
                                 "next": "Siguiente",
                                 "previous": "Anterior"
                             }
+                        },
+                        "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                            var index = iDisplayIndex + 1; // Obtener el índice de la fila después de filtrar y sumar 1
+                            $('td:eq(0)', nRow).text(index); // Actualizar el número de posición en la primera columna
+                            return nRow;
                         }
                     });
-                });
 
+                    tabla.on('draw.dt', function () {
+                        // Obtener las filas visibles en la tabla
+                        var rows = tabla.rows({ page: 'current' }).nodes();
+
+                        // Actualizar la posición de ranking para cada fila visible
+                        var i, rankingPosition;
+                        for (i = 0; i < rows.length; i++) {
+                            rankingPosition = tabla.page.info().start + i + 1;
+                            $(rows[i]).find('td:eq(0)').text(rankingPosition);
+                        }
+                    });
+
+                    tabla.on('page.dt', function () {
+                        // Redibujar la tabla después de cambiar de página
+                        tabla.draw(false);
+                    });
+                });
             </script>
 </body>
 

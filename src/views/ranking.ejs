@@ -8,104 +8,123 @@
 <body>
     <div class="preloader">
         <div class="spinner"></div>
-      </div>
-      <div class="content">
-    <%- include('partials/navHome.ejs') %>
-       
+    </div>
+    <div class="content">
+        <%- include('partials/navHome.ejs') %>
 
-        <div class="col-xs-12 col-md-10 col-lg-11 mx-auto tablaPosiciones">
-            <h1 class="text-center">Ranking de <%= deporte.nombreDeporte %></h1>
 
-            <div class="row">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
-                        <thead>
-                            <tr class="bg-primary text-white">
-                                <th scope="col">#</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Carrera</th>
-                                <th scope="col">Deporte</th>
-                                <th scope="col">Puntos</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% ranking.forEach((ranking)=>{ %>
-                                <tr>
-                                    <td>
+            <div class="col-xs-12 col-md-10 col-lg-11 mx-auto tablaPosiciones">
+                <h1 class="text-center">Ranking de <%= deporte.nombreDeporte %>
+                </h1>
 
-                                    </td>
-                                    <td>
-                                        <%= ranking.nombreJugador %>
-                                    </td>
-                                    <td>
-                                        <%= ranking.nombreCarrera %>
-                                    </td>
-                                    <td>
-                                        <%= ranking.nombreDeporte %>
-                                    </td>
-                                    <td>
-                                        <%= ranking.puntos %>
-                                    </td>
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
+                            <thead>
+                                <tr class="bg-primary text-white">
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Carrera</th>
+                                    <th scope="col">Deporte</th>
+                                    <th scope="col">Puntos</th>
                                 </tr>
-                                <% }) %>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <% ranking.forEach((ranking)=>{ %>
+                                    <tr>
+                                        <td>
+
+                                        </td>
+                                        <td>
+                                            <%= ranking.nombreJugador %>
+                                        </td>
+                                        <td>
+                                            <%= ranking.nombreCarrera %>
+                                        </td>
+                                        <td>
+                                            <%= ranking.nombreDeporte %>
+                                        </td>
+                                        <td>
+                                            <%= ranking.puntos %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
 
 
-        
 
 
-     </div> <!-- Cierre del preloader -->
-        <%- include('partials/scripts2.ejs') %>
-            <script>
-                $(document).ready(function () {
-                    let tabla = $('#miTabla').DataTable({
-                        "order": [[4, "desc"]], // Ordenar por la columna de Puntos en orden descendente
-                        "paging": true,
-                        "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-                            var index = iDisplayIndex + 1; // Obtener el índice de la fila después de filtrar y sumar 1
-                            $('td:eq(0)', nRow).html(index); // Agregar el número de posición en la primera columna
-                            return nRow;
-                        },
-                        pageLength: 10, // mostrar 10 registros por pagina
-                        lengthChange: false, // select de 10 registros por defecto
-                        
-                        columnDefs: [{
-                            orderable: false,
-                        }],
-                        "language": {
-                            "lengthMenu": "Mostrar _MENU_ ",
-                            "zeroRecords": "No se encontraron registros",
-                            "info": "",
-                            "infoEmpty": "No hay registros disponibles",
-                            "infoFiltered": "",
-                            "search": "Buscar:",
-                            "paginate": {
-                                "first": "Primero",
-                                "last": "Último",
-                                "next": "Siguiente",
-                                "previous": "Anterior"
 
-                            }
+    </div> <!-- Cierre del preloader -->
+    <%- include('partials/scripts2.ejs') %>
+        <script>
+            $(document).ready(function () {
+                if ($.fn.DataTable.isDataTable('#miTabla')) {
+                    $('#miTabla').DataTable().destroy();
+                }
+                var tabla = $('#miTabla').DataTable({
+                    "order": [[4, "desc"]], // Ordenar por la columna de Puntos en orden descendente
+                    columnDefs: [{
+                        orderable: false,
+                        targets: [0, 1, 2, 3, 5] // deshabilitar ordenamiento en la columna "Acciones"
+                    }],
+                    "language": {
+                        "lengthMenu": "Mostrar _MENU_ ",
+                        "zeroRecords": "No se encontraron registros",
+                        "info": "",
+                        "infoEmpty": "No hay registros disponibles",
+                        "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                        "search": "Buscar:",
+                        "paginate": {
+                            "first": "Primero",
+                            "last": "Último",
+                            "next": "Siguiente",
+                            "previous": "Anterior"
                         }
-                    })
-                    // mostrar variable de nombreDeporte evniada desde el controlador
-                    let receivedVariable = "<%= deporte.nombreDeporte %>"; // recibimos la variable del controlador
-                    //Función para filtrar los valores
-                    function filterTable(receivedVariable) {
-                        tabla.search(receivedVariable).draw();
+                    },
+
+                    "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                        var index = iDisplayIndex + 1; // Obtener el índice de la fila después de filtrar y sumar 1
+                        $('td:eq(0)', nRow).text(index); // Actualizar el número de posición en la primera columna
+                        return nRow;
                     }
-                    // Llamamos a la función y le pasamos la variable recibida
-                    filterTable(receivedVariable);
-                    // fin de filtrar valores
-                    $('.dataTables_filter').hide(); // ocultar el buscador
                 });
 
+                tabla.on('draw.dt', function () {
+                    // Obtener las filas visibles en la tabla
+                    var rows = tabla.rows({ page: 'current' }).nodes();
 
-            </script>
+                    // Actualizar la posición de ranking para cada fila visible
+                    var i, rankingPosition;
+                    for (i = 0; i < rows.length; i++) {
+                        rankingPosition = tabla.page.info().start + i + 1;
+                        $(rows[i]).find('td:eq(0)').text(rankingPosition);
+                    }
+                });
+
+                tabla.on('page.dt', function () {
+                    // Redibujar la tabla después de cambiar de página
+                    tabla.draw(false);
+
+                });
+                // mostrar variable de nombreDeporte evniada desde el controlador
+                let receivedVariable = "<%= deporte.nombreDeporte %>"; // recibimos la variable del controlador
+                //Función para filtrar los valores
+                function filterTable(receivedVariable) {
+                    tabla.search(receivedVariable).draw();
+                }
+                // Llamamos a la función y le pasamos la variable recibida
+                filterTable(receivedVariable);
+                // fin de filtrar valores
+                $('.dataTables_filter').hide(); // ocultar el buscador
+            });
+
+
+        </script>
 
 
 
