@@ -364,6 +364,15 @@ h2.TituloJornada {
   .matchup-container {
     flex-wrap: nowrap;
   }
+  .vs {
+    font-size: 15px;
+    margin: 0 2px;
+  }
+  .team-container img {
+    /* object-fit: contain; */
+   width: 100px;
+   height: 95px;
+  }
 
   .vs {
     margin: 20px 0;
