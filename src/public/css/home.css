@@ -74,7 +74,6 @@ a:visited {
   display: none;
 }
 
-
 /*Estilos Swipers Slider*/
 
 .slide-content {
@@ -153,7 +152,6 @@ a:visited {
   font-size: 36px;
   font-weight: bold;
   margin: 20px;
-
 }
 
 /*Estilos del tabulador de resultados*/
@@ -217,8 +215,6 @@ a:visited {
   max-width: 100px;
   margin-bottom: 10px;
 }
-
-
 
 .date-and-stadium {
   font-size: 18px;
@@ -285,10 +281,9 @@ a:visited {
   font-size: 1rem;
 }
 
-
- ul li a.colablinks:hover{
-  color:#007bff;
-  transition: .5s;
+ul li a.colablinks:hover {
+  color: #007bff;
+  transition: 0.5s;
   background-color: blue;
   padding: 3px;
   border-radius: 5px;
@@ -320,8 +315,12 @@ a:visited {
 
 /* Animación para el spinner */
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Estilos para ocultar el contenido hasta que cargue */
@@ -329,6 +328,51 @@ a:visited {
   display: none;
 }
 
-h2.TituloJornada{
+h2.TituloJornada {
   margin-top: 50px;
+}
+
+/*ENFRENTAMIENTO*/
+
+.matchup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.team-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+}
+
+.team-container img {
+  /* object-fit: contain; */
+  max-width: 240px;
+  max-height: 240px;
+}
+
+.vs {
+  font-size: 50px;
+  font-weight: bold;
+  margin: 0 20px;
+}
+
+@media (max-width: 576px) {
+  .matchup-container {
+    flex-wrap: nowrap;
+  }
+
+  .vs {
+    margin: 20px 0;
+  }
+}
+
+
+.separator {
+  width: 100%;
+  height: 1px;
+  background-color: #ffffff;
 }
