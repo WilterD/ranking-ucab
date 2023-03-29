@@ -31,13 +31,13 @@
 
               <div class="mb-3">
                 <label for="nombreDeporte" class="form-label">Nombre Deporte</label>
-                <select id="nombreDeporte" name="nombreDeporte" class="form-select" aria-label="Default select example"
+                <select id="nombreDeporte" name="codDeporte" class="form-select" aria-label="Default select example"
                   tabindex="2" required>
                   <option selected disabled>
                     Seleccione un deporte
                   </option>
                   <% deporte.forEach((deporte)=>{ %>
-                    <option value="<%= deporte.nombreDeporte %>">
+                    <option value="<%= deporte.id %>">
                       <%= deporte.nombreDeporte %> %>
                     </option>
                     <% }) %>
@@ -47,11 +47,11 @@
 
               <div class="mb-3">
                 <label for="nombreEstadio" class="form-label">Estadio</label>
-                <select id="nombreEstadio" name="nombreEstadio" class="form-select" aria-label="Default select example"
+                <select id="nombreEstadio" name="codEstadio" class="form-select" aria-label="Default select example"
                   tabindex="2" required>
                   <option disabled selected>Seleccione un estadio</option>
                   <% estadios.forEach((estadio)=>{ %>
-                    <option value="<%= estadio.nombreEstadio %>">
+                    <option value="<%= estadio.codEstadio %>">
                       <%= estadio.nombreEstadio %>
                     </option>
                     <% }) %>

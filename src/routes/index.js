@@ -253,12 +253,15 @@ router.get("/admin/", requireLogin, (req, res) => {});
 // Ruta para mostrar el enfrentamiento entre dos equipos
 router.get("/admin/partidos", requireLogin, (req, res) => {
   // Realizar la consulta SQL
-  const sql = `SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, p.nombrePartido, p.fecha, p.nombreEstadio, p.nombreDeporte, p.codPartido
-               FROM juegan j
-               INNER JOIN equipos e1 ON j.codEquipo1 = e1.codEquipo
-               INNER JOIN equipos e2 ON j.codEquipo2 = e2.codEquipo
-               INNER JOIN partido p ON j.codPartido = p.codPartido
-               `;
+  // SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2,
+  const sql = `SELECT j.codPartido, e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, p.nombrePartido, p.fecha, e.nombreEstadio, d.nombreDeporte, d.tipoDeporte
+  FROM juegan j
+  INNER JOIN equipos e1 ON j.codEquipo1 = e1.codEquipo
+  INNER JOIN equipos e2 ON j.codEquipo2 = e2.codEquipo
+  JOIN partido p ON j.codPartido = p.codPartido
+  JOIN estadio e ON p.codEstadio = e.codEstadio
+  JOIN deporte d ON p.codDeporte = d.id;
+  `;
 
   conexion.query(sql, (error, partidos) => {
     if (error) {
@@ -1050,7 +1053,7 @@ router.get("/admin/dashboard", requireLogin, (req, res) => {
 
 router.get(['/', '/home'], (req, res) => {
   conexion.query(
-    "SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2,e1.imagen AS imagen1, e2.imagen AS imagen2, p.nombrePartido, p.fecha, p.nombreEstadio, p.nombreDeporte, p.codPartido FROM juegan j INNER JOIN equipos e1 ON j.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON j.codEquipo2 = e2.codEquipo INNER JOIN partido p ON j.codPartido = p.codPartido",
+    "SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2,e1.imagen AS imagen1, e2.imagen AS imagen2, p.nombrePartido, es.nombreEstadio, p.fecha, d.nombreDeporte, p.codPartido FROM juegan j INNER JOIN equipos e1 ON j.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON j.codEquipo2 = e2.codEquipo INNER JOIN partido p ON j.codPartido = p.codPartido JOIN estadio es ON p.codEstadio = es.codEstadio JOIN deporte d ON p.codDeporte = d.id;",
     (error, partidos) => {
       if (error) {
         console.log(error);
@@ -1230,7 +1233,8 @@ router.get("/deportes-:id", (req, res) => {
         if (error) {
           console.log(error);
         } else {
-          conexion.query("SELECT DISTINCT d.nombreDeporte ,d.id FROM deporte d LEFT JOIN rankini r ON d.nombreDeporte = r.nombreDeporte LEFT JOIN rankinge re ON d.nombreDeporte = re.nombreDeporte WHERE r.nombreJugador IS NOT NULL OR re.nombreEquipo IS NOT NULL;", (error, deportes) => {
+          conexion.query("SELECT DISTINCT d.nombreDeporte ,d.id FROM deporte d LEFT JOIN rankini r ON d.nombreDeporte = r.nombreDeporte LEFT JOIN rankinge re ON d.nombreDeporte = re.nombreDeporte WHERE r.nombreJugador IS NOT NULL OR re.nombreEquipo IS NOT NULL", (error, deportes) => {
+            
             if (error) {
               console.log(error);
             } else {

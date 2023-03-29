@@ -23,19 +23,19 @@ exports.saveGrupo = (req, res) => {
 
 exports.savePartido = (req, res) => {
   const fecha = moment(req.body.fecha).format("YYYY-MM-DD HH:mm:ss");
-  const nombreEstadio = req.body.nombreEstadio;
+  const codEstadio = req.body.codEstadio;
   const nombrePartido = req.body.nombrePartido;
   const codEquipo1 = req.body.codEquipo1;
   const codEquipo2 = req.body.codEquipo2;
-  const nombreDeporte = req.body.nombreDeporte;
+  const codDeporte = req.body.codDeporte;
 
   conexion.query(
     "INSERT INTO partido SET ?",
     {
       nombrePartido: nombrePartido,
       fecha: fecha,
-      nombreEstadio: nombreEstadio,
-      nombreDeporte: nombreDeporte,
+      codEstadio: codEstadio,
+      codDeporte: codDeporte,
     },
     (error, results) => {
       if (error) {
