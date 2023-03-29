@@ -68,8 +68,6 @@ exports.updatePartido = (req, res) => {
   const codEquipo1 = req.body.codEquipo1;
   const codEquipo2 = req.body.codEquipo2;
 
-  console.log(req)
-
 
   conexion.query(
     "UPDATE partido SET ? WHERE codPartido = ?",

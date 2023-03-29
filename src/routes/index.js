@@ -1088,6 +1088,21 @@ router.get(['/', '/home'], (req, res) => {
                                 let mes = fechaPartidos.getMonth() + 1;
                                 let hora = fechaPartidos.getHours();
                                 let minutos = fechaPartidos.getMinutes();
+                                if(minutos =="0"){
+                                  minutos = "00";
+                                }
+                                if(hora > 12){
+                                  hora = hora - 12;
+                                  minutos = minutos + " PM"
+                                }else{
+                                  minutos = minutos + " AM"
+                                }
+                                
+                                
+                                if (minutos < 10) {
+                                  minutos = "0" + minutos;
+                                }
+
                                 let nombreMes = " ";
 
                                 switch (mes) {
