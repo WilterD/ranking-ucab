@@ -63,14 +63,13 @@
     <%- include('partials/scripts2.ejs') %>
         <script>
             $(document).ready(function () {
-                if ($.fn.DataTable.isDataTable('#miTabla')) {
-                    $('#miTabla').DataTable().destroy();
-                }
+               
                 var tabla = $('#miTabla').DataTable({
                     "order": [[4, "desc"]], // Ordenar por la columna de Puntos en orden descendente
                     columnDefs: [{
                         orderable: false,
-                        targets: [0, 1, 2, 3, 5] // deshabilitar ordenamiento en la columna "Acciones"
+                        lengthChange: false,
+                        targets: [0, 1, 2, 3] // deshabilitar ordenamiento en la columna "Acciones"
                     }],
                     "language": {
                         "lengthMenu": "Mostrar _MENU_ ",

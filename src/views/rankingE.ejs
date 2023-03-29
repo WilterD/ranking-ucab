@@ -55,9 +55,10 @@
                 
                     var tabla = $('#miTabla').DataTable({
                         "order": [[3, "desc"]], // Ordenar por la columna de Puntos en orden descendente
+                        lengthChange: false,
                         columnDefs: [{
                             orderable: false,
-                            targets: [0, 1, 2, 4] // deshabilitar ordenamiento en la columna "Acciones"
+                            targets: [0, 1, 2] // deshabilitar ordenamiento en la columna "Acciones"
                         }],
                         "language": {
                             "lengthMenu": "Mostrar _MENU_ ",
