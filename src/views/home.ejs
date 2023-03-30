@@ -138,7 +138,7 @@
                             <%= partidos.nombrePartido %> - <%= partidos.nombreDeporte %>
                           </h3>
                           <div class="matchup-container d-flex justify-content-center align-items-center">
-                            <div class="team-container" style="max-width: 200px; max-height: 200px;">
+                            <div class="team-container">
                               <img src="<%= partidos.imagen1 ? partidos.imagen1 : 'images/logo-wolfleague.png' %>"
                                 alt="<%= partidos.equipo1 %>">
                               <h4 class="text-white text-center">
@@ -146,7 +146,7 @@
                               </h4>
                             </div>
                             <div class="vs text-white">VS</div>
-                            <div class="team-container" style="max-width: 200px; max-height: 200px;">
+                            <div class="team-container">
                               <img src="<%= partidos.imagen2 ? partidos.imagen2 : 'images/logo-wolfleague.png' %>"
                                 alt="<%= partidos.equipo2 %>">
                               <h4 class="text-white text-center">
@@ -201,36 +201,29 @@
                               class="tabcontent <%= index === resultados.length - 1 ? 'show' : '' %>">
                               <% } %>
                                 <div class="d-flex flex-wrap text-center justify-content-center align-items-center">
-                                  <h2 class="text-center TituloJornada">Jornada <%= resultado.jornada %>
+                                  <h2 class="text-center TituloJornada">Jornada <%= resultado.jornada %> -  <%= fechaResultados[index] %>
                                   </h2>
                                 </div>
-                                <div
-                                  class="text-center mt-5 mb-5 d-flex flex-nowrap justify-content-center align-items-center">
-                                  <div>
-                                    <img width="200px" height="200px"
-                                      src="<%= resultado.imagen1 ? resultado.imagen1 : 'images/logo-wolfleague.png' %>"
+                                <div class="matchup-container d-flex justify-content-center align-items-center">
+                                  <div class="team-container">
+                                    <img src="<%= resultado.imagen1 ? resultado.imagen1 : 'images/logo-wolfleague.png' %>"
                                       alt="Logo del equipo 1">
-                                    <h4>
+                                    <h4 class="text-center">
                                       <%= resultado.equipo1 %>
                                     </h4>
                                   </div>
-                                  <div class="">
-                                    <h1 class="result text-nowrap">
-                                      <%= resultado.puntos1 %> - <%= resultado.puntos2 %>
-                                    </h1>
-                                    <div class="date-and-stadium">
-                                      <%= fechaResultados[index] %>
-                                    </div>
+                                  <div class="vs">
+                                    <%= resultado.puntos1 %> - <%= resultado.puntos2 %>
                                   </div>
-                                  <div>
-                                    <img width="200px" height="200px"
-                                      src="<%= resultado.imagen2 ? resultado.imagen2 : 'images/logo-wolfleague.png' %>"
+                                  <div class="team-container">
+                                    <img src="<%= resultado.imagen2 ? resultado.imagen2 : 'images/logo-wolfleague.png' %>"
                                       alt="Logo del equipo 2">
-                                    <h4>
+                                    <h4 class="text-center">
                                       <%= resultado.equipo2 %>
                                     </h4>
                                   </div>
                                 </div>
+                               
                                 <% if (index===resultados.length - 1 || resultado.jornada
                                   !==resultados[index+1].jornada) { %>
                             </div>
@@ -241,9 +234,7 @@
                                     <script>
                                       const tabs = document.querySelectorAll('.tablinks');
                                       const tabContents = document.querySelectorAll('.tabcontent');
-
                                       function openTab(event, tabId) {
-
                                         // Ocultamos todos los contenidos de las pestañas
                                         tabContents.forEach(content => content.style.display = 'none');
                                         // Quitamos la clase 'active' de todos los botones tabuladores
@@ -281,8 +272,6 @@
                                       const lastTabId = lastTab.getAttribute('data-tab-id');
                                       // Mostramos por defecto la última jornada
                                       openTab(null, lastTabId);
-
-
                                       // Añadimos el evento 'click' a cada botón tabulador
                                       tabs.forEach(tab => {
                                         tab.addEventListener('click', event => {
@@ -292,10 +281,7 @@
                                           openTab(event, tabId);
                                         });
                                       });
-
-
                                     </script>
-
   </div> <!-- cierre de contenido de preloader -->
 
   <%- include('partials/scripts2.ejs') %>
