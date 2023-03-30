@@ -370,7 +370,9 @@ h4.text-center{
     flex-wrap: nowrap;
   }
   .vs {
-    white-space: nowrap
+    white-space: nowrap;
+    font-size: 17px;
+    
   }
   .team-container img {
    object-fit: contain;
