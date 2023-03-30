@@ -361,15 +361,15 @@ h2.TituloJornada {
   font-weight: bold;
   margin: 0 20px;
 }
+h4.text-center{
+  white-space: nowrap
+}
 
 @media (max-width: 576px) {
   .matchup-container {
     flex-wrap: nowrap;
   }
   .vs {
-    font-size: 15px;
-    margin: 0 2px;
-    /* flex-wrap: nowrap; */
     white-space: nowrap
   }
   .team-container img {
