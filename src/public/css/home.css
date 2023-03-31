@@ -371,13 +371,16 @@ h4.text-center{
   }
   .vs {
     white-space: nowrap;
-    font-size: 17px;
+    font-size: 30px;
     
   }
   .team-container img {
    object-fit: contain;
    width: 100px;
    height: 95px;
+  }
+  .tituloEquipo h4{
+    font-size: 15px;
   }
 }
 
