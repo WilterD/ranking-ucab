@@ -175,24 +175,27 @@
                   <!-- Si no hay resultados, no mostrar nada -->
                   <% if (resultados.length> 0) { %>
                     <div class="container text-center mt-5 mb-5">
-                      <h2 class="text-center">Resultados ⚽</h2>
+                      <h2 class="text-center">Resultados Clasificatoria ⚽</h2>
                     </div>
                     <% } %>
 
-                      <div class="tab">
-                        <% const idMap=new Map(); %>
-                          <% resultados.forEach((resultado, index)=> { %>
-                            <% if (!idMap.has(resultado.jornada)) { %>
-                              <button data-tab-id="<%= resultado.jornada %>"
-                                class="tablinks <%= index === resultados.length - 1 ? 'active' : '' %>"
-                                onclick="openTab(event, '<%= resultado.jornada %>')">
-                                Jornada - <%= resultado.jornada %>
-                              </button>
-                              <% idMap.set(resultado.jornada, true); %>
-                                <% } %>
-                                  <% let lastJornada=resultado.jornada %> %>
-                                    <% }); %>
+                      <div class="col-md-3 mx-auto">
+                        <select class="form-select" aria-label="Default select example" id="selectJornada">
+                          <% const idMap=new Map(); %>
+                            <% resultados.forEach((resultado, index)=> { %>
+                              <% if (!idMap.has(resultado.jornada)) { %>
+                                <option selected data-tab-id="<%= resultado.jornada %>"
+                                  class="tablinks <%= index === resultados.length - 1 ? 'active' : '' %>"
+                                  onclick="openTab(event, '<%= resultado.jornada %>')" value="<%= resultado.jornada %>">
+                                  Jornada - <%= resultado.jornada %>
+                                </option>
+                                <% idMap.set(resultado.jornada, true); %>
+                                  <% } %>
+                                    <% let lastJornada=resultado.jornada %> %>
+                                      <% }); %>
+                        </select>
                       </div>
+
 
                       <% let lastJornada=null; %>
                         <% resultados.forEach((resultado, index)=> { %>
@@ -201,12 +204,14 @@
                               class="tabcontent <%= index === resultados.length - 1 ? 'show' : '' %>">
                               <% } %>
                                 <div class="d-flex flex-wrap text-center justify-content-center align-items-center">
-                                  <h2 class="text-center TituloJornada">Jornada <%= resultado.jornada %> -  <%= fechaResultados[index] %>
+                                  <h2 class="text-center TituloJornada">Jornada <%= resultado.jornada %> - <%=
+                                        fechaResultados[index] %>
                                   </h2>
                                 </div>
                                 <div class="matchup-container d-flex justify-content-center align-items-center">
                                   <div class="team-container">
-                                    <img src="<%= resultado.imagen1 ? resultado.imagen1 : 'images/logo-wolfleague.png' %>"
+                                    <img
+                                      src="<%= resultado.imagen1 ? resultado.imagen1 : 'images/logo-wolfleague.png' %>"
                                       alt="Logo del equipo 1">
                                     <h4 class="text-center tituloEquipo">
                                       <%= resultado.equipo1 %>
@@ -216,14 +221,15 @@
                                     <%= resultado.puntos1 %> - <%= resultado.puntos2 %>
                                   </div>
                                   <div class="team-container">
-                                    <img src="<%= resultado.imagen2 ? resultado.imagen2 : 'images/logo-wolfleague.png' %>"
+                                    <img
+                                      src="<%= resultado.imagen2 ? resultado.imagen2 : 'images/logo-wolfleague.png' %>"
                                       alt="Logo del equipo 2">
                                     <h4 class="text-center tituloEquipo">
                                       <%= resultado.equipo2 %>
                                     </h4>
                                   </div>
                                 </div>
-                               
+
                                 <% if (index===resultados.length - 1 || resultado.jornada
                                   !==resultados[index+1].jornada) { %>
                             </div>
@@ -232,6 +238,11 @@
                                 <% }); %>
                                   <%- include('partials/footer.ejs') %>
                                     <script>
+                                      miSelect = document.getElementById('selectJornada');
+                                      miSelect.addEventListener('change', function () {
+                                        var id = this.options[this.selectedIndex].getAttribute('data-tab-id');
+                                        openTab(null, id);
+                                      });
                                       const tabs = document.querySelectorAll('.tablinks');
                                       const tabContents = document.querySelectorAll('.tabcontent');
                                       function openTab(event, tabId) {
