@@ -255,15 +255,24 @@
                                               <div class="tournament-bracket__match" tabindex="0">
                                                 <table class="tournament-bracket__table">
                                                   <caption class="tournament-bracket__caption">
-                                                    <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %>">
-                                                      <%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %>
+                                                    <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>">
+                                                      <%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>
                                                     </time>
+                                                    <% var fechaPartido=new Date(partido.fecha); %>
+                    <% if (fechaPartido> new Date()) { %>
+                      <br>
+                        <time>Próximamente</time>
+                    <% } else { %>
+                        <time datetime="<%= fechaPartido.toISOString() %>">
+                            <%= fechaPartido.toLocaleDateString('es-ES') %> - <%= fechaPartido.toLocaleString("en-US", {hour12: true, hour: "numeric" , minute: "numeric"}) %>
+                        </time>
+                    <% } %>
                                                   </caption>
                                                   <tbody class="tournament-bracket__content">
                                                     <tr class="tournament-bracket__team">
                                                       <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code"><img width="60px"
-                                                            height="50px"
+                                                        <abbr class="tournament-bracket__code"><img width="65px"
+                                                            height="65px"
                                                             src="<%= partido.imagen1 ? partido.imagen1 : 'images/logo-wolfleague.png' %>"
                                                             alt="<%= partido.equipo1 %>"></abbr>
                                                         <span class="tournament-bracket__flag flag-icon flag-icon-ca"
@@ -277,8 +286,8 @@
                                                     </tr>
                                                     <tr class="tournament-bracket__team">
                                                       <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code"><img width="60px"
-                                                            height="50px"
+                                                        <abbr class="tournament-bracket__code"><img width="65px"
+                                                            height="65px"
                                                             src="<%= partido.imagen2 ? partido.imagen2 : 'images/logo-wolfleague.png' %>"
                                                             alt="<%= partido.equipo2 %>"></abbr>
                                                         <span class="tournament-bracket__flag flag-icon flag-icon-kz"
@@ -348,15 +357,15 @@
                                                 <div class="tournament-bracket__match" tabindex="0">
                                                   <table class="tournament-bracket__table">
                                                     <caption class="tournament-bracket__caption">
-                                                      <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %>"><%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %></time>
+                                                      <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>"><%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %></time>
                                                     </caption>
 
                                                     <tbody class="tournament-bracket__content">
                                                       <tr class="tournament-bracket__team">
                                                         <td class="tournament-bracket__country">
                                                           <abbr class="tournament-bracket__code"
-                                                            ><img width="60px"
-                                                            height="50px"
+                                                            ><img width="65px"
+                                                            height="65px"
                                                             src="<%= partido.imagen1 ? partido.imagen1 : 'images/logo-wolfleague.png' %>"
                                                             alt="<%= partido.equipo1 %>"></abbr>
                                                           <span class="tournament-bracket__flag flag-icon flag-icon-ca"
@@ -369,8 +378,8 @@
                                                       <tr
                                                         class="tournament-bracket__team">
                                                         <td class="tournament-bracket__country">
-                                                          <abbr class="tournament-bracket__code"><img width="60px"
-                                                            height="50px"
+                                                          <abbr class="tournament-bracket__code"><img width="65px"
+                                                            height="65px"
                                                             src="<%= partido.imagen2 ? partido.imagen2 : 'images/logo-wolfleague.png' %>"
                                                             alt="<%= partido.equipo1 %>"></abbr>
                                                           <span class="tournament-bracket__flag flag-icon flag-icon-cz"
@@ -440,15 +449,15 @@
                                             <div class="tournament-bracket__match" tabindex="0">
                                               <table class="tournament-bracket__table">
                                                 <caption class="tournament-bracket__caption">
-                                                  <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %>"><%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %></time>
+                                                  <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>"><%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %></time>
                                                 </caption>
 
                                                 <tbody class="tournament-bracket__content">
                                                   <tr class="tournament-bracket__team tournament-bracket__team--winner">
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"
-                                                        ><img width="60px"
-                                                        height="50px"
+                                                        ><img width="65px"
+                                                        height="65px"
                                                         src="<%= partido.imagen1 ? partido.imagen1 : 'images/logo-wolfleague.png' %>"
                                                         alt="<%= partido.equipo1 %>"></abbr>
                                                       <span class="tournament-bracket__flag flag-icon flag-icon-fi"
@@ -464,8 +473,8 @@
                                                   <tr class="tournament-bracket__team">
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"
-                                                       ><img width="60px"
-                                                        height="50px"
+                                                       ><img width="65px"
+                                                        height="65px"
                                                         src="<%= partido.imagen2 ? partido.imagen2 : 'images/logo-wolfleague.png' %>"
                                                         alt="<%= partido.equipo2 %>"></abbr>
                                                       <span class="tournament-bracket__flag flag-icon flag-icon-ca"
@@ -536,15 +545,15 @@
                                             <div class="tournament-bracket__match" tabindex="0">
                                               <table class="tournament-bracket__table">
                                                 <caption class="tournament-bracket__caption">
-                                                  <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %>"><%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %></time>
+                                                  <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>"><%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %></time>
                                                 </caption>
 
                                                 <tbody class="tournament-bracket__content">
                                                   <tr class="tournament-bracket__team tournament-bracket__team--winner">
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"
-                                                        ><img width="60px"
-                                                        height="50px"
+                                                        ><img width="65px"
+                                                        height="65px"
                                                         src="<%= partido.imagen1 ? partido.imagen1 : 'images/logo-wolfleague.png' %>"
                                                         alt="<%= partido.equipo1 %>"></abbr>
                                                       <span class="tournament-bracket__flag flag-icon flag-icon-cz"

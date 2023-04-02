@@ -22,7 +22,7 @@ exports.saveGrupo = (req, res) => {
 };
 
 exports.savePartido = (req, res) => {
-  const fecha = moment(req.body.fecha).format("YYYY-MM-DD HH:mm:ss");
+  const fecha = req.body.fecha;
   const codEstadio = req.body.codEstadio;
   const nombrePartido = req.body.nombrePartido;
   const codEquipo1 = req.body.codEquipo1;
@@ -61,39 +61,38 @@ exports.savePartido = (req, res) => {
     
 
 exports.updatePartido = (req, res) => {
+
   const codPartido = req.body.codPartido;
   const nombrePartido = req.body.nombrePartido;
-  const nombreDeporte = req.body.nombreDeporte;
+  const codDeporte = req.body.codDeporte;
   const fecha = req.body.fecha;
-  const nombreEstadio = req.body.nombreEstadio;
+  const codEstadio = req.body.codEstadio;
   const codEquipo1 = req.body.codEquipo1;
+  const puntos1 = req.body.puntos1;
   const codEquipo2 = req.body.codEquipo2;
+  const puntos2 = req.body.puntos2;
+  const etapa = req.body.etapa;
+  const jornada = req.body.jornada;
 
 
   conexion.query(
     "UPDATE partido SET ? WHERE codPartido = ?",
-    [{ nombrePartido: nombrePartido, fecha: fecha,nombreEstadio:nombreEstadio,nombreDeporte:nombreDeporte }, codPartido],
+    [{ nombrePartido, fecha,codEstadio,codDeporte,puntos1,puntos2,etapa,jornada }, codPartido],
     (error, results) => {
       if (error) {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        conexion.query(
-          "UPDATE juegan SET ? WHERE codPartido = ?",
-          [{ codEquipo1: codEquipo1, codEquipo2: codEquipo2 }, codPartido],
-          (error, results) => {
-            if (error) {
-              console.log(error);
-              res.status(400).json({ msg: "error" });
-            } else {
-              res.redirect("/admin/partidos");
-            }
-          }
-        );
+        res.redirect("/admin/partidos");
+
       }
     }
   );
 };
+           
+
+          
+        
 
 // Equipos
 
@@ -639,33 +638,3 @@ exports.updateRE = (req, res) => {
   );
 };
 
-exports.saveResultados = (req, res) => {
-  const nombreDeporte = req.body.nombreDeporte;
-  const fecha = moment(req.body.fecha).format("YYYY-MM-DD");
-  const jornada = req.body.jornada;
-  const codEquipo1 = req.body.codEquipo1;
-  const codEquipo2 = req.body.codEquipo2;
-  const puntos1 = req.body.puntos1;
-  const puntos2 = req.body.puntos2;
-
-  conexion.query(
-    "INSERT INTO resultados SET ?",
-    {
-       nombreDeporte,
-       fecha,
-       jornada,
-       codEquipo1,
-       codEquipo2,
-       puntos1,
-       puntos2,
-    },
-    (error, results) => {
-      if (error) {
-        console.log(error);
-        res.status(400).json({ msg: "error" });
-      } else {
-        res.redirect("/admin/resultados");
-      }
-    }
-  );
-};
