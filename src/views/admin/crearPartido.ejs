@@ -27,8 +27,34 @@
                 <label for="name" class="form-label">Nombre del Partido</label>
                 <input type="text" class="form-control" id="nombrePartido" name="nombrePartido" tabindex="1">
               </div>
-              
-
+              <div class="mb-3">
+                <label for="etapa" class="form-label">Etapa</label>
+                <select id="etapa" name="etapa" class="form-select" aria-label="Default select example" tabindex="2"
+                  required>
+                  <option selected disabled>
+                    Seleccione Una Etapa
+                  </option>
+                  <option value="CLASIFICATORIA">
+                    CLASIFICATORIA
+                  </option>
+                  <option value="TERCER LUGAR">
+                    TERCER LUGAR
+                  </option>
+                  <option value="CUARTOS DE FINAL">
+                    CUARTOS DE FINAL
+                  </option>
+                  <option value="SEMIFINAL">
+                    SEMIFINAL
+                  </option>
+                  <option value="FINAL">
+                    FINAL
+                  </option>
+                </select>
+              </div>
+              <div class="mb-3" id="jornada">
+                <label for="jornada" class="form-label">Jornada</label>
+                <input type="number" class="form-control" name="jornada" tabindex="1">
+              </div>
               <div class="mb-3">
                 <label for="nombreDeporte" class="form-label">Nombre Deporte</label>
                 <select id="nombreDeporte" name="codDeporte" class="form-select" aria-label="Default select example"
@@ -43,8 +69,6 @@
                     <% }) %>
                 </select>
               </div>
-
-
               <div class="mb-3">
                 <label for="nombreEstadio" class="form-label">Estadio</label>
                 <select id="nombreEstadio" name="codEstadio" class="form-select" aria-label="Default select example"
@@ -70,6 +94,11 @@
                 </select>
               </div>
               <div class="mb-3">
+                <label for="puntos1" class="form-label">Puntos Anotados (Si ya se disputó el partido)</label>
+                <input type="number" placeholder="Se puede dejar en blanco" class="form-control" id="puntos1"
+                  name="puntos1" tabindex="1">
+              </div>
+              <div class="mb-3">
                 <label for="codEquipo2" class="form-label">Equipo Visitante</label>
                 <select id="codEquipo2" name="codEquipo2" class="form-select" aria-label="Default select example"
                   tabindex="2" required>
@@ -81,8 +110,11 @@
                     <% }) %>
                 </select>
               </div>
-
-
+              <div class="mb-3">
+                <label for="puntos2" class="form-label">Puntos Anotados (Si ya se disputó el partido)</label>
+                <input type="number" placeholder="Se puede dejar en blanco" class="form-control" id="puntos2"
+                  name="puntos2" tabindex="1">
+              </div>
               <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
               <a href="/admin/partidos" class="btn btn-secondary">Cancelar</a>
             </form>
@@ -102,6 +134,20 @@
         </div>
       </div>
     </section>
+
+    <script>
+      const select = document.getElementById('etapa');
+      const jornadaInput = document.getElementById('jornada');
+
+      select.addEventListener('change', function () {
+        if (select.value !== 'CLASIFICATORIA') {
+          jornadaInput.style.display = 'none';
+        } else {
+          jornadaInput.style.display = 'block';
+        }
+      });
+
+    </script>
 
     <%- include('partials/scripts.ejs') %>
 

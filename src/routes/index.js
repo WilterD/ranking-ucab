@@ -254,11 +254,10 @@ router.get("/admin/", requireLogin, (req, res) => {});
 router.get("/admin/partidos", requireLogin, (req, res) => {
   // Realizar la consulta SQL
   // SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2,
-  const sql = `SELECT j.codPartido, e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, p.nombrePartido, p.fecha, e.nombreEstadio, d.nombreDeporte, d.tipoDeporte
-  FROM juegan j
-  INNER JOIN equipos e1 ON j.codEquipo1 = e1.codEquipo
-  INNER JOIN equipos e2 ON j.codEquipo2 = e2.codEquipo
-  JOIN partido p ON j.codPartido = p.codPartido
+  const sql = `SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, p.nombrePartido,p.jornada, p.puntos1,p.codPartido, p.puntos2, p.etapa, p.fecha, e.nombreEstadio, d.nombreDeporte, d.tipoDeporte
+  FROM partido p
+  INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo
+  INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo
   JOIN estadio e ON p.codEstadio = e.codEstadio
   JOIN deporte d ON p.codDeporte = d.id;
   `;
@@ -324,7 +323,6 @@ router.get("/admin/editarPartido/:codPartido", (req, res) => {
             if (error) {
               console.log(error);
             } else {
-              
               res.render("admin/editarPartido.ejs", {
                 partidos: partidos,
                 fecha: fecha,
@@ -895,8 +893,9 @@ function queryDatabase(sql) {
 }
 
 //WHERE (e1.nombreEquipo = 'NombreEquipo1' AND e2.nombreEquipo = 'NombreEquipo2') OR (e1.nombreEquipo = 'NombreEquipo2' AND e2.nombreEquipo = 'NombreEquipo1')
-router.get("/admin/resultados", requireLogin,(req, res) => {
-  conexion.query("SELECT r.fecha, r.jornada, r.id, e1.nombreEquipo AS equipo1, r.puntos1, e2.nombreEquipo AS equipo2, r.puntos2  FROM resultados r INNER JOIN equipos e1 ON r.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON r.codEquipo2 = e2.codEquipo",
+router.get("/admin/resultados", requireLogin, (req, res) => {
+  conexion.query(
+    "SELECT r.fecha, r.jornada, r.id, e1.nombreEquipo AS equipo1, r.puntos1, e2.nombreEquipo AS equipo2, r.puntos2  FROM resultados r INNER JOIN equipos e1 ON r.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON r.codEquipo2 = e2.codEquipo",
     (error, resultados) => {
       if (error) {
         console.log(error);
@@ -1050,113 +1049,61 @@ router.get("/admin/dashboard", requireLogin, (req, res) => {
   );
 });
 
-
-router.get(['/', '/home'], (req, res) => {
+router.get(["/", "/home"], (req, res) => {
   conexion.query(
-    "SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2,e1.imagen AS imagen1, e2.imagen AS imagen2, p.nombrePartido, es.nombreEstadio, p.fecha, d.nombreDeporte, p.codPartido FROM juegan j INNER JOIN equipos e1 ON j.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON j.codEquipo2 = e2.codEquipo INNER JOIN partido p ON j.codPartido = p.codPartido JOIN estadio es ON p.codEstadio = es.codEstadio JOIN deporte d ON p.codDeporte = d.id;",
+    "SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, e1.imagen AS imagen1, e2.imagen AS imagen2, p.nombrePartido, es.nombreEstadio, p.jornada, p.fecha, p.etapa, d.nombreDeporte, p.codPartido FROM partido p INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo INNER JOIN estadio es ON p.codEstadio = es.codEstadio INNER JOIN deporte d ON p.codDeporte = d.id WHERE p.puntos1 = NULL AND p.puntos2 = NULL ;",
     (error, partidos) => {
       if (error) {
         console.log(error);
       } else {
-        conexion.query("SELECT DISTINCT d.nombreDeporte ,d.id FROM deporte d LEFT JOIN rankini r ON d.nombreDeporte = r.nombreDeporte LEFT JOIN rankinge re ON d.nombreDeporte = re.nombreDeporte WHERE r.nombreJugador IS NOT NULL OR re.nombreEquipo IS NOT NULL;", (error, deportes) => {
-          if (error) {
-            console.log(error);
-          } else {
-            conexion.query(
-              "SELECT * FROM eliminatorias",
-              (error, eliminatoria) => {
-                if (error) {
-                  console.log(error);
-                } else {
-                  conexion.query(
-                    "SELECT r.fecha, r.jornada, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, r.puntos1, e2.nombreEquipo AS equipo2, r.puntos2  FROM resultados r INNER JOIN equipos e1 ON r.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON r.codEquipo2 = e2.codEquipo",
-                    (error, resultados) => {
-                      if (error) {
-                        console.log(error);
-                      } else {
-                        conexion.query(
-                          "SELECT * FROM juegan",
-                          (error, juegan) => {
-                            if (error) {
-                              console.log(error);
-                            } else {
-                              let fechaPartidos = partidos.map((partido) => {
-                                // obtener los dias de la semana
-                                let fechaPartidos = new Date(partido.fecha);
-
-                                let dia = fechaPartidos.getDate();
-                                let mes = fechaPartidos.getMonth() + 1;
-                                let hora = fechaPartidos.getHours();
-                                let minutos = fechaPartidos.getMinutes();
-                                if(minutos =="0"){
-                                  minutos = "00";
-                                }
-                                if(hora > 12){
-                                  hora = hora - 12;
-                                  minutos = minutos + " PM"
-                                }else{
-                                  minutos = minutos + " AM"
-                                }
-                                
-                                
-                                if (minutos < 10) {
-                                  minutos = "0" + minutos;
-                                }
-
-                                let nombreMes = " ";
-
-                                switch (mes) {
-                                  case 1:
-                                    nombreMes = "Enero";
-                                    break;
-                                  case 2:
-                                    nombreMes = "Febrero";
-                                    break;
-                                  case 3:
-                                    nombreMes = "Marzo";
-                                    break;
-                                  case 4:
-                                    nombreMes = "Abril";
-                                    break;
-                                  case 5:
-                                    nombreMes = "Mayo";
-                                    break;
-                                  case 6:
-                                    nombreMes = "Junio";
-                                    break;
-                                  case 7:
-                                    nombreMes = "Julio";
-                                    break;
-                                  case 8:
-                                    nombreMes = "Agosto";
-                                    break;
-                                  case 9:
-                                    nombreMes = "Septiembre";
-                                    break;
-                                  case 10:
-                                    nombreMes = "Octubre";
-                                    break;
-                                  case 11:
-                                    nombreMes = "Noviembre";
-                                    break;
-                                  case 12:
-                                    nombreMes = "Diciembre";
-                                    break;
-                                }
-
-                                fechaPartidos = `${dia} de ${nombreMes} - ${hora}:${minutos}`;
-
-                                return fechaPartidos;
-                              });
-                              let fechaResultados = resultados.map(
-                                (resultados) => {
+        conexion.query(
+          "SELECT DISTINCT d.nombreDeporte ,d.id FROM deporte d LEFT JOIN rankini r ON d.nombreDeporte = r.nombreDeporte LEFT JOIN rankinge re ON d.nombreDeporte = re.nombreDeporte WHERE r.nombreJugador IS NOT NULL OR re.nombreEquipo IS NOT NULL;",
+          (error, deportes) => {
+            if (error) {
+              console.log(error);
+            } else {
+              conexion.query(
+                // partidos con Clasificatoria de Cuartos, semifinal, final, tercer lugar
+                "SELECT p.fecha, p.jornada, p.etapa, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, p.puntos1, e2.nombreEquipo AS equipo2, p.puntos2 FROM partido p INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo WHERE p.etapa = 'TERCER LUGAR' OR p.etapa = 'CUARTOS DE FINAL' OR p.etapa = 'SEMIFINAL' OR p.etapa = 'FINAL' ORDER BY CASE p.etapa WHEN 'CUARTOS DE FINAL' THEN 1 WHEN 'SEMIFINAL' THEN 2 WHEN 'TERCER LUGAR' THEN 3 WHEN 'FINAL' THEN 4 END",
+                (error, partidosTorneos) => {
+                  if (error) {
+                    console.log(error);
+                  } else {
+                    conexion.query(
+                      "SELECT * FROM eliminatorias",
+                      (error, eliminatoria) => {
+                        if (error) {
+                          console.log(error);
+                        } else {
+                          conexion.query(
+                            // Partidos Con Resultados y Clasificatoria
+                            "SELECT p.fecha, p.jornada, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, p.puntos1, e2.nombreEquipo AS equipo2, p.puntos2 FROM partido p INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo WHERE p.etapa = 'CLASIFICATORIA' AND p.puntos1 IS NOT NULL AND p.puntos2 IS NOT NULL ORDER BY p.jornada ASC;",
+                            (error, resultados) => {
+                              if (error) {
+                                console.log(error);
+                              } else {
+                                let fechaPartidos = partidos.map((partido) => {
                                   // obtener los dias de la semana
-                                  let fechaResultados = new Date(
-                                    resultados.fecha
-                                  );
+                                  let fechaPartidos = new Date(partido.fecha);
 
-                                  let dia = fechaResultados.getDate();
-                                  let mes = fechaResultados.getMonth() + 1;
+                                  let dia = fechaPartidos.getDate();
+                                  let mes = fechaPartidos.getMonth() + 1;
+                                  let hora = fechaPartidos.getHours();
+                                  let minutos = fechaPartidos.getMinutes();
+                                  if (minutos == "0") {
+                                    minutos = "00";
+                                  }
+                                  if (hora > 12) {
+                                    hora = hora - 12;
+                                    minutos = minutos + " PM";
+                                  } else {
+                                    minutos = minutos + " AM";
+                                  }
+
+                                  if (minutos < 10) {
+                                    minutos = "0" + minutos;
+                                  }
+
                                   let nombreMes = " ";
 
                                   switch (mes) {
@@ -1198,31 +1145,65 @@ router.get(['/', '/home'], (req, res) => {
                                       break;
                                   }
 
-                                  fechaResultados = `${dia} de ${nombreMes}`;
+                                  fechaPartidos = `${dia} de ${nombreMes} - ${hora}:${minutos}`;
 
-                                  return fechaResultados;
-                                }
-                              );
-                              res.render("home.ejs", {
-                                deportes: deportes,
-                                eliminatoria: eliminatoria,
-                                resultados: resultados,
-                                partidos: partidos,
-                                juegan: juegan,
-                                fechaPartidos: fechaPartidos,
-                                fechaResultados: fechaResultados,
-                              }); //render muestra el archivo ejs
+                                  return fechaPartidos;
+                                });
+
+                                // for (
+                                //   let i = 0;
+                                //   i < partidosTorneos.length;
+                                //   i++
+                                // ) {
+                                  // Obtenemos la fecha del partido
+                                  // const fecha = new Date(
+                                  //   partidosTorneos[i].fecha
+                                  // );
+
+                                  // Formateamos la fecha
+                                //   const dia = fecha
+                                //     .getDate()
+                                //     .toString()
+                                //     .padStart(2, "0");
+                                //   const mes = (fecha.getMonth() + 1)
+                                //     .toString()
+                                //     .padStart(2, "0");
+                                //   const anio = fecha.getFullYear().toString();
+                                //   const hora = fecha
+                                //     .getHours()
+                                //     .toString()
+                                //     .padStart(2, "0");
+                                //   const minutos = fecha
+                                //     .getMinutes()
+                                //     .toString()
+                                //     .padStart(2, "0");
+
+                                //   // Asignamos la fecha formateada al objeto original
+                                //   partidosTorneos[
+                                //     i
+                                //   ].fecha = `${dia}/${mes}/${anio} - ${hora}:${minutos}`;
+                                // }
+
+                                res.render("home.ejs", {
+                                  deportes: deportes,
+                                  eliminatoria: eliminatoria,
+                                  resultados: resultados,
+                                  partidos: partidos,
+                                  fechaPartidos: fechaPartidos,
+                                  partidosTorneos: partidosTorneos,
+                                });
+                              }
                             }
-                          }
-                        );
+                          );
+                        }
                       }
-                    }
-                  );
+                    );
+                  }
                 }
-              }
-            );
+              );
+            }
           }
-        });
+        );
       }
     }
   );
@@ -1248,37 +1229,39 @@ router.get("/deportes-:id", (req, res) => {
         if (error) {
           console.log(error);
         } else {
-          conexion.query("SELECT DISTINCT d.nombreDeporte ,d.id FROM deporte d LEFT JOIN rankini r ON d.nombreDeporte = r.nombreDeporte LEFT JOIN rankinge re ON d.nombreDeporte = re.nombreDeporte WHERE r.nombreJugador IS NOT NULL OR re.nombreEquipo IS NOT NULL", (error, deportes) => {
-            
-            if (error) {
-              console.log(error);
-            } else {
-              conexion.query(
-                "SELECT * FROM deporte WHERE id=?",
-                [id],
-                (error, deporte) => {
-                  if (error) {
-                    console.log(error);
-                    throw error;
-                  } else {
-                    if (deporte[0].tipoDeporte == "Individual") {
-                      res.render("ranking.ejs", {
-                        ranking: ranking,
-                        deportes: deportes,
-                        deporte: deporte[0],
-                      }); //render muestra el archivo ejs
-                    } else if (deporte[0].tipoDeporte == "Equipos") {
-                      res.render("rankingE.ejs", {
-                        rankinge: rankinge,
-                        deportes: deportes,
-                        deporte: deporte[0],
-                      });
+          conexion.query(
+            "SELECT DISTINCT d.nombreDeporte ,d.id FROM deporte d LEFT JOIN rankini r ON d.nombreDeporte = r.nombreDeporte LEFT JOIN rankinge re ON d.nombreDeporte = re.nombreDeporte WHERE r.nombreJugador IS NOT NULL OR re.nombreEquipo IS NOT NULL",
+            (error, deportes) => {
+              if (error) {
+                console.log(error);
+              } else {
+                conexion.query(
+                  "SELECT * FROM deporte WHERE id=?",
+                  [id],
+                  (error, deporte) => {
+                    if (error) {
+                      console.log(error);
+                      throw error;
+                    } else {
+                      if (deporte[0].tipoDeporte == "Individual") {
+                        res.render("ranking.ejs", {
+                          ranking: ranking,
+                          deportes: deportes,
+                          deporte: deporte[0],
+                        }); //render muestra el archivo ejs
+                      } else if (deporte[0].tipoDeporte == "Equipos") {
+                        res.render("rankingE.ejs", {
+                          rankinge: rankinge,
+                          deportes: deportes,
+                          deporte: deporte[0],
+                        });
+                      }
                     }
                   }
-                }
-              );
+                );
+              }
             }
-          });
+          );
         }
       });
     }
@@ -1291,8 +1274,6 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // login
-
-
 
 //registro
 

@@ -177,7 +177,7 @@
                     <div class="container text-center mt-5 mb-5">
                       <h2 class="text-center">Resultados Clasificatoria ⚽</h2>
                     </div>
-                    <% } %>
+                    
 
                       <div class="col-md-3 mx-auto">
                         <select class="form-select" aria-label="Default select example" id="selectJornada">
@@ -195,6 +195,7 @@
                                       <% }); %>
                         </select>
                       </div>
+                      <% } %>
 
 
                       <% let lastJornada=null; %>
@@ -205,7 +206,7 @@
                               <% } %>
                                 <div class="d-flex flex-wrap text-center justify-content-center align-items-center">
                                   <h2 class="text-center TituloJornada">Jornada <%= resultado.jornada %> - <%=
-                                        fechaResultados[index] %>
+                                        fechaPartidos[index] %>
                                   </h2>
                                 </div>
                                 <div class="matchup-container d-flex justify-content-center align-items-center">
@@ -236,6 +237,406 @@
                             <% } %>
                               <% lastJornada=resultado.jornada; %>
                                 <% }); %>
+
+                                  <!-- Eliminatoria Torneo -->
+<% if (partidosTorneos.length> 0) { %>
+                                  <div class="container">
+                                    <h1>Eliminatoria</h1>
+                                    <div class="tournament-bracket tournament-bracket--rounded">
+                                      <div class="tournament-bracket__round tournament-bracket__round--quarterfinals">
+                                        <h3 class="tournament-bracket__round-title">Cuartos De Final</h3>
+                                        <ul class="tournament-bracket__list">
+                                          <% var partidosCuartos = partidosTorneos.filter(function(partido) { 
+                                            return partido.etapa === "CUARTOS DE FINAL";
+                                          }); %>
+                                         <% var partidosPorDefinir = 4; %>
+                                          <% partidosCuartos.forEach((partido,i)=>{ %>
+                                            <li class="tournament-bracket__item">
+                                              <div class="tournament-bracket__match" tabindex="0">
+                                                <table class="tournament-bracket__table">
+                                                  <caption class="tournament-bracket__caption">
+                                                    <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %>">
+                                                      <%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %>
+                                                    </time>
+                                                  </caption>
+                                                  <tbody class="tournament-bracket__content">
+                                                    <tr class="tournament-bracket__team">
+                                                      <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code"><img width="60px"
+                                                            height="50px"
+                                                            src="<%= partido.imagen1 ? partido.imagen1 : 'images/logo-wolfleague.png' %>"
+                                                            alt="<%= partido.equipo1 %>"></abbr>
+                                                        <span class="tournament-bracket__flag flag-icon flag-icon-ca"
+                                                          aria-label="Flag"></span>
+                                                      </td>
+                                                      <td class="tournament-bracket__score">
+                                                        <span class="tournament-bracket__number">
+                                                          <%= partido.puntos1 %>
+                                                        </span>
+                                                      </td>
+                                                    </tr>
+                                                    <tr class="tournament-bracket__team">
+                                                      <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code"><img width="60px"
+                                                            height="50px"
+                                                            src="<%= partido.imagen2 ? partido.imagen2 : 'images/logo-wolfleague.png' %>"
+                                                            alt="<%= partido.equipo2 %>"></abbr>
+                                                        <span class="tournament-bracket__flag flag-icon flag-icon-kz"
+                                                          aria-label="Flag"></span>
+                                                      </td>
+                                                      <td class="tournament-bracket__score">
+                                                        <span class="tournament-bracket__number">
+                                                          <%= partido.puntos2 %>
+                                                        </span>
+                                                      </td>
+                                                    </tr>
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                            </li>
+                                              <% partidosPorDefinir--; %>
+                                            <% }) %>
+                                            <% for (var i = 0; i < partidosPorDefinir; i++) { %>
+                                              <li class="tournament-bracket__item">
+                                                <div class="tournament-bracket__match" tabindex="0">
+                                                  <table class="tournament-bracket__table">
+                                                    <caption class="tournament-bracket__caption">
+                                                      <time datetime="Por definir">Por definir</time>
+                                                    </caption>
+                                                    <tbody class="tournament-bracket__content">
+                                                      <tr class="tournament-bracket__team">
+                                                        <td class="tournament-bracket__country">
+                                                          <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.png"></abbr>
+                                                          <span
+                                                            class="tournament-bracket__flag flag-icon flag-icon-fi"
+                                                            aria-label="Flag"></span>
+                                                        </td>
+                                                        <td class="tournament-bracket__score">
+                                                          <span class="tournament-bracket__number">0</span>
+                                                        </td>
+                                                      </tr>
+                                                      <tr
+                                                        class="tournament-bracket__team">
+                                                        <td class="tournament-bracket__country">
+                                                          <abbr class="tournament-bracket__code"
+                                                            ><img width="40px" height="40px" src="images/ShieldGray.png"></abbr>
+                                                          <span
+                                                            class="tournament-bracket__flag flag-icon flag-icon-ru"
+                                                            aria-label="Flag"></span>
+                                                        </td>
+                                                        <td class="tournament-bracket__score">
+                                                          <span class="tournament-bracket__number">0</span>
+                                                        </td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </li>
+                                            <% } %>
+                                           
+                                        </ul>
+                                      </div>
+                                      <div class="tournament-bracket__round tournament-bracket__round--semifinals">
+                                        <h3 class="tournament-bracket__round-title">Semifinal</h3>
+                                        <ul class="tournament-bracket__list">
+                                          <% var partidosSemi = partidosTorneos.filter(function(partido) { 
+                                            return partido.etapa === "SEMIFINAL";
+                                          }); %>
+                                         <% var partidoSemi = 2; %>
+                                         <% partidosSemi.forEach((partido,i)=>{ %>
+                                              <li class="tournament-bracket__item">
+                                                <div class="tournament-bracket__match" tabindex="0">
+                                                  <table class="tournament-bracket__table">
+                                                    <caption class="tournament-bracket__caption">
+                                                      <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %>"><%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %></time>
+                                                    </caption>
+
+                                                    <tbody class="tournament-bracket__content">
+                                                      <tr class="tournament-bracket__team">
+                                                        <td class="tournament-bracket__country">
+                                                          <abbr class="tournament-bracket__code"
+                                                            ><img width="60px"
+                                                            height="50px"
+                                                            src="<%= partido.imagen1 ? partido.imagen1 : 'images/logo-wolfleague.png' %>"
+                                                            alt="<%= partido.equipo1 %>"></abbr>
+                                                          <span class="tournament-bracket__flag flag-icon flag-icon-ca"
+                                                            aria-label="Flag"></span>
+                                                        </td>
+                                                        <td class="tournament-bracket__score">
+                                                          <span class="tournament-bracket__number"><%= partido.puntos1 %></span>
+                                                        </td>
+                                                      </tr>
+                                                      <tr
+                                                        class="tournament-bracket__team">
+                                                        <td class="tournament-bracket__country">
+                                                          <abbr class="tournament-bracket__code"><img width="60px"
+                                                            height="50px"
+                                                            src="<%= partido.imagen2 ? partido.imagen2 : 'images/logo-wolfleague.png' %>"
+                                                            alt="<%= partido.equipo1 %>"></abbr>
+                                                          <span class="tournament-bracket__flag flag-icon flag-icon-cz"
+                                                            aria-label="Flag"></span>
+                                                        </td>
+                                                        <td class="tournament-bracket__score">
+                                                          <span class="tournament-bracket__number"><%= partido.puntos2 %></span>
+                                                        </td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </li>
+                                              <% partidoSemi--; %>
+                                            <% }) %>
+                                            <% for (var i = 0; i < partidoSemi; i++) { %>
+                                              <li class="tournament-bracket__item">
+                                                <div class="tournament-bracket__match" tabindex="0">
+                                                  <table class="tournament-bracket__table">
+                                                    <caption class="tournament-bracket__caption">
+                                                      <time datetime="Por definir">Por definir</time>
+                                                    </caption>
+
+                                                    <tbody class="tournament-bracket__content">
+                                                      <tr class="tournament-bracket__team">
+                                                        <td class="tournament-bracket__country">
+                                                          <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.png"></abbr>
+                                                          <span
+                                                            class="tournament-bracket__flag flag-icon flag-icon-fi"
+                                                            aria-label="Flag"></span>
+                                                        </td>
+                                                        <td class="tournament-bracket__score">
+                                                          <span class="tournament-bracket__number">0</span>
+                                                        </td>
+                                                      </tr>
+                                                      <tr
+                                                        class="tournament-bracket__team">
+                                                        <td class="tournament-bracket__country">
+                                                          <abbr class="tournament-bracket__code"
+                                                            ><img width="40px" height="40px" src="images/ShieldGray.png"></abbr>
+                                                          <span
+                                                            class="tournament-bracket__flag flag-icon flag-icon-ru"
+                                                            aria-label="Flag"></span>
+                                                        </td>
+                                                        <td class="tournament-bracket__score">
+                                                          <span class="tournament-bracket__number">0</span>
+                                                        </td>
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </li>
+                                            <% } %>
+                                                  
+
+                                        </ul>
+                                      </div>
+                                      <div class="tournament-bracket__round tournament-bracket__round--bronze">
+                                        <h3 class="tournament-bracket__round-title">Tercer Lugar</h3>
+                                        <ul class="tournament-bracket__list">
+                                          <% var partidoTercer = partidosTorneos.filter(function(partido) { 
+                                            return partido.etapa === "TERCER LUGAR";
+                                          }); %>
+                                         <% var tecerlugar = 1; %>
+                                         <% partidoTercer.forEach((partido,i)=>{ %>
+                                          <li class="tournament-bracket__item">
+                                            <div class="tournament-bracket__match" tabindex="0">
+                                              <table class="tournament-bracket__table">
+                                                <caption class="tournament-bracket__caption">
+                                                  <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %>"><%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %></time>
+                                                </caption>
+
+                                                <tbody class="tournament-bracket__content">
+                                                  <tr class="tournament-bracket__team tournament-bracket__team--winner">
+                                                    <td class="tournament-bracket__country">
+                                                      <abbr class="tournament-bracket__code"
+                                                        ><img width="60px"
+                                                        height="50px"
+                                                        src="<%= partido.imagen1 ? partido.imagen1 : 'images/logo-wolfleague.png' %>"
+                                                        alt="<%= partido.equipo1 %>"></abbr>
+                                                      <span class="tournament-bracket__flag flag-icon flag-icon-fi"
+                                                        aria-label="Flag"></span>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                      <span class="tournament-bracket__number"><%= partido.puntos1 %></span>
+                                                      <span
+                                                        class="tournament-bracket__medal tournament-bracket__medal--bronze fa fa-trophy"
+                                                        aria-label="Tercer lugar"></span>
+                                                    </td>
+                                                  </tr>
+                                                  <tr class="tournament-bracket__team">
+                                                    <td class="tournament-bracket__country">
+                                                      <abbr class="tournament-bracket__code"
+                                                       ><img width="60px"
+                                                        height="50px"
+                                                        src="<%= partido.imagen2 ? partido.imagen2 : 'images/logo-wolfleague.png' %>"
+                                                        alt="<%= partido.equipo2 %>"></abbr>
+                                                      <span class="tournament-bracket__flag flag-icon flag-icon-ca"
+                                                        aria-label="Flag"></span>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                      <span class="tournament-bracket__number"><%= partido.puntos2 %></span>
+                                                    </td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>
+                                            </div>
+                                          </li>
+                                          <% tecerlugar--; %>
+                                          <% }) %>
+                                          <% for (var i = 0; i < tecerlugar; i++) { %>
+                                            <li class="tournament-bracket__item">
+                                              <div class="tournament-bracket__match" tabindex="0">
+                                                <table class="tournament-bracket__table">
+                                                  <caption class="tournament-bracket__caption">
+                                                    <time datetime="Por definir">Por definir</time>
+                                                  </caption>
+
+                                                  <tbody class="tournament-bracket__content">
+                                                    <tr class="tournament-bracket__team">
+                                                      <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.png"></abbr>
+                                                        <span
+                                                          class="tournament-bracket__flag flag-icon flag-icon-fi"
+                                                          aria-label="Flag"></span>
+                                                      </td>
+                                                      <td class="tournament-bracket__score">
+                                                        <span class="tournament-bracket__number">0</span>
+                                                      </td>
+                                                    </tr>
+                                                    <tr
+                                                      class="tournament-bracket__team">
+                                                      <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code"
+                                                          ><img width="40px" height="40px" src="images/ShieldGray.png"></abbr>
+                                                        <span
+                                                          class="tournament-bracket__flag flag-icon flag-icon-ru"
+                                                          aria-label="Flag"></span>
+                                                      </td>
+                                                      <td class="tournament-bracket__score">
+                                                        <span class="tournament-bracket__number">0</span>
+                                                      </td>
+                                                    </tr>
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                            </li>
+                                          <% } %>
+                                        </ul>
+
+
+
+                                      </div>
+                                      <div class="tournament-bracket__round tournament-bracket__round--gold">
+                                        <h3 class="tournament-bracket__round-title">Final</h3>
+                                        <ul class="tournament-bracket__list">
+                                          <% var partidoFinal = partidosTorneos.filter(function(partido) { 
+                                            return partido.etapa === "FINAL";
+                                          }); %>
+                                         <% var final = 1; %>
+                                         <% partidoFinal.forEach((partido,i)=>{ %>
+                                          <li class="tournament-bracket__item">
+                                            <div class="tournament-bracket__match" tabindex="0">
+                                              <table class="tournament-bracket__table">
+                                                <caption class="tournament-bracket__caption">
+                                                  <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %>"><%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleTimeString('es-ES').slice(0,5) %></time>
+                                                </caption>
+
+                                                <tbody class="tournament-bracket__content">
+                                                  <tr class="tournament-bracket__team tournament-bracket__team--winner">
+                                                    <td class="tournament-bracket__country">
+                                                      <abbr class="tournament-bracket__code"
+                                                        ><img width="60px"
+                                                        height="50px"
+                                                        src="<%= partido.imagen1 ? partido.imagen1 : 'images/logo-wolfleague.png' %>"
+                                                        alt="<%= partido.equipo1 %>"></abbr>
+                                                      <span class="tournament-bracket__flag flag-icon flag-icon-cz"
+                                                        aria-label="Flag"></span>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                      <span class="tournament-bracket__number"><%= partido.puntos1 %></span>
+                                                      <span
+                                                        class="tournament-bracket__medal tournament-bracket__medal--gold fa fa-trophy"
+                                                        aria-label="Gold medal"></span>
+                                                    </td>
+                                                  </tr>
+                                                  <tr class="tournament-bracket__team">
+                                                    <td class="tournament-bracket__country">
+                                                      <abbr class="tournament-bracket__code"
+                                                        title="Russia"><img width="60px"
+                                                        height="50px"
+                                                        src="<%= partido.imagen2 ? partido.imagen2 : 'images/logo-wolfleague.png' %>"
+                                                        alt="<%= partido.equipo2 %>"></abbr>
+                                                      <span class="tournament-bracket__flag flag-icon flag-icon-ru"
+                                                        aria-label="Flag"></span>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                      <span class="tournament-bracket__number"><%= partido.puntos2 %></span>
+                                                      <span
+                                                        class="tournament-bracket__medal tournament-bracket__medal--silver fa fa-trophy"
+                                                        aria-label="Silver medal"></span>
+                                                    </td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>
+                                            </div>
+                                          </li>
+                                          <% final--; %>
+                                          <% }) %>
+                                          <% for (var i = 0; i < final; i++) { %>
+                                            <li class="tournament-bracket__item">
+                                              <div class="tournament-bracket__match" tabindex="0">
+                                                <table class="tournament-bracket__table">
+                                                  <caption class="tournament-bracket__caption">
+                                                    <time datetime="Por definir">Por definir</time>
+                                                  </caption>
+
+                                                  <tbody class="tournament-bracket__content">
+                                                    <tr class="tournament-bracket__team">
+                                                      <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.png"></abbr>
+                                                        <span
+                                                          class="tournament-bracket__flag flag-icon flag-icon-fi"
+                                                          aria-label="Flag"></span>
+                                                      </td>
+                                                      <td class="tournament-bracket__score">
+                                                        <span class="tournament-bracket__number">0</span>
+                                                      </td>
+                                                    </tr>
+                                                    <tr
+                                                      class="tournament-bracket__team">
+                                                      <td class="tournament-bracket__country">
+                                                        <abbr class="tournament-bracket__code"
+                                                          ><img width="40px" height="40px" src="images/ShieldGray.png"></abbr>
+                                                        <span
+                                                          class="tournament-bracket__flag flag-icon flag-icon-ru"
+                                                          aria-label="Flag"></span>
+                                                      </td>
+                                                      <td class="tournament-bracket__score">
+                                                        <span class="tournament-bracket__number">0</span>
+                                                      </td>
+                                                    </tr>
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                            </li>
+                                          <% } %>
+                                        </ul>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
+<% }; %>
+
+                                  <!-- Fin eliminatoria torneo -->
+
+
+
+
+
+
+
+
+
+
+
                                   <%- include('partials/footer.ejs') %>
                                     <script>
                                       miSelect = document.getElementById('selectJornada');
@@ -293,12 +694,59 @@
                                         });
                                       });
                                     </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   </div> <!-- cierre de contenido de preloader -->
+
+
 
   <%- include('partials/scripts2.ejs') %>
     <script>
 
       $(document).ready(function () {
+
+        // definir ganadores
+
+        // Obtenemos todos los elementos tbody que tienen dos elementos tr con la clase tournament-bracket__team
+        const tbodies = document.querySelectorAll('tbody:has(.tournament-bracket__team:first-child):has(.tournament-bracket__team:last-child)');
+
+        // Iteramos por cada tbody
+        tbodies.forEach(tbody => {
+          // Obtenemos los dos elementos tr con la clase tournament-bracket__team
+          const [team1, team2] = tbody.querySelectorAll('.tournament-bracket__team');
+
+          // Obtenemos los valores numéricos de ambos equipos
+          const value1 = parseFloat(team1.textContent);
+          const value2 = parseFloat(team2.textContent);
+
+          // Comparamos los valores y añadimos la clase tournament-bracket__team--winner al equipo con el valor más alto
+          if (value1 > value2) {
+            team1.classList.add('tournament-bracket__team--winner');
+            team2.classList.remove('tournament-bracket__team--winner');
+          } else if (value2 > value1) {
+            team2.classList.add('tournament-bracket__team--winner');
+            team1.classList.remove('tournament-bracket__team--winner');
+          }
+        });
+
+        // fin definir ganadores
+
+
+
         let tabla = $('#miTabla').DataTable({
           "paging": true,
           "pagingType": "simple",

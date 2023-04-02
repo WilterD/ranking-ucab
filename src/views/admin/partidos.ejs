@@ -21,10 +21,14 @@
           <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
             <thead>
               <tr class="bg-primary text-white">
+                <th scope="col">J</th> 
                 <th scope="col">Nombre</th>           
                 <th scope="col">Estadio</th>           
-                <th scope="col">Local</th>           
-                <th scope="col">Visitante</th>           
+                <th scope="col">Local</th> 
+                <th scope="col">Pts</th> 
+                <th scope="col">Visitante</th> 
+                <th scope="col">Pts</th> 
+                <th scope="col">Etapa</th>        
                 <th scope="col">Deporte</th>           
                 <th scope="col">Fecha</th>           
                 <th scope="col">Acciones</th>           
@@ -34,10 +38,14 @@
               <% partidos.forEach((partidos,i)=>{ %>
              
                 <tr>  
+                  <td><%= partidos.jornada %></td>  
                   <td><%= partidos.nombrePartido %></td>  
                   <td><%= partidos.nombreEstadio %></td>  
                   <td><%= partidos.equipo1 %></td>  
+                  <td><%= partidos.puntos1 %></td>  
                   <td><%= partidos.equipo2 %></td>  
+                  <td><%= partidos.puntos2 %></td>  
+                  <td><%= partidos.etapa %></td>  
                   <td><%= partidos.nombreDeporte %></td>  
                   <td><%= fecha[i] %></td>  
                     <td>
@@ -71,7 +79,7 @@
   <script>
       $(document).ready(function() {
       let tabla = $('#miTabla').DataTable();
-      tabla.order([5, 'asc']).draw();
+      tabla.order([9, 'asc']).draw();
       });
   </script>
 </body>

@@ -28,36 +28,37 @@ exports.savePartido = (req, res) => {
   const codEquipo1 = req.body.codEquipo1;
   const codEquipo2 = req.body.codEquipo2;
   const codDeporte = req.body.codDeporte;
+  const etapa = req.body.etapa;
+  const jornada = req.body.jornada;
+  const puntos1 = req.body.puntos1;
+  const puntos2 = req.body.puntos2;
+  
 
   conexion.query(
     "INSERT INTO partido SET ?",
     {
-      nombrePartido: nombrePartido,
-      fecha: fecha,
-      codEstadio: codEstadio,
-      codDeporte: codDeporte,
+      fecha,
+      codEstadio,
+      nombrePartido,
+      codEquipo1,
+      codEquipo2,
+      codDeporte,
+      etapa,
+      jornada,
+      puntos1,
+      puntos2
     },
     (error, results) => {
       if (error) {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
-        conexion.query(
-          "INSERT INTO juegan SET ?",
-          { codPartido: results.insertId, codEquipo1, codEquipo2 },
-          (error, results) => {
-            if (error) {
-              console.log(error);
-              res.status(400).json({ msg: "error" });
-            } else {
               res.redirect("/admin/partidos");
             }
           }
         );
       }
-    }
-  );
-};
+    
 
 exports.updatePartido = (req, res) => {
   const codPartido = req.body.codPartido;
