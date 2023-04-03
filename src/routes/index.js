@@ -95,7 +95,7 @@ router.get("/admin/deleteEquipo/:codEquipo", (req, res) => {
 });
 
 router.get("/admin/jugadores", requireLogin, (req, res) => {
-  conexion.query("SELECT j.codJugador, j.nombreJugador, j.codCarrera,c.id, e.nombreEquipo,c.nombreCarrera FROM jugador j  JOIN carreras c ON j.codCarrera = c.id  JOIN equipos e ON j.codEquipo = e.codEquipo; ", (error, jugadores) => {
+  conexion.query("SELECT j.codJugador, j.nombreJugador, j.codCarrera, c.id, COALESCE(e.nombreEquipo, 'Sin Equipo') AS nombreEquipo, c.nombreCarrera FROM jugador j JOIN carreras c ON j.codCarrera = c.id LEFT JOIN equipos e ON j.codEquipo = e.codEquipo; ", (error, jugadores) => {
     if (error) {
       console.log(error);
     } else {

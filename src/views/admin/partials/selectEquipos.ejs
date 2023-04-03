@@ -1,0 +1,35 @@
+<script>
+    const selectDeporte = document.getElementById('nombreDeporte');
+    const selectEquipo1 = document.getElementById('codEquipo1');
+    const selectEquipo2 = document.getElementById('codEquipo2');
+
+    selectDeporte.addEventListener('change', function () {
+        const codDeporte = this.value;
+        
+        $.ajax({
+            url: `/actualizarEquipos/${codDeporte}`,
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                try {
+                    const equipos = JSON.parse(response.jsonEquipos);
+                    let template = '';
+                    equipos.forEach((equipo) => {
+                        template += `<option value="${equipo.codEquipo}">${equipo.nombreEquipo}</option>`;
+                    });
+                    selectEquipo1.innerHTML = template;
+                    selectEquipo2.innerHTML = template;
+                } catch (e) {
+                    console.error('Error al analizar la respuesta:', e);
+                    return;
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr);
+                console.log(status);
+                console.log(error);
+            }
+        });
+    });
+
+</script>
