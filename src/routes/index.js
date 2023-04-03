@@ -1272,7 +1272,6 @@ router.post("/saveEliminatoria", mycrud.saveEliminatoria);
 router.post("/saveEIndividuales", mycrud.saveEIndividuales);
 router.post("/saveEGenerales", mycrud.saveEGenerales);
 router.post("/saveEstadios", mycrud.saveEstadios);
-router.post("/saveJornada", mycrud.saveJornada);
 router.post("/saveDeporte", mycrud.saveDeporte);
 router.post("/saveRI", mycrud.saveRI);
 router.post("/saveRE", mycrud.saveRE);

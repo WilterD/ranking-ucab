@@ -509,23 +509,6 @@ exports.updateEstadio = (req, res) => {
   );
 };
 
-exports.saveJornada = (req, res) => {
-  const fecha = moment(req.body.fecha).format("YYYY-MM-DD HH:mm:ss");
-
-  conexion.query(
-    "INSERT INTO jornadas SET ?",
-    { fecha: fecha },
-    (error, results) => {
-      if (error) {
-        console.log(error);
-        res.status(400).json({ msg: "error" });
-      } else {
-        res.redirect("/admin/jornadas");
-      }
-    }
-  );
-};
-
 exports.saveDeporte = (req, res) => {
   const nombreDeporte = req.body.nombreDeporte;
   const tipoDeporte = req.body.tipoDeporte;
