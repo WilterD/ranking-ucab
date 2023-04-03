@@ -21,11 +21,11 @@
 
               <div class="mb-3">
                 <label for="deporte" class="form-label">Deporte</label>
-                <select id="nombreDeporte" name="nombreDeporte" class="form-select" aria-label="Default select example"
+                <select id="nombreDeporte" name="codDeporte" class="form-select" aria-label="Default select example"
                   tabindex="2" required>
                   <option selected disabled>Seleccione un deporte</option>
                   <% deporte.forEach((deporte)=>{ %>
-                    <option value="<%= deporte.nombreDeporte %>">
+                    <option value="<%= deporte.id %>">
                       <%= deporte.nombreDeporte %>
                     </option>
                     <% }) %>

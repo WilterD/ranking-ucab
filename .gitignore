@@ -19,6 +19,8 @@ dist/
 build/
 respaldo/
 
+src/public/uploads/img/
+
 # Otros archivos
 Thumbs.db
 .DS_Store

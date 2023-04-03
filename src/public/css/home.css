@@ -50,6 +50,11 @@ a:visited {
   display: block;
 }
 
+a .linkMenu:hover{
+  color: #0d1b7b;
+  transition: .5s;
+}
+
 /* Estilo para ocultar el submenú cuando se cierra */
 .dropdown-menu {
   position: absolute;

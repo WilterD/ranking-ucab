@@ -8,6 +8,7 @@
         </button>
         <% if (deportes.length> 0) { %>
             <div class="collapse navbar-collapse" id="navbarNav">
+                <li class="nav-item"><a class="text-white linkMenu" href="/">Inicio</a></li>
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown navbarDropdown2"
@@ -16,7 +17,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu2" aria-labelledby="navbarDropdown">
                             <% deportes.forEach((deportes)=>{ %>
-                                <li><a class="dropdown-item" href="/deportes-<%= deportes.id %>">
+                                <li><a class="dropdown-item linkMenu" href="/deportes-<%= deportes.id %>">
                                         <%= deportes.nombreDeporte %>
                                     </a></li>
                                 <% }) %>

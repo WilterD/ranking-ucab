@@ -35,7 +35,6 @@ router.get("/admin/equipos", requireLogin, (req, res) => {
     if (error) {
       console.log(error);
     } else {
-      console.log(equipos)
           res.render("admin/equipos.ejs", { 
             equipos: equipos
           });
@@ -55,29 +54,37 @@ router.get("/admin/crearEquipo", requireLogin, (req, res) => {
   });
 });
 
-router.get("/admin/editarEquipo/:codEquipo", requireLogin, (req, res) => {
-  const codEquipo = req.params.codEquipo;
-  conexion.query(
-    "SELECT * FROM equipos WHERE codEquipo=?",
-    [codEquipo],
-    (error, equipos) => {
-      if (error) {
-        throw error;
-      } else {
-        conexion.query("SELECT * FROM deporte", (error, deporte) => {
-          if (error) {
-            throw error;
-          } else {
-            res.render("admin/editarEquipo.ejs", {
-              equipo: equipos[0],
-              deporte: deporte,
-            });
-          }
+      router.get("/admin/editarEquipo/:codEquipo", requireLogin, (req, res) => {
+        const codEquipo = req.params.codEquipo;
+        conexion.query(
+          "SELECT e.codEquipo, e.nombreEquipo, e.codDeporte, d.nombreDeporte FROM equipos e JOIN deporte d ON e.codDeporte = d.id WHERE codEquipo=?",
+          [codEquipo],
+          (error, equipos) => {
+            if (error) {
+              throw error;
+            } else {
+              conexion.query("SELECT * FROM deporte", (error, deportes) =>{
+                if (error) {
+                  throw error;
+                }else{
+                  res.render("admin/editarEquipo.ejs", {
+                    equipo: equipos[0],
+                    deportes: deportes,
+                  });
+                }
+              })
+              }
+            }
+          );
         });
-      }
-    }
-  );
-});
+        
+                  
+                    
+          
+          
+
+
+               
 
 router.get("/admin/deleteEquipo/:codEquipo", (req, res) => {
   const codEquipo = req.params.codEquipo;

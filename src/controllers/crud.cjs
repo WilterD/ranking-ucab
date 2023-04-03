@@ -97,14 +97,14 @@ exports.updatePartido = (req, res) => {
 // Equipos
 
 exports.saveEquipo = (req, res) => {
-  const { codEquipo, codDeporte } = req.body;
+  const { codDeporte,nombreEquipo } = req.body;
 
   if (!req.file?.path) {
     conexion.query(
       "INSERT INTO equipos SET ?",
       {
         nombreEquipo,
-        nombreDeporte,
+        codDeporte,
       },
       (error, results) => {
         if (error) {
@@ -121,7 +121,7 @@ exports.saveEquipo = (req, res) => {
       "INSERT INTO equipos SET ?",
       {
         nombreEquipo,
-        nombreDeporte,
+        codDeporte,
         imagen: filePath,
       },
       (error, results) => {
@@ -137,11 +137,16 @@ exports.saveEquipo = (req, res) => {
 };
 
 exports.updateEquipo = (req, res) => {
-  console.log(req.body)
+  
   const codEquipo = req.body.codEquipo;
   const nombreEquipo = req.body.nombreEquipo;
   const codDeporte = req.body.codDeporte;
 
+  console.log(codEquipo)
+  console.log(nombreEquipo)
+  console.log(codDeporte)
+
+  if (!req.file?.path) { // si imagen no existe
   conexion.query(
     "UPDATE equipos SET ? WHERE codEquipo = ?",
     [{ nombreEquipo: nombreEquipo, codDeporte: codDeporte }, codEquipo],
@@ -154,6 +159,21 @@ exports.updateEquipo = (req, res) => {
       }
     }
   );
+  }else{ // si imagen existe
+    const filePath = getImageUrl(req.file.filename);
+    conexion.query(
+      "UPDATE equipos SET ? WHERE codEquipo = ?",
+      [{ nombreEquipo: nombreEquipo, codDeporte: codDeporte,imagen:filePath }, codEquipo],
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          res.status(400).json({ msg: "error" });
+        } else {
+          res.redirect("/admin/equipos");
+        }
+      }
+    );
+  }
 };
 
 // jugadores
