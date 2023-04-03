@@ -137,13 +137,12 @@ exports.saveEquipo = (req, res) => {
 };
 
 exports.updateEquipo = (req, res) => {
-  
-  const codEquipo = req.body.codEquipo;
-  const nombreEquipo = req.body.nombreEquipo;
-  const codDeporte = req.body.codDeporte;
 
-  console.log(codEquipo)
+  const { codEquipo,nombreEquipo,codDeporte } = req.body;
+
+
   console.log(nombreEquipo)
+  console.log(codEquipo)
   console.log(codDeporte)
 
   if (!req.file?.path) { // si imagen no existe
