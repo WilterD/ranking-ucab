@@ -410,6 +410,31 @@ router.get("/admin/deleteGrupo/:letraGrupo", requireLogin, (req, res) => {
   );
 });
 
+router.get("/admin/usuarios", requireLogin, (req, res) => {
+  conexion.query("SELECT * FROM users", (error, usuarios) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.render("admin/usuarios", { usuarios: usuarios });
+    }
+  });
+});
+
+router.get("/admin/deleteUsuarios/:id", requireLogin, (req, res) => {
+  const id = req.params.id;
+  conexion.query(
+    "DELETE FROM users WHERE id = ?",
+    [id],
+    (error, results) => {
+      if (error) {
+        console.log(error);
+      } else {
+        res.redirect("/admin/usuarios");
+      }
+    }
+  );
+});
+
 router.get("/admin/eliminatorias", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM eliminatorias", (error, eliminatoria) => {
     if (error) {
@@ -1265,7 +1290,6 @@ router.post("/saveGrupo", mycrud.saveGrupo);
 router.post("/saveJugador", mycrud.saveJugador);
 
 router.post("/saveEquipo", uploadImg, mycrud.saveEquipo);
-
 router.post("/saveCarrera", mycrud.saveCarrera);
 router.post("/savePartido", mycrud.savePartido);
 router.post("/saveEliminatoria", mycrud.saveEliminatoria);

@@ -77,7 +77,7 @@ exports.updatePartido = (req, res) => {
 
   conexion.query(
     "UPDATE partido SET ? WHERE codPartido = ?",
-    [{ nombrePartido, fecha,codEstadio,codDeporte,puntos1,puntos2,etapa,jornada }, codPartido],
+    [{ nombrePartido, fecha,codEstadio,codDeporte,puntos1,puntos2,etapa,jornada,codEquipo1,codEquipo2 }, codPartido],
     (error, results) => {
       if (error) {
         console.log(error);
@@ -98,6 +98,7 @@ exports.updatePartido = (req, res) => {
 
 exports.saveEquipo = (req, res) => {
   const { codDeporte,nombreEquipo } = req.body;
+  
 
   if (!req.file?.path) {
     conexion.query(
@@ -139,10 +140,11 @@ exports.saveEquipo = (req, res) => {
 exports.updateEquipo = (req, res) => {
 
   const { codEquipo,nombreEquipo,codDeporte } = req.body;
-  const filePath2 = getImageUrl(req.file.filename);
-  console.log(filePath2)
+  console.log(req.body)
+ 
 
   if (!req.file?.path) { // si imagen no existe
+    console.log("no existe imagen")
   conexion.query(
     "UPDATE equipos SET ? WHERE codEquipo = ?",
     [{ nombreEquipo: nombreEquipo, codDeporte: codDeporte }, codEquipo],
@@ -156,6 +158,8 @@ exports.updateEquipo = (req, res) => {
     }
   );
   }else{ // si imagen existe
+    console.log("si existe imagen")
+
     const filePath = getImageUrl(req.file.filename);
     conexion.query(
       "UPDATE equipos SET ? WHERE codEquipo = ?",
