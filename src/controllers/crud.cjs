@@ -139,11 +139,8 @@ exports.saveEquipo = (req, res) => {
 exports.updateEquipo = (req, res) => {
 
   const { codEquipo,nombreEquipo,codDeporte } = req.body;
-
-
-  console.log(nombreEquipo)
-  console.log(codEquipo)
-  console.log(codDeporte)
+  const filePath2 = getImageUrl(req.file.filename);
+  console.log(filePath2)
 
   if (!req.file?.path) { // si imagen no existe
   conexion.query(

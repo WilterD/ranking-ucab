@@ -347,7 +347,6 @@ router.get("/admin/crearPartido", requireLogin, (req, res) => {
                         console.log(error);
                       } else {
                         res.render("admin/crearPartido.ejs", {
-                          jornadas: jornadas,
                           estadios: estadios,
                           equipos: equipos,
                           carrera: carrera,
