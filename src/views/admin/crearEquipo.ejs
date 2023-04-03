@@ -1,50 +1,55 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <%- include('partials/head.ejs') %>
+  <%- include('partials/head.ejs') %>
     <link rel="stylesheet" href="/css/main.css">
     <title>Crear Nuevo Equipo</title>
 </head>
+
 <body>
-    <%- include('partials/navigation.ejs') %>
+  <%- include('partials/navigation.ejs') %>
     <section class="home-section">
-        <div class="home-content">
-          <i class='bx bx-menu' ></i>
-        </div>
-      <div class="container mt-4">     
-            <div class="card border-secondary">  
-                <div class="card-header">Nuevo Equipo</div>
-                <div class="card-body">
-                    <form action="/saveEquipo" method="POST" enctype="multipart/form-data">
-
-                      <div class="mb-3">
-                        <label for="deporte" class="form-label">Deporte</label>
-                        <select id="nombreDeporte" name="nombreDeporte" class="form-select" aria-label="Default select example" tabindex="2" required>
-                          <option selected disabled>Seleccione un deporte</option>
-                            <% deporte.forEach((deporte)=>{ %>
-                <option value="<%= deporte.nombreDeporte %>"><%= deporte.nombreDeporte %></option>
-                            <% }) %>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                                <label for="nombreEquipo" class="form-label">Nombre de Equipo</label>
-                                <input type="text" class="form-control" id="nombreEquipo" name="nombreEquipo" tabindex="1">
-                         </div>
-
-                         <div class="mb-3">
-                          <label for="imagen" class="form-label">Imagen Equipo</label>
-                          <input type="file" name="file" />
-                         </div>
-                         
-                          
-                         
-                        <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
-                        <a href="/admin/equipos" class="btn btn-secondary">Cancelar</a>
-                    </form>
-                </div>
-            </div>        
+      <div class="home-content">
+        <i class='bx bx-menu'></i>
       </div>
-      
+      <div class="container mt-4">
+        <div class="card border-secondary">
+          <div class="card-header">Nuevo Equipo</div>
+          <div class="card-body">
+            <form action="/saveEquipo" method="POST" enctype="multipart/form-data">
+
+              <div class="mb-3">
+                <label for="deporte" class="form-label">Deporte</label>
+                <select id="nombreDeporte" name="nombreDeporte" class="form-select" aria-label="Default select example"
+                  tabindex="2" required>
+                  <option selected disabled>Seleccione un deporte</option>
+                  <% deporte.forEach((deporte)=>{ %>
+                    <option value="<%= deporte.nombreDeporte %>">
+                      <%= deporte.nombreDeporte %>
+                    </option>
+                    <% }) %>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="nombreEquipo" class="form-label">Nombre de Equipo</label>
+                <input type="text" class="form-control" id="nombreEquipo" name="nombreEquipo" tabindex="1">
+              </div>
+
+              <div class="mb-3">
+                <label for="imagen" class="form-label">Imagen Equipo</label>
+                <input type="file" name="file" />
+              </div>
+
+
+
+              <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
+              <a href="/admin/equipos" class="btn btn-secondary">Cancelar</a>
+            </form>
+          </div>
+        </div>
+      </div>
+
     </section>
     <section class="home-section">
       <div class="container">
@@ -58,7 +63,8 @@
         </div>
       </div>
     </section>
-      <%- include('partials/scripts.ejs') %>
-     
+    <%- include('partials/scripts.ejs') %>
+
 </body>
+
 </html>

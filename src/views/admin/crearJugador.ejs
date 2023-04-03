@@ -24,11 +24,11 @@
                                     tabindex="1">
                             </div>
                             <div class="mb-3">
-                                <label for="carrera" class="form-label">Equipo</label>
-                                <select name="nombreEquipo" id="nombreEquipo" class="form-select">
+                                <label for="codEquipo" class="form-label">Equipo</label>
+                                <select name="codEquipo" id="codEquipo" class="form-select">
                                     <option disabled selected>Seleccione un equipo</option>
                                     <% equipo.forEach((equipo)=>{ %>
-                                        <option value="<%= equipo.nombreEquipo %>">
+                                        <option value="<%= equipo.codEquipo %>">
                                             <%= equipo.nombreEquipo %>
                                         </option>
                                         <% }) %>
@@ -36,10 +36,10 @@
                             </div>
                             <div class="mb-3">
                                 <label for="Carrera" class="form-label">Carrera</label>
-                                <select name="nombreCarrera" id="nombreCarrera" class="form-select">
+                                <select name="codCarrera" id="codCarrera" class="form-select">
                                     <option disabled selected>Seleccione una carrera</option>
                                     <% carrera.forEach((carrera)=>{ %>
-                                        <option value="<%= carrera.nombreCarrera %>">
+                                        <option value="<%= carrera.id %>">
                                             <%= carrera.nombreCarrera %>
                                         </option>
                                         <% }) %>

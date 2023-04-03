@@ -17,36 +17,35 @@
                     <div class="card-header">Nuevo Ranking Equipo</div>
                     <div class="card-body">
                         <form action="/saveRE" method="POST">
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre Equipo</label>
-                        <select id="nombreEquipo" name="nombreEquipo" class="form-select"
-                            aria-label="Default select example" tabindex="2" required>
-                            
-                            <option value="" disabled selected>Seleccione un Equipo</option>
-                            <% equipos.forEach((equipos)=>{ %>
-                                <option value="<%= equipos.nombreEquipo %>">
-                                    <%= equipos.nombreEquipo %>
-                                </option>
-                                <% }) %>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Deporte</label>
-                        <select id="nombreDeporte" name="nombreDeporte" class="form-select"
-                            aria-label="Default select example" tabindex="2" required>
-                            
-                            <option value="" disabled selected>Seleccione un deporte</option>
-                            <% deportes.forEach((deportes)=>{ %>
-                                <option value="<%= deportes.nombreDeporte %>">
-                                    <%= deportes.nombreDeporte %>
-                                </option>
-                                <% }) %>
-                        </select>
-                    </div>
-                    <div class="mb-3">
+                            <div class="mb-3">
+                                <label for="codDeporte" class="form-label">Deporte</label>
+                                <select id="nombreDeporte" name="codDeporte" class="form-select"
+                                    aria-label="Default select example" tabindex="2" required>
+
+                                    <option value="" disabled selected>Seleccione un deporte</option>
+                                    <% deportes.forEach((deportes)=>{ %>
+                                        <option value="<%= deportes.id %>">
+                                            <%= deportes.nombreDeporte %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="codEquipo" class="form-label">Nombre Equipo</label>
+                                <select id="codEquipo1" name="codEquipo" class="form-select"
+                                    aria-label="Default select example" tabindex="2" required>
+                                    <option disabled selected>Seleccione un Equipo</option>
+                                    <% equipos.forEach((equipos)=>{ %>
+                                        <option value="<%= equipos.codEquipo %>">
+                                            <%= equipos.nombreEquipo %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="mb-3">
                                 <label for="name" class="form-label">Puntos</label>
                                 <input type="number" class="form-control" id="puntos" name="puntos" tabindex="1">
-                    </div>
+                            </div>
                             <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
                             <a href="/admin/rankingEquipos" class="btn btn-secondary">Cancelar</a>
                         </form>
@@ -66,7 +65,8 @@
                 </div>
             </div>
         </section>
-        <%- include('partials/scripts.ejs') %>
+        <%- include('partials/selectEquipos.ejs') %>
+            <%- include('partials/scripts.ejs') %>
 </body>
 
 </html>

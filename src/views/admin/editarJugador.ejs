@@ -25,21 +25,20 @@
                         </div> 
                         <div class="mb-3">
                           <label for="carrera" class="form-label">Carrera</label>
-                          <select id="nombreCarrera" name="nombreCarrera" class="form-select" aria-label="Default select example" tabindex="2" required>
-                            <option selected value="<%= jugador.nombreCarrera %>"><%= jugador.nombreCarrera %></option>
+                          <select id="codCarrera" name="codCarrera" class="form-select" aria-label="Default select example" tabindex="2" required>
+                            <option selected disabled>Seleccione una carrera</option>
                             <% carrera.forEach((carrera)=>{ %>
-                                <option value="<%= carrera.nombreCarrera %>"><%= carrera.nombreCarrera %></option>
+                                <option value="<%= carrera.id %>"><%= carrera.nombreCarrera %></option>
                             <% }) %>
                             
                         </select>
                         </div> 
-                       
                         <div class="mb-3">
                           <label for="equipo" class="form-label">Equipo</label>
-                          <select id="nombreEquipo" name="nombreEquipo" class="form-select" aria-label="Default select example" tabindex="2" required>
-                            <option selected value="<%= jugador.nombreEquipo %>"><%= jugador.nombreEquipo %></option>
+                          <select id="codEquipo" name="codEquipo" class="form-select" aria-label="Default select example" tabindex="2" required>
+                            <option selected disabled>Seleccione un equipo</option>
                             <% equipo.forEach((equipo)=>{ %>
-                                <option value="<%= equipo.nombreEquipo %>"><%= equipo.nombreEquipo %></option>
+                                <option value="<%= equipo.codEquipo %>"><%= equipo.nombreEquipo %></option>
                             <% }) %>
                             
                         </select>

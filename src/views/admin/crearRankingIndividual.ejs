@@ -19,12 +19,12 @@
                         <form action="/saveRI" method="POST">
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Nombre Jugador</label>
-                        <select id="nombreJugador" name="nombreJugador" class="form-select"
+                        <select id="codJugador" name="codJugador" class="form-select"
                             aria-label="Default select example" tabindex="2" required>
                             
                             <option value="" disabled selected>Seleccione un jugador</option>
                             <% jugadores.forEach((jugadores)=>{ %>
-                                <option value="<%= jugadores.nombreJugador %>">
+                                <option value="<%= jugadores.codJugador %>">
                                     <%= jugadores.nombreJugador %>
                                 </option>
                                 <% }) %>
@@ -32,12 +32,12 @@
                     </div>
                     <div class="mb-3">
                         <label for="nombre" class="form-label">Deporte</label>
-                        <select id="nombreDeporte" name="nombreDeporte" class="form-select"
+                        <select id="codDeporte" name="codDeporte" class="form-select"
                             aria-label="Default select example" tabindex="2" required>
                             
                             <option value="" disabled selected>Seleccione un deporte</option>
                             <% deportes.forEach((deportes)=>{ %>
-                                <option value="<%= deportes.nombreDeporte %>">
+                                <option value="<%= deportes.id %>">
                                     <%= deportes.nombreDeporte %>
                                 </option>
                                 <% }) %>

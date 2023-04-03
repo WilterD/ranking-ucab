@@ -27,18 +27,18 @@
               </tr>
           </thead>
           <tbody>
-            <% for (let i = 0; i < equipos.length; i++) { %>
+            <% equipos.forEach((equipos)=>{ %>
         <tr>  
-            <td><%= equipos[i].nombreEquipo %></td>  
-            <td><%= equipos[i].nombreDeporte %></td>  
-            <td><img class="img-fluid text-center mx-auto" src="<%= equipos[i].imagen ? equipos[i].imagen : '../images/logo-wolfleague.png' %>              " width="55px" height="55px" /></td>  
+            <td><%= equipos.nombreEquipo %></td>  
+            <td><%= equipos.nombreDeporte %></td>  
+            <td><img class="img-fluid text-center mx-auto" src="<%= equipos.imagen ? equipos.imagen : '../images/logo-wolfleague.png' %>" width="55px" height="55px" /></td>  
             <td>
-              <a href="/admin/editarEquipo/<%= equipos[i].codEquipo %>" class="btn btn-outline-info"><i class='bx bxs-pencil fs-5'></i></a>
-              <a onclick="confirmar('<%= equipos[i].codEquipo %>','/admin/deleteEquipo')" class="btn btn-outline-danger">
+              <a href="/admin/editarEquipo/<%= equipos.codEquipo %>" class="btn btn-outline-info"><i class='bx bxs-pencil fs-5'></i></a>
+              <a onclick="confirmar('<%= equipos.codEquipo %>','/admin/deleteEquipo')" class="btn btn-outline-danger">
                 <i class='bx bxs-trash'></i></a>
             </td>
         </tr>                                   
-     <% } %>
+     <% }) %>
             </tbody>
           </table>
         </div>

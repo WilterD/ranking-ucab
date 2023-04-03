@@ -4,25 +4,6 @@
   <%- include('partials/head.ejs') %>
   <link rel="stylesheet" href="/css/main.css">
     <title>Editar Equipo</title>
-    <style>
-        
-      .image_container{
-          width: 100%;
-          display: flex;
-          justify-content: left;
-          align-items: left;
-      }
-      .image_container img{
-          width: 300px;
-          display: block;
-          background-color: var(--color);
-      }
-      .image_container2 img{
-          width: 300px;
-          display: block;
-          background-color: var(--color2);
-      }
-          </style>
 </head>
 <body>
     <%- include('partials/navigation.ejs') %>
@@ -44,10 +25,10 @@
                            
                           <div class="mb-3">
                             <label for="deporte" class="form-label">Deporte</label>
-                            <select id="nombreDeporte" name="nombreDeporte" class="form-select" aria-label="Default select example" tabindex="2" required>
-                              <option selected value="<%= equipo.nombreDeporte %>"><%= equipo.nombreDeporte %></option>
+                            <select id="codDeporte" name="codDeporte" class="form-select" aria-label="Default select example" tabindex="2" required>
+                              <option selected value="<%= equipo.id %>"><%= equipo.nombreDeporte %></option>
                               <% deporte.forEach((deporte)=>{ %>
-                                  <option value="<%= deporte.nombreDeporte %>"><%= deporte.nombreDeporte %></option>
+                                  <option value="<%= deporte.id %>"><%= deporte.nombreDeporte %></option>
                               <% }) %>
                               
                           </select>
