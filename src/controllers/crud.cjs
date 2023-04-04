@@ -112,7 +112,7 @@ exports.saveEquipo = (req, res) => {
       (error, results) => {
         if (error) {
           console.log(error);
-          res.status(400).json({ msg: "error" });
+          res.status(400).json({ msg: "Este equipo, ya existe" });
         } else {
           res.redirect("/admin/equipos");
         }

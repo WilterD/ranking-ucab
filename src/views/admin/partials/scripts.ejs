@@ -36,12 +36,18 @@ if (form) {
     })
       .then((response) => {
         if (!response.ok) {
-          console.log(response);
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "¡Ha ocurrido un error!",
-            showConfirmButton: false,
+          // Analizar el cuerpo de la respuesta para mostrar mensajes de error personalizados
+          response.json().then((data) => {
+            let errorMessage = "Ha ocurrido un error";
+            if (data && data.msg) {
+              errorMessage = data.msg;
+            }
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: errorMessage,
+              showConfirmButton: false,
+            });
           });
         } else {
           window.location = urlAtras;
