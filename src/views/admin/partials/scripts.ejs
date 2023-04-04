@@ -8,55 +8,59 @@
 
 <script type="text/javascript">
 
-  let url = window.location.href;
-  let form = document.querySelector('form');
-  if (form) {
-    form.addEventListener("submit", function (e) {
-      // Obtener URL
-      e.preventDefault();
-      try {
-        let formDatos = new FormData(form);
-        let datos = {};
-        formDatos.forEach((valor, llave) => {
-          datos[llave] = valor;
-        });
-        let actionUrl = form.action;
-        let urlAtras = document.querySelector('.btn-secondary');
-        urlAtras = urlAtras.href;
-        fetch(actionUrl, {
-          method: 'POST',
-          body: JSON.stringify(datos),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then(response => {
-          if (!response.ok) {
-            console.log(response);
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: '¡Ha ocurrido un error!',
-              showConfirmButton: false
-            });
-          } else {
-            window.location = urlAtras;
-            // volver a la pagina de mostrar registros
-          }
-          return response.json();
-        })
-      } catch (error) {
-        console.log(error)
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: '¡Ha ocurrido un error!',
-          showConfirmButton: false,
-          showCloseButton: true
-        });
-      }
+let form = document.querySelector('form');
+if (form) {
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    let formData = new FormData(form);
+    let actionUrl = form.action;
+    let urlAtras = document.querySelector('.btn-secondary').href;
+    let headers = {};
+    let body = null;
+
+    // Determinar el tipo de datos enviados
+    if (form.enctype === "application/x-www-form-urlencoded") {
+      headers = {
+        "Content-Type": "application/json",
+      };
+      body = JSON.stringify(Object.fromEntries(formData));
+    } else if (form.enctype === "multipart/form-data") {
+      body = formData;
     }
-    )
-  }
+
+    // Enviar solicitud HTTP
+    fetch(actionUrl, {
+      method: "POST",
+      headers: headers,
+      body: body,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          console.log(response);
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "¡Ha ocurrido un error!",
+            showConfirmButton: false,
+          });
+        } else {
+          window.location = urlAtras;
+        }
+        return response.json();
+      })
+      .catch((error) => {
+        console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "¡Ha ocurrido un error!",
+          showConfirmButton: false,
+          showCloseButton: true,
+        });
+      });
+  });
+}
+
 
  
 

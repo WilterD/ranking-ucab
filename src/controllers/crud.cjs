@@ -142,11 +142,8 @@ exports.saveEquipo = (req, res) => {
 exports.updateEquipo = (req, res) => {
 
   const { codEquipo,nombreEquipo,codDeporte } = req.body;
-  console.log(req.body)
- 
 
   if (!req.file?.path) { // si imagen no existe
-    console.log("no existe imagen")
   conexion.query(
     "UPDATE equipos SET ? WHERE codEquipo = ?",
     [{ nombreEquipo: nombreEquipo, codDeporte: codDeporte }, codEquipo],
@@ -160,8 +157,6 @@ exports.updateEquipo = (req, res) => {
     }
   );
   }else{ // si imagen existe
-    console.log("si existe imagen")
-
     const filePath = getImageUrl(req.file.filename);
     conexion.query(
       "UPDATE equipos SET ? WHERE codEquipo = ?",
