@@ -8,7 +8,7 @@ const { imgRelativeDir } = require('./fileManager.cjs');
 exports.getImageUrl = (imageName) => {
   const imgRelativeDirWithoutBarrasVeganas = '/' + imgRelativeDir.replace('\\', '/') + '/';
 
-  
+ 
   
   return `${process.env.DOMAIN}${imgRelativeDirWithoutBarrasVeganas}${imageName}`;
 }

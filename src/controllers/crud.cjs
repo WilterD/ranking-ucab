@@ -98,6 +98,8 @@ exports.updatePartido = (req, res) => {
 
 exports.saveEquipo = (req, res) => {
   const { codDeporte,nombreEquipo } = req.body;
+
+  console.log(req.headers)
   
 
   if (!req.file?.path) {

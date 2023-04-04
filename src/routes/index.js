@@ -1300,9 +1300,10 @@ router.post("/saveDeporte", mycrud.saveDeporte);
 router.post("/saveRI", mycrud.saveRI);
 router.post("/saveRE", mycrud.saveRE);
 
+
 // actualizar registros
 router.post("/updateJugador", mycrud.updateJugador);
-router.post("/updateEquipo", mycrud.updateEquipo);
+router.post("/updateEquipo", uploadImg, mycrud.updateEquipo);
 router.post("/updateCarrera", mycrud.updateCarrera);
 router.post("/updatePartido", mycrud.updatePartido);
 router.post("/updateEliminatoria", mycrud.updateEliminatoria);
