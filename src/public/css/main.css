@@ -322,11 +322,27 @@ h2 {
   transition: .5s;
 }
 .card#carreras{
-  background-color: #FF8B13;
+  background-color: #1a0964;
   transition: .5s;
 }
 .card#carreras:hover{
-  background-color: #ffac13;
+  background-color: #3215b2;
+}
+.card#users{
+  background-color: #d013ff;
+  transition: .5s;
+}
+.card#users:hover{
+  background-color: #e62bff;
+  transition: .5s;
+}
+.card#torneos{
+  background-color: #ff6613;
+  transition: .5s;
+}
+.card#torneos:hover{
+  background-color: #f9451c;
+  transition: .5s;
 }
 
 .card-title {

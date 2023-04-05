@@ -5,26 +5,7 @@
     <%- include('partials/head.ejs') %>
         <link rel="stylesheet" href="/css/main.css">
         <title>Crear Nueva tabla eliminatoria</title>
-        <style>
-            .image_container {
-                width: 100%;
-                display: flex;
-                justify-content: left;
-                align-items: left;
-            }
-
-            .image_container img {
-                width: 300px;
-                display: block;
-                background-color: var(--color);
-            }
-
-            .image_container2 img {
-                width: 300px;
-                display: block;
-                background-color: var(--color2);
-            }
-        </style>
+       
 </head>
 
 <body>
@@ -39,13 +20,23 @@
                     <div class="card-body">
                         <form action="/saveEliminatoria" method="POST">
                             <div class="mb-3">
-                                <label for="nombreEquipo" class="form-label">Nombre de Equipo</label>
-                                <select id="nombreEquipo" name="nombreEquipo" class="form-select"
-                                    aria-label="Default select example" tabindex="2" required>
-                                    <option selected disabled>Seleccione un equipo</option>
+                                <label for="codEquipo" class="form-label">Equipo</label>
+                                <select name="codEquipo" id="codEquipo" class="form-select">
+                                    <option disabled selected>Seleccione un equipo</option>
                                     <% equipos.forEach((equipos)=>{ %>
-                                        <option value="<%= equipos.nombreEquipo %>">
+                                        <option value="<%= equipos.codEquipo %>">
                                             <%= equipos.nombreEquipo %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="codTorneo" class="form-label">Torneo</label>
+                                <select name="codTorneo" id="codTorneo" class="form-select">
+                                    <option disabled selected>Seleccione un torneo</option>
+                                    <% torneos.forEach((torneos)=>{ %>
+                                        <option value="<%= torneos.codTorneo %>">
+                                            <%= torneos.nombreTorneo %>
                                         </option>
                                         <% }) %>
                                 </select>

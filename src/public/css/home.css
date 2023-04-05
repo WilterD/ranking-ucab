@@ -23,11 +23,60 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+/*Estilos Swipers Slider*/
+
+.slide-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff;
+  z-index: 1;
+}
+
+.slide-content h2 {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.slide-content p {
+  font-size: 1.5rem;
+}
+
 .swiper-slide img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  max-height: 100vh; /* Cambiar el valor según se desee */
+  object-position: center;
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+}
+
+/* CSS */
+.swiper-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+/* CSS */
+.swiper-button-prev,
+.swiper-button-next {
+  color: #ffffff; /* Cambiar el color de las flechas */
+  font-size: 24px; /* Cambiar el tamaño de las flechas */
+  opacity: 0.5; /* Cambiar la opacidad de las flechas */
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  opacity: 1; /* Cambiar la opacidad de las flechas al pasar el ratón por encima */
 }
 a:link {
   text-decoration: none;
@@ -79,70 +128,7 @@ a .linkMenu:hover{
   display: none;
 }
 
-/*Estilos Swipers Slider*/
 
-.slide-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  color: #fff;
-  z-index: 1;
-}
-
-.slide-content h2 {
-  font-size: 3rem;
-  margin-bottom: 0.5rem;
-}
-
-.slide-content p {
-  font-size: 1.5rem;
-}
-
-.swiper-slide img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-
-  max-height: 80vh; /* Cambiar el valor según se desee */
-  object-fit: cover;
-  object-position: center;
-}
-
-/* CSS */
-.swiper-container {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
-}
-
-/* CSS */
-.swiper-button-prev,
-.swiper-button-next {
-  color: #ffffff; /* Cambiar el color de las flechas */
-  font-size: 24px; /* Cambiar el tamaño de las flechas */
-  opacity: 0.5; /* Cambiar la opacidad de las flechas */
-}
-
-.swiper-button-prev:hover,
-.swiper-button-next:hover {
-  opacity: 1; /* Cambiar la opacidad de las flechas al pasar el ratón por encima */
-}
-
-/*Enfrentamiento*/
-/* .team-logo {
-  display: inline-block;
-  vertical-align: middle;
-  margin: 5px;
-  padding: 5px;
-} */
 
 .team-name {
   font-size: 24px;
@@ -213,14 +199,9 @@ a .linkMenu:hover{
 
 .swiper-container {
   width: 100%;
-  height: 400px;
+  height: 600px;
+  max-width: 100%;
   position: relative;
-}
-
-.swiper-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .tablaPosiciones {

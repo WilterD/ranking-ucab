@@ -18,6 +18,20 @@
                     <div class="card-body">
                         <form action="/saveRE" method="POST">
                             <div class="mb-3">
+                                <label for="codTorneo" class="form-label">Nombre Del Torneo</label>
+                                <select id="codTorneo" name="codTorneo" class="form-select" aria-label="Default select example"
+                                  tabindex="2" required>
+                                  <option selected disabled>
+                                    Seleccione un Torneo
+                                  </option>
+                                  <% torneos.forEach((torneos)=>{ %>
+                                    <option value="<%= torneos.codTorneo %>">
+                                      <%= torneos.nombreTorneo %>
+                                    </option>
+                                    <% }) %>
+                                </select>
+                              </div>
+                            <div class="mb-3">
                                 <label for="codDeporte" class="form-label">Deporte</label>
                                 <select id="nombreDeporte" name="codDeporte" class="form-select"
                                     aria-label="Default select example" tabindex="2" required>

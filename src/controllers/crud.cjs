@@ -24,7 +24,7 @@ exports.saveGrupo = (req, res) => {
 exports.savePartido = (req, res) => {
   const fecha = req.body.fecha;
   const codEstadio = req.body.codEstadio;
-  const nombrePartido = req.body.nombrePartido;
+  const codTorneo = req.body.codTorneo;
   const codEquipo1 = req.body.codEquipo1;
   const codEquipo2 = req.body.codEquipo2;
   const codDeporte = req.body.codDeporte;
@@ -39,7 +39,7 @@ exports.savePartido = (req, res) => {
     {
       fecha,
       codEstadio,
-      nombrePartido,
+      codTorneo,
       codEquipo1,
       codEquipo2,
       codDeporte,
@@ -63,7 +63,7 @@ exports.savePartido = (req, res) => {
 exports.updatePartido = (req, res) => {
 
   const codPartido = req.body.codPartido;
-  const nombrePartido = req.body.nombrePartido;
+  const codTorneo = req.body.codTorneo;
   const codDeporte = req.body.codDeporte;
   const fecha = req.body.fecha;
   const codEstadio = req.body.codEstadio;
@@ -77,7 +77,7 @@ exports.updatePartido = (req, res) => {
 
   conexion.query(
     "UPDATE partido SET ? WHERE codPartido = ?",
-    [{ nombrePartido, fecha,codEstadio,codDeporte,puntos1,puntos2,etapa,jornada,codEquipo1,codEquipo2 }, codPartido],
+    [{ codTorneo, fecha,codEstadio,codDeporte,puntos1,puntos2,etapa,jornada,codEquipo1,codEquipo2 }, codPartido],
     (error, results) => {
       if (error) {
         console.log(error);
@@ -112,7 +112,7 @@ exports.saveEquipo = (req, res) => {
       (error, results) => {
         if (error) {
           console.log(error);
-          res.status(400).json({ msg: "Este equipo, ya existe" });
+          res.status(400).json({ msg: "Este equipo, ya existe, crea otro con un nombre diferente" });
         } else {
           res.redirect("/admin/equipos");
         }
@@ -264,7 +264,7 @@ exports.updateCarrera = (req, res) => {
 };
 
 exports.saveEliminatoria = (req, res) => {
-  const nombreEquipo = req.body.nombreEquipo;
+  const codEquipo = req.body.codEquipo;
   const juegos_ganados = req.body.juegos_ganados;
   const juegos_perdidos = req.body.juegos_perdidos;
   const goles_a_favor = req.body.goles_a_favor;
@@ -273,24 +273,26 @@ exports.saveEliminatoria = (req, res) => {
   const diferencia_goles = req.body.diferencia_goles;
   const puntos = req.body.puntos;
   const juegos_jugados = req.body.juegos_jugados;
+  const codTorneo = req.body.codTorneo;
 
   conexion.query(
     "INSERT INTO eliminatorias SET ?",
     {
-      nombreEquipo: nombreEquipo,
-      juegos_ganados: juegos_ganados,
-      juegos_perdidos: juegos_perdidos,
-      goles_a_favor: goles_a_favor,
-      goles_en_contra: goles_en_contra,
-      juegos_empate: juegos_empate,
-      diferencia_goles: diferencia_goles,
-      puntos: puntos,
-      juegos_jugados: juegos_jugados,
+      codEquipo,
+      codTorneo,
+      juegos_ganados,
+      juegos_perdidos,
+      goles_a_favor,
+      goles_en_contra,
+      juegos_empate,
+      diferencia_goles,
+      puntos,
+      juegos_jugados,
     },
     (error, results) => {
       if (error) {
         console.log(error);
-        res.status(400).json({ msg: "error" });
+        res.status(400).json({ msg: "Error al insertar los datos" });
       } else {
         res.redirect("/admin/eliminatorias");
       }
@@ -299,7 +301,9 @@ exports.saveEliminatoria = (req, res) => {
 };
 
 exports.updateEliminatoria = (req, res) => {
-  const nombreEquipo = req.body.nombreEquipo;
+  const id = req.body.id;
+  const codEquipo = req.body.codEquipo;
+  const codTorneo = req.body.codTorneo;
   const juegos_jugados = req.body.juegos_jugados;
   const juegos_ganados = req.body.juegos_ganados;
   const juegos_empate = req.body.juegos_empate;
@@ -309,20 +313,24 @@ exports.updateEliminatoria = (req, res) => {
   const diferencia_goles = req.body.diferencia_goles;
   const puntos = req.body.puntos;
 
+  console.log(req.body)
+
   conexion.query(
-    "UPDATE eliminatorias SET ? WHERE nombreEquipo = ?",
+    "UPDATE eliminatorias SET ? WHERE id = ?",
     [
       {
-        juegos_ganados: juegos_ganados,
-        juegos_perdidos: juegos_perdidos,
-        goles_a_favor: goles_a_favor,
-        goles_en_contra: goles_en_contra,
-        juegos_empate: juegos_empate,
-        diferencia_goles: diferencia_goles,
-        puntos: puntos,
-        juegos_jugados: juegos_jugados,
+        juegos_ganados,
+        juegos_perdidos,
+        goles_a_favor,
+        goles_en_contra,
+        juegos_empate,
+        diferencia_goles,
+        puntos,
+        juegos_jugados,
+        codEquipo,
+        codTorneo
       },
-      nombreEquipo,
+      id,
     ],
     (error, results) => {
       if (error) {
@@ -557,13 +565,17 @@ exports.saveRI = (req, res) => {
   const codJugador = req.body.codJugador;
   const puntos = req.body.puntos;
   const codDeporte = req.body.codDeporte;
+  const codTorneo = req.body.codTorneo;
+
+  
+
   conexion.query(
     "SELECT codCarrera FROM jugador WHERE codJugador=?",
     [codJugador],
     (error, carreras) => {
       if (error) {
         console.log(error);
-        res.status(400).json({ msg: "error" });
+        res.status(400).json({ msg: "Error: El Jugador ya se encuenta en el Ranking de este deporte en este torneo" });
         return;
       }
       conexion.query(
@@ -573,11 +585,16 @@ exports.saveRI = (req, res) => {
           puntos: puntos,
           codCarrera: carreras[0].codCarrera,
           codDeporte: codDeporte,
+          codTorneo: codTorneo,
         },
         (error) => {
           if (error) {
             console.log(error);
-            res.status(400).json({ msg: "error" });
+            if (error.code === 'ER_DUP_ENTRY') {
+              res.status(400).json({ msg: "Error: El Jugador ya se encuenta en el Ranking de este deporte para este torneo" });
+            } else {
+            res.status(400).json({ msg: "Ha Ocurrido un error inesperado" });
+            }
           } else {
             res.redirect("admin/rankingIndividual");
           }
@@ -615,6 +632,7 @@ exports.saveRE = (req, res) => {
   const codEquipo = req.body.codEquipo;
   const puntos = req.body.puntos;
   const codDeporte = req.body.codDeporte;
+  const codTorneo = req.body.codTorneo;
 
   conexion.query(
     "INSERT INTO rankinge SET ?",
@@ -622,6 +640,7 @@ exports.saveRE = (req, res) => {
       codEquipo: codEquipo,
       puntos: puntos,
       codDeporte: codDeporte,
+      codTorneo: codTorneo,
     },
     (error, results) => {
       if (error) {
@@ -639,10 +658,11 @@ exports.updateRE = (req, res) => {
   const puntos = req.body.puntos;
   const codDeporte = req.body.codDeporte;
   const codEquipo = req.body.codEquipo;
+  const codTorneo = req.body.codTorneo;
 
   conexion.query(
     "UPDATE rankinge SET ? WHERE id = ?",
-    [{ puntos: puntos,codDeporte:codDeporte,codEquipo:codEquipo }, id],
+    [{ puntos: puntos,codDeporte:codDeporte,codEquipo:codEquipo,codTorneo:codTorneo }, id],
     (error, results) => {
       if (error) {
         console.log(error);
@@ -654,3 +674,43 @@ exports.updateRE = (req, res) => {
   );
 };
 
+
+// torneos crud
+
+exports.saveTorneo = (req, res) => {
+  const { nombreTorneo,fecha_inicio,fecha_fin } = req.body;
+
+  conexion.query(
+    "INSERT INTO torneos SET ?",
+    {
+      nombreTorneo,
+      fecha_inicio,
+      fecha_fin
+    },
+    (error, results) => {
+      if (error) {
+        console.log(error);
+        res.status(400).json({ msg: "Error: Torneo Duplicado" });
+      } else {
+        res.redirect("/admin/torneos");
+      }
+    }
+  );
+};
+
+exports.updateTorneo = (req, res) => {
+  const { codTorneo,nombreTorneo,fecha_inicio,fecha_fin } = req.body;
+
+  conexion.query(
+    "UPDATE torneos SET ? WHERE codTorneo = ?",
+    [{ codTorneo,nombreTorneo,fecha_inicio,fecha_fin }, codTorneo],
+    (error, results) => {
+      if (error) {
+        console.log(error);
+        res.status(400).json({ msg: "Error: Fallo al actualizar torneo" });
+      } else {
+        res.redirect("/admin/torneos");
+      }
+    }
+  );
+};

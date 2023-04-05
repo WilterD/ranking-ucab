@@ -21,6 +21,7 @@
           <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
             <thead>
               <tr class="bg-primary text-white">
+                <th scope="col">Torneo</th>
                 <th scope="col">Equipo</th>
                 <th scope="col">PJ</th>
                 <th scope="col">PG</th>    
@@ -36,6 +37,7 @@
             <tbody>
               <% eliminatoria.forEach((elim)=>{ %>
                 <tr>  
+                  <td><%= elim.nombreTorneo %></td>  
                     <td><%= elim.nombreEquipo %></td>  
                     <td><%= elim.juegos_jugados %></td>  
                     <td><%= elim.juegos_ganados %></td>
@@ -46,8 +48,8 @@
                     <td><%= elim.diferencia_goles%></td>
                     <td><%= elim.puntos%></td>
                     <td>
-                      <a href="/admin/editarEliminatoria/<%= elim.codEquipo %>" class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>
-                      <a onclick="confirmar('<%= elim.codEquipo %>','/admin/deleteEliminatoria')" class="btn btn-outline-danger"><i
+                      <a href="/admin/editarEliminatoria/<%= elim.id %>" class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>
+                      <a onclick="confirmar('<%= elim.id %>','/admin/deleteEliminatoria')" class="btn btn-outline-danger"><i
                         class='bx bxs-trash'></i></a>
                     </td>
                 </tr>                                   

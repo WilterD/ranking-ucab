@@ -17,36 +17,50 @@
                     <div class="card-header">Nuevo Ranking Individual</div>
                     <div class="card-body">
                         <form action="/saveRI" method="POST">
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Nombre Jugador</label>
-                        <select id="codJugador" name="codJugador" class="form-select"
-                            aria-label="Default select example" tabindex="2" required>
-                            
-                            <option value="" disabled selected>Seleccione un jugador</option>
-                            <% jugadores.forEach((jugadores)=>{ %>
-                                <option value="<%= jugadores.codJugador %>">
-                                    <%= jugadores.nombreJugador %>
-                                </option>
-                                <% }) %>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="nombre" class="form-label">Deporte</label>
-                        <select id="codDeporte" name="codDeporte" class="form-select"
-                            aria-label="Default select example" tabindex="2" required>
-                            
-                            <option value="" disabled selected>Seleccione un deporte</option>
-                            <% deportes.forEach((deportes)=>{ %>
-                                <option value="<%= deportes.id %>">
-                                    <%= deportes.nombreDeporte %>
-                                </option>
-                                <% }) %>
-                        </select>
-                    </div>
-                    <div class="mb-3">
+                            <div class="mb-3">
+                                <label for="codTorneo" class="form-label">Nombre Del Torneo</label>
+                                <select id="codTorneo" name="codTorneo" class="form-select"
+                                    aria-label="Default select example" tabindex="2" required>
+                                    <option selected disabled>
+                                        Seleccione un Torneo
+                                    </option>
+                                    <% torneos.forEach((torneos)=>{ %>
+                                        <option value="<%= torneos.codTorneo %>">
+                                            <%= torneos.nombreTorneo %> %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre Jugador</label>
+                                <select id="codJugador" name="codJugador" class="form-select"
+                                    aria-label="Default select example" tabindex="2" required>
+
+                                    <option value="" disabled selected>Seleccione un jugador</option>
+                                    <% jugadores.forEach((jugadores)=>{ %>
+                                        <option value="<%= jugadores.codJugador %>">
+                                            <%= jugadores.nombreJugador %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Deporte</label>
+                                <select id="codDeporte" name="codDeporte" class="form-select"
+                                    aria-label="Default select example" tabindex="2" required>
+
+                                    <option value="" disabled selected>Seleccione un deporte</option>
+                                    <% deportes.forEach((deportes)=>{ %>
+                                        <option value="<%= deportes.id %>">
+                                            <%= deportes.nombreDeporte %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="mb-3">
                                 <label for="name" class="form-label">Puntos</label>
                                 <input type="number" class="form-control" id="puntos" name="puntos" tabindex="1">
-                    </div>
+                            </div>
                             <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
                             <a href="/admin/rankingIndividual" class="btn btn-secondary">Cancelar</a>
                         </form>

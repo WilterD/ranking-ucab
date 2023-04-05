@@ -24,6 +24,7 @@
               <thead>
                 <tr class="bg-primary text-white">
                   <th scope="col">#</th>
+                  <th scope="col">Torneo</th>
                   <th scope="col">Nombre Jugador</th>
                   <th scope="col">Carrera / Unidad</th>
                   <th scope="col">Deporte</th>
@@ -35,6 +36,9 @@
                 <% rankini.forEach((rankini)=>{ %>
                   <tr>
                     <td> </td>
+                    <td>
+                      <%= rankini.nombreTorneo %>
+                    </td>
                     <td>
                       <%= rankini.nombreJugador %>
                     </td>
@@ -82,10 +86,10 @@
             $('#miTabla').DataTable().destroy();
           }
           var tabla = $('#miTabla').DataTable({
-            "order": [[4, "desc"]], // Ordenar por la columna de Puntos en orden descendente
+            "order": [[5, "desc"]], // Ordenar por la columna de Puntos en orden descendente
             columnDefs: [{
               orderable: false,
-              targets: [0, 1, 2, 3, 5] // deshabilitar ordenamiento en la columna "Acciones"
+              targets: [0, 1, 2, 3, 4,5] // deshabilitar ordenamiento en la columna "Acciones"
             }],
             "language": {
               "lengthMenu": "Mostrar _MENU_ ",

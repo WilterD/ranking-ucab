@@ -6,10 +6,27 @@
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <% if (deportes.length> 0) { %>
+        
             <div class="collapse navbar-collapse" id="navbarNav">
                 <li class="nav-item"><a class="text-white linkMenu" href="/">Inicio</a></li>
                 <ul class="navbar-nav">
+                    <% if (torneos.length> 0) { %>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown navbarDropdown2"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Torneos
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu2" aria-labelledby="navbarDropdown">
+                            <% torneos.forEach((torneos)=>{ %>
+                                <li><a class="dropdown-item linkMenu" href="/torneos<%= torneos.codTorneo %>">
+                                        <%= torneos.nombreTorneo %>
+                                    </a></li>
+                                <% }) %>
+                        </ul>
+                    </li>
+                    <% } %>
+                
+                    <% if (deportes.length> 0) { %>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown navbarDropdown2"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -17,7 +34,7 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu2" aria-labelledby="navbarDropdown">
                             <% deportes.forEach((deportes)=>{ %>
-                                <li><a class="dropdown-item linkMenu" href="/deportes-<%= deportes.id %>">
+                                <li><a class="dropdown-item linkMenu" href="/ranking<%= deportes.id %><%= deportes.codTorneo %>">
                                         <%= deportes.nombreDeporte %>
                                     </a></li>
                                 <% }) %>

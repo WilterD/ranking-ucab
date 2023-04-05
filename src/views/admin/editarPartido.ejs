@@ -22,11 +22,20 @@
                         <form action="/updatePartido" method="POST">
                             <input type="hidden" class="form-control" id="codPartido" name="codPartido" tabindex="1"
                                 value="<%= partido.codPartido %>" />
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Nombre Partido</label>
-                                <input type="text" class="form-control" id="nombrePartido" name="nombrePartido"
-                                    tabindex="1" value=" <%= partido.nombrePartido %>" />
-                            </div>
+                                <div class="mb-3">
+                                    <label for="codTorneo" class="form-label">Nombre Torneo</label>
+                                    <select id="codTorneo" name="codTorneo" class="form-select"
+                                        aria-label="Default select example" tabindex="2" required>
+                                        <option selected value="<%= partido.codTorneo %>">
+                                            <%= partido.nombreTorneo %>
+                                        </option>
+                                        <% torneos.forEach((torneos)=>{ %>
+                                            <option value="<%= torneos.codTorneo %>">
+                                                <%= torneos.nombreTorneo %> %>
+                                            </option>
+                                            <% }) %>
+                                    </select>
+                                </div>
                             <div class="mb-3">
                                 <label for="etapa" class="form-label">Etapa</label>
                                 <select id="etapa" name="etapa" class="form-select" aria-label="Default select example"

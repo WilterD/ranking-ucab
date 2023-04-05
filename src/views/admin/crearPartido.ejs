@@ -24,8 +24,18 @@
                 </select>
               </div>
               <div class="mb-3">
-                <label for="name" class="form-label">Nombre del Partido</label>
-                <input type="text" class="form-control" id="nombrePartido" name="nombrePartido" tabindex="1">
+                <label for="codTorneo" class="form-label">Nombre Del Torneo</label>
+                <select id="codTorneo" name="codTorneo" class="form-select" aria-label="Default select example"
+                  tabindex="2" required>
+                  <option selected disabled>
+                    Seleccione un Torneo
+                  </option>
+                  <% torneos.forEach((torneos)=>{ %>
+                    <option value="<%= torneos.codTorneo %>">
+                      <%= torneos.nombreTorneo %> %>
+                    </option>
+                    <% }) %>
+                </select>
               </div>
               <div class="mb-3">
                 <label for="etapa" class="form-label">Etapa</label>

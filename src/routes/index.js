@@ -6,6 +6,7 @@ import * as mycrud from "../controllers/crud.cjs";
 // importar moment
 import moment from "moment";
 import multer from "multer";
+import util from "util";
 
 import session from "express-session";
 import flash from "connect-flash";
@@ -246,12 +247,13 @@ router.get("/admin/", requireLogin, (req, res) => {});
 router.get("/admin/partidos", requireLogin, (req, res) => {
   // Realizar la consulta SQL
   // SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2,
-  const sql = `SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, p.nombrePartido,p.jornada, p.puntos1,p.codPartido, p.puntos2, p.etapa, p.fecha, e.nombreEstadio, d.nombreDeporte, d.tipoDeporte
+  const sql = `SELECT t.nombreTorneo,e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2,p.jornada, p.puntos1,p.codPartido, p.puntos2, p.etapa, p.fecha, e.nombreEstadio, d.nombreDeporte
   FROM partido p
-  INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo
-  INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo
+  JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo
+  JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo
   JOIN estadio e ON p.codEstadio = e.codEstadio
-  JOIN deporte d ON p.codDeporte = d.id;
+  JOIN deporte d ON p.codDeporte = d.id
+  JOIN torneos t ON p.codTorneo = t.codTorneo
   `;
 
   conexion.query(sql, (error, partidos) => {
@@ -271,6 +273,8 @@ router.get("/admin/partidos", requireLogin, (req, res) => {
         return `${dia}/${mes}/${anio} ${hora}:${minutos}`;
       });
 
+      console.log(partidos);
+
       res.render("admin/partidos.ejs", {
         partidos: partidos,
         fecha: fecha,
@@ -283,7 +287,7 @@ router.get("/admin/editarPartido/:codPartido", (req, res) => {
   const { codPartido } = req.params;
 
   conexion.query(
-    "SELECT p.codPartido, d.id, d.nombreDeporte, p.codEstadio, p.codEquipo1, p.codEquipo2, e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, p.nombrePartido, es.nombreEstadio, p.jornada, p.fecha, p.etapa, p.puntos1, p.puntos2, p.codDeporte FROM partido p INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo INNER JOIN estadio es ON p.codEstadio = es.codEstadio INNER JOIN deporte d ON p.codDeporte = d.id WHERE p.codPartido = ?",
+    "SELECT p.codPartido, d.id, d.nombreDeporte, p.codEstadio, p.codEquipo1, p.codEquipo2, e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, t.nombreTorneo,t.codTorneo, es.nombreEstadio, p.jornada, p.fecha, p.etapa, p.puntos1, p.puntos2, p.codDeporte FROM partido p INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo INNER JOIN estadio es ON p.codEstadio = es.codEstadio INNER JOIN deporte d ON p.codDeporte = d.id JOIN torneos t ON p.codTorneo = t.codTorneo WHERE p.codPartido = ?",
     [codPartido],
     (error, results) => {
       if (error) {
@@ -304,13 +308,23 @@ router.get("/admin/editarPartido/:codPartido", (req, res) => {
                     if (error) {
                       console.log(error);
                     } else {
-                      console.log(results[0]);
-                      res.render("admin/editarPartido.ejs", {
-                        partido: results[0],
-                        estadios: estadios,
-                        equipos: equipos,
-                        deporte: deporte,
-                      });
+                      conexion.query(
+                        "SELECT * FROM torneos",
+                        (error, torneos) => {
+                          if (error) {
+                            console.log(error);
+                          } else {
+                            console.log(results[0]);
+                            res.render("admin/editarPartido.ejs", {
+                              partido: results[0],
+                              estadios: estadios,
+                              equipos: equipos,
+                              deporte: deporte,
+                              torneos: torneos,
+                            });
+                          }
+                        }
+                      );
                     }
                   });
                 }
@@ -332,7 +346,7 @@ router.get("/admin/crearPartido", requireLogin, (req, res) => {
         if (error) {
           console.log(error);
         } else {
-          conexion.query("SELECT * FROM carreras", (error, carrera) => {
+          conexion.query("SELECT * FROM torneos", (error, torneos) => {
             if (error) {
               console.log(error);
             } else {
@@ -349,9 +363,9 @@ router.get("/admin/crearPartido", requireLogin, (req, res) => {
                         res.render("admin/crearPartido.ejs", {
                           estadios: estadios,
                           equipos: equipos,
-                          carrera: carrera,
                           deporte: deporte,
                           jugadores: jugadores,
+                          torneos: torneos,
                         });
                       }
                     }
@@ -422,21 +436,18 @@ router.get("/admin/usuarios", requireLogin, (req, res) => {
 
 router.get("/admin/deleteUsuarios/:id", requireLogin, (req, res) => {
   const id = req.params.id;
-  conexion.query(
-    "DELETE FROM users WHERE id = ?",
-    [id],
-    (error, results) => {
-      if (error) {
-        console.log(error);
-      } else {
-        res.redirect("/admin/usuarios");
-      }
+  conexion.query("DELETE FROM users WHERE id = ?", [id], (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.redirect("/admin/usuarios");
     }
-  );
+  });
 });
 
 router.get("/admin/eliminatorias", requireLogin, (req, res) => {
-  conexion.query("SELECT * FROM eliminatorias", (error, eliminatoria) => {
+  const sql = `SELECT e.nombreEquipo, eli.*, t.nombreTorneo FROM eliminatorias eli JOIN equipos e ON eli.codEquipo = e.codEquipo JOIN torneos t ON eli.codTorneo = t.codTorneo;`;
+  conexion.query(sql, (error, eliminatoria) => {
     if (error) {
       console.log(error);
     } else {
@@ -446,20 +457,32 @@ router.get("/admin/eliminatorias", requireLogin, (req, res) => {
 });
 
 router.get("/admin/crearEliminatoria", requireLogin, (req, res) => {
-  conexion.query("SELECT * FROM equipos", (error, equipos) => {
+  const sql = `SELECT e.* FROM equipos e
+  INNER JOIN deporte d ON e.codDeporte = d.id 
+  WHERE d.nombreDeporte LIKE 'F%' OR d.nombreDeporte LIKE 'f%';`;
+  conexion.query(sql, (error, equipos) => {
+    // seleccionar solo equipos de futbol
     if (error) {
       console.log(error);
     } else {
-      res.render("admin/crearEliminatoria.ejs", { equipos: equipos });
+      const sql2 = `SELECT * FROM torneos`;
+      conexion.query(sql2, (error, torneos) => {
+        // seleccionar solo equipos de futbol
+        if (error) {
+          console.log(error);
+        } else {
+          res.render("admin/crearEliminatoria.ejs", { equipos, torneos });
+        }
+      });
     }
   });
 });
 
-router.get("/admin/deleteEliminatoria/:codEquipo", requireLogin, (req, res) => {
-  const codEquipo = req.params.codEquipo;
+router.get("/admin/deleteEliminatoria/:id", requireLogin, (req, res) => {
+  const id = req.params.id;
   conexion.query(
-    "DELETE FROM eliminatorias WHERE codEquipo = ?",
-    [codEquipo],
+    "DELETE FROM eliminatorias WHERE id = ?",
+    [id],
     (error, results) => {
       if (error) {
         console.log(error);
@@ -470,21 +493,35 @@ router.get("/admin/deleteEliminatoria/:codEquipo", requireLogin, (req, res) => {
   );
 });
 
-router.get("/admin/editarEliminatoria/:codEquipo", requireLogin, (req, res) => {
-  const codEquipo = req.params.codEquipo;
-  conexion.query(
-    "SELECT * FROM eliminatorias WHERE codEquipo=?",
-    [codEquipo],
-    (error, eliminatoria) => {
-      if (error) {
-        throw error;
-      } else {
-        res.render("admin/editarEliminatoria.ejs", {
-          eliminatoria: eliminatoria[0],
-        });
-      }
+router.get("/admin/editarEliminatoria/:id", requireLogin, (req, res) => {
+  const id = req.params.id;
+  const sql = `SELECT eli.*,e.nombreEquipo, e.codEquipo, t.nombreTorneo, t.codTorneo FROM eliminatorias eli
+  JOIN equipos e ON eli.codEquipo = e.codEquipo
+  JOIN torneos t ON eli.codTorneo = t.codTorneo 
+  WHERE id=?`;
+  conexion.query(sql, [id], (error, eliminatoria) => {
+    if (error) {
+      throw error;
+    } else {
+      conexion.query("SELECT * FROM equipos", (error, equipos) => {
+        if (error) {
+          console.log(error);
+        } else {
+          conexion.query("SELECT * FROM torneos", (error, torneos) => {
+            if (error) {
+              console.log(error);
+            } else {
+              res.render("admin/editarEliminatoria.ejs", {
+                eliminatoria: eliminatoria[0],
+                equipos: equipos,
+                torneos: torneos,
+              });
+            }
+          });
+        }
+      });
     }
-  );
+  });
 });
 
 router.get("/admin/crearEIndividuales", requireLogin, (req, res) => {
@@ -715,8 +752,15 @@ router.get("/admin/deleteDeporte/:id", requireLogin, (req, res) => {
 });
 
 router.get("/admin/rankingIndividual", requireLogin, (req, res) => {
+  const sql = `SELECT t.nombreTorneo,r.id,j.nombreJugador,c.nombreCarrera, d.nombreDeporte,r.puntos 
+  FROM rankini r 
+  JOIN carreras c ON r.codCarrera = c.id 
+  JOIN deporte d ON r.codDeporte = d.id 
+  JOIN jugador j ON r.codJugador = j.codJugador
+  JOIN torneos t ON r.codTorneo = t.codTorneo
+  `
   conexion.query(
-    "SELECT r.id,j.nombreJugador,c.nombreCarrera, d.nombreDeporte,r.puntos FROM rankini r JOIN carreras c ON r.codCarrera = c.id JOIN deporte d ON r.codDeporte = d.id JOIN jugador j ON r.codJugador = j.codJugador;",
+    sql,
     (error, rankini) => {
       if (error) {
         console.log(error);
@@ -738,10 +782,18 @@ router.get("/admin/crearRankingIndividual", requireLogin, (req, res) => {
           if (error) {
             console.log(error);
           } else {
-            res.render("admin/crearRankingIndividual.ejs", {
-              jugadores: jugadores,
-              deportes: deportes,
-            });
+            conexion.query("SELECT * FROM torneos",(error,torneos)=>{
+              if(error){
+                console.log(error)
+              }else{
+                res.render("admin/crearRankingIndividual.ejs", {
+                  jugadores: jugadores,
+                  deportes: deportes,
+                  torneos:torneos
+                });
+              }
+
+            })
           }
         }
       );
@@ -831,10 +883,17 @@ router.get("/admin/crearRankingEquipos", requireLogin, (req, res) => {
           if (error) {
             console.log(error);
           } else {
-            res.render("admin/crearRankingEquipos.ejs", {
-              equipos: equipos,
-              deportes: deportes,
-            });
+            conexion.query("SELECT * FROM torneos",(error,torneos)=>{
+              if(error){
+                console.log(error)
+              }else{
+                res.render("admin/crearRankingEquipos.ejs", {
+                  equipos: equipos,
+                  deportes: deportes,
+                  torneos:torneos
+                });
+              }
+            })
           }
         }
       );
@@ -844,8 +903,15 @@ router.get("/admin/crearRankingEquipos", requireLogin, (req, res) => {
 
 router.get("/admin/editarRankingRE/:id", requireLogin, (req, res) => {
   const id = req.params.id;
+  const sql =`
+  SELECT re.*, e.nombreEquipo, e.codEquipo, d.nombreDeporte, d.id 
+  FROM rankinge re 
+  JOIN deporte d ON re.codDeporte = d.id
+  JOIN equipos e ON re.codEquipo = e.codEquipo
+  WHERE id = ?  
+  `
   conexion.query(
-    "SELECT * FROM rankinge WHERE id=?",
+    sql,
     [id],
     (error, rankingRE) => {
       if (error) {
@@ -861,6 +927,7 @@ router.get("/admin/editarRankingRE/:id", requireLogin, (req, res) => {
                 if (error) {
                   console.log(error);
                 } else {
+
                   res.render("admin/editarRankingRE", {
                     rankingRE: rankingRE[0],
                     equipos: equipos,
@@ -906,242 +973,253 @@ function queryDatabase(sql) {
 // login y registro
 
 // Ruta de dashboard protegida
-router.get("/admin/dashboard", requireLogin, (req, res) => {
-  // Verificar que el usuario haya iniciado sesión
-  conexion.query(
-    "SELECT COUNT(*) AS cantidadDeportes FROM deporte",
-    (error, deportes) => {
-      if (error) {
-        console.log(error);
-      } else {
-        conexion.query(
-          "SELECT COUNT(*) AS cantidadEquipos FROM equipos",
-          (error, resultadosEquipos) => {
-            if (error) {
-              console.log(error);
-            } else {
-              conexion.query(
-                "SELECT COUNT(*) AS cantidadJugadores FROM jugador",
-                (error, resultadosJugadores) => {
-                  if (error) {
-                    console.log(error);
-                  } else {
-                    conexion.query(
-                      "SELECT COUNT(*) AS cantidadEstadios FROM estadio",
-                      (error, resultadosEstadios) => {
-                        if (error) {
-                          console.log(error);
-                        } else {
-                          conexion.query(
-                            "SELECT COUNT(*) AS cantidadPartidos FROM partido",
-                            (error, resultadosPartidos) => {
-                              if (error) {
-                                console.log(error);
-                              } else {
-                                conexion.query(
-                                  "SELECT COUNT(*) AS cantidadCarreras FROM carreras",
-                                  (error, resultadosCarreras) => {
-                                    if (error) {
-                                      console.log(error);
-                                    } else {
-                                      res.render("admin/dashboard", {
-                                        cantidadDeportes:
-                                          deportes[0].cantidadDeportes,
-                                        cantidadEquipos:
-                                          resultadosEquipos[0].cantidadEquipos,
-                                        cantidadJugadores:
-                                          resultadosJugadores[0]
-                                            .cantidadJugadores,
-                                        cantidadEstadios:
-                                          resultadosEstadios[0]
-                                            .cantidadEstadios,
-                                        cantidadPartidos:
-                                          resultadosPartidos[0]
-                                            .cantidadPartidos,
-                                        cantidadCarreras:
-                                          resultadosCarreras[0]
-                                            .cantidadCarreras,
-                                      });
-                                    }
-                                  }
-                                );
-                              }
-                            }
-                          );
-                        }
-                      }
-                    );
-                  }
-                }
-              );
-            }
-          }
-        );
-      }
-    }
-  );
+
+router.get("/admin/dashboard", requireLogin, async (req, res) => {
+  try {
+    const [
+      deportes,
+      equipos,
+      jugadores,
+      estadios,
+      partidos,
+      carreras,
+      users,
+      torneos,
+    ] = await Promise.all([
+      util.promisify(conexion.query).bind(conexion)(
+        "SELECT COUNT(*) AS cantidadDeportes FROM deporte"
+      ),
+      util.promisify(conexion.query).bind(conexion)(
+        "SELECT COUNT(*) AS cantidadEquipos FROM equipos"
+      ),
+      util.promisify(conexion.query).bind(conexion)(
+        "SELECT COUNT(*) AS cantidadJugadores FROM jugador"
+      ),
+      util.promisify(conexion.query).bind(conexion)(
+        "SELECT COUNT(*) AS cantidadEstadios FROM estadio"
+      ),
+      util.promisify(conexion.query).bind(conexion)(
+        "SELECT COUNT(*) AS cantidadPartidos FROM partido"
+      ),
+      util.promisify(conexion.query).bind(conexion)(
+        "SELECT COUNT(*) AS cantidadCarreras FROM carreras"
+      ),
+      util.promisify(conexion.query).bind(conexion)(
+        "SELECT COUNT(*) AS cantidadUsers FROM users"
+      ),
+      util.promisify(conexion.query).bind(conexion)(
+        "SELECT COUNT(*) AS cantidadTorneos FROM torneos"
+      ),
+    ]);
+
+    res.render("admin/dashboard", {
+      cantidadDeportes: deportes[0].cantidadDeportes,
+      cantidadEquipos: equipos[0].cantidadEquipos,
+      cantidadJugadores: jugadores[0].cantidadJugadores,
+      cantidadEstadios: estadios[0].cantidadEstadios,
+      cantidadPartidos: partidos[0].cantidadPartidos,
+      cantidadCarreras: carreras[0].cantidadCarreras,
+      cantidadUsers: users[0].cantidadUsers,
+      cantidadTorneos: torneos[0].cantidadTorneos,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 router.get(["/", "/home"], (req, res) => {
-  conexion.query(
+  const sql = `SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, e1.imagen AS imagen1, e2.imagen AS imagen2, t.nombreTorneo, t.codTorneo, es.nombreEstadio, p.jornada, p.fecha, p.etapa, d.nombreDeporte, p.codPartido 
+  FROM partido p 
+  INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
+  INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
+  INNER JOIN estadio es ON p.codEstadio = es.codEstadio 
+  INNER JOIN deporte d ON p.codDeporte = d.id 
+  INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
+  WHERE p.fecha > NOW() AND t.status=1 
+  ORDER BY p.fecha ASC;`;
+
+  conexion.query(sql, (error, partidos) => {
     // proximos partidos
-    "SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, e1.imagen AS imagen1, e2.imagen AS imagen2, p.nombrePartido, es.nombreEstadio, p.jornada, p.fecha, p.etapa, d.nombreDeporte, p.codPartido FROM partido p INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo INNER JOIN estadio es ON p.codEstadio = es.codEstadio INNER JOIN deporte d ON p.codDeporte = d.id WHERE p.fecha > NOW() ORDER BY p.fecha ASC;",
-    (error, partidos) => {
-      if (error) {
-        console.log(error);
-      } else {
-        conexion.query(
-          // Rankging individual y por equipos
-          "SELECT DISTINCT d.nombreDeporte ,d.id FROM deporte d LEFT JOIN rankini r ON d.id = r.codDeporte LEFT JOIN rankinge re ON d.id = re.codDeporte WHERE r.codJugador IS NOT NULL OR re.codEquipo IS NOT NULL;",
-          (error, deportes) => {
-            if (error) {
-              console.log(error);
-            } else {
-              conexion.query(
-                // partidos con Clasificatoria de Cuartos, semifinal, final, tercer lugar
-                "SELECT p.fecha, p.jornada, p.etapa, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, p.puntos1, e2.nombreEquipo AS equipo2, p.puntos2 FROM partido p INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo WHERE p.etapa = 'TERCER LUGAR' OR p.etapa = 'CUARTOS DE FINAL' OR p.etapa = 'SEMIFINAL' OR p.etapa = 'FINAL' ORDER BY CASE p.etapa WHEN 'CUARTOS DE FINAL' THEN 1 WHEN 'SEMIFINAL' THEN 2 WHEN 'TERCER LUGAR' THEN 3 WHEN 'FINAL' THEN 4 END",
-                (error, partidosTorneos) => {
-                  if (error) {
-                    console.log(error);
-                  } else {
-                    conexion.query(
-                      "SELECT * FROM eliminatorias",
-                      (error, eliminatoria) => {
-                        if (error) {
-                          console.log(error);
-                        } else {
-                          conexion.query(
-                            // Partidos Con Resultados y Clasificatoria
-                            "SELECT p.fecha, p.jornada, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, p.puntos1, e2.nombreEquipo AS equipo2, p.puntos2 FROM partido p INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo WHERE p.etapa = 'CLASIFICATORIA' AND p.puntos1 IS NOT NULL AND p.puntos2 IS NOT NULL ORDER BY p.jornada ASC;",
-                            (error, resultados) => {
+    if (error) {
+      console.log(error);
+    } else { // completar llave foranea de codTorneo de rankinge a torneos
+      const sql = ` 
+      SELECT DISTINCT d.nombreDeporte, t.nombreTorneo, d.id, t.codTorneo
+    FROM ((rankini r INNER JOIN torneos t ON r.codTorneo = t.codTorneo) 
+     INNER JOIN deporte d ON r.codDeporte = d.id) 
+    WHERE t.status = 1
+      UNION 
+      SELECT DISTINCT d.nombreDeporte, t.nombreTorneo, d.id, t.codTorneo 
+        FROM (rankinge r INNER JOIN torneos t ON r.codTorneo = t.codTorneo) 
+        INNER JOIN deporte d ON r.codDeporte = d.id 
+      WHERE t.status = 1;`;
+      conexion.query( // Rankging individual y por equipos
+        sql,
+        (error, deportes) => {
+          if (error) {
+            console.log(error);
+          } else {
+            const sql = `SELECT p.fecha, p.jornada, p.etapa, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, p.puntos1, e2.nombreEquipo AS equipo2, p.puntos2 
+              FROM partido p 
+              INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo
+              INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
+              INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
+              WHERE p.etapa = 'TERCER LUGAR' OR p.etapa = 'CUARTOS DE FINAL' OR p.etapa = 'SEMIFINAL' OR p.etapa = 'FINAL' 
+                AND t.status = 1
+              ORDER BY CASE p.etapa 
+                WHEN 'CUARTOS DE FINAL' THEN 1 
+                WHEN 'SEMIFINAL' THEN 2 
+                WHEN 'TERCER LUGAR' THEN 3 
+                WHEN 'FINAL' THEN 4 
+              END`;
+            conexion.query(
+              // partidos con Clasificatoria de Cuartos, semifinal, final, tercer lugar
+              sql,
+              (error, partidosTorneos) => {
+                if (error) {
+                  console.log(error);
+                } else {
+                  conexion.query(
+                    "SELECT eli.*, e.nombreEquipo, t.nombreTorneo FROM eliminatorias eli INNER JOIN torneos t ON eli.codTorneo = t.codTorneo INNER JOIN equipos e ON eli.codEquipo = e.codEquipo WHERE t.status = 1",
+                    (error, eliminatoria) => {
+                      if (error) {
+                        console.log(error);
+                      } else {
+                        const sql2 = `SELECT t.nombreTorneo,p.fecha, p.jornada, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, p.puntos1, e2.nombreEquipo AS equipo2, p.puntos2 
+                          FROM partido p 
+                          INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
+                          INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
+                          INNER JOIN torneos t ON p.codTorneo = t.codTorneo
+                          WHERE p.etapa = 'CLASIFICATORIA' AND p.fecha <= CURDATE() AND t.status=1
+                          ORDER BY p.jornada ASC;`;
+                        conexion.query(sql2, (error, resultados) => {
+                          // resultados de partidos
+                          if (error) {
+                            console.log(error);
+                          } else {
+                            const sql3 = `SELECT * FROM torneos`;
+                            conexion.query(sql3, (error, torneos) => {
+                              // torneos
                               if (error) {
                                 console.log(error);
                               } else {
-                                let fechaPartidos = partidos.map((partido) => {
-                                  // obtener los dias de la semana
-                                  let fechaPartidos = new Date(partido.fecha);
-
-                                  let dia = fechaPartidos.getDate();
-                                  let mes = fechaPartidos.getMonth() + 1;
-                                  let hora = fechaPartidos.getHours();
-                                  let minutos = fechaPartidos.getMinutes();
-                                  if (minutos == "0") {
-                                    minutos = "00";
-                                  }
-                                  if (hora > 12) {
-                                    hora = hora - 12;
-                                    minutos = minutos + " PM";
-                                  } else {
-                                    minutos = minutos + " AM";
-                                  }
-
-                                  if (minutos < 10) {
-                                    minutos = "0" + minutos;
-                                  }
-
-                                  let nombreMes = " ";
-
-                                  switch (mes) {
-                                    case 1:
-                                      nombreMes = "Enero";
-                                      break;
-                                    case 2:
-                                      nombreMes = "Febrero";
-                                      break;
-                                    case 3:
-                                      nombreMes = "Marzo";
-                                      break;
-                                    case 4:
-                                      nombreMes = "Abril";
-                                      break;
-                                    case 5:
-                                      nombreMes = "Mayo";
-                                      break;
-                                    case 6:
-                                      nombreMes = "Junio";
-                                      break;
-                                    case 7:
-                                      nombreMes = "Julio";
-                                      break;
-                                    case 8:
-                                      nombreMes = "Agosto";
-                                      break;
-                                    case 9:
-                                      nombreMes = "Septiembre";
-                                      break;
-                                    case 10:
-                                      nombreMes = "Octubre";
-                                      break;
-                                    case 11:
-                                      nombreMes = "Noviembre";
-                                      break;
-                                    case 12:
-                                      nombreMes = "Diciembre";
-                                      break;
-                                  }
-
-                                  fechaPartidos = `${dia} de ${nombreMes} - ${hora}:${minutos}`;
-
-                                  return fechaPartidos;
-                                });
-
-                                // for (
-                                //   let i = 0;
-                                //   i < partidosTorneos.length;
-                                //   i++
-                                // ) {
-                                // Obtenemos la fecha del partido
-                                // const fecha = new Date(
-                                //   partidosTorneos[i].fecha
-                                // );
-
-                                // Formateamos la fecha
-                                //   const dia = fecha
-                                //     .getDate()
-                                //     .toString()
-                                //     .padStart(2, "0");
-                                //   const mes = (fecha.getMonth() + 1)
-                                //     .toString()
-                                //     .padStart(2, "0");
-                                //   const anio = fecha.getFullYear().toString();
-                                //   const hora = fecha
-                                //     .getHours()
-                                //     .toString()
-                                //     .padStart(2, "0");
-                                //   const minutos = fecha
-                                //     .getMinutes()
-                                //     .toString()
-                                //     .padStart(2, "0");
-
-                                //   // Asignamos la fecha formateada al objeto original
-                                //   partidosTorneos[
-                                //     i
-                                //   ].fecha = `${dia}/${mes}/${anio} - ${hora}:${minutos}`;
-                                // }
 
                                 res.render("home.ejs", {
-                                  deportes: deportes,
-                                  eliminatoria: eliminatoria,
-                                  resultados: resultados,
-                                  partidos: partidos,
-                                  fechaPartidos: fechaPartidos,
-                                  partidosTorneos: partidosTorneos,
+                                  partidos,
+                                  deportes,
+                                  partidosTorneos,
+                                  eliminatoria,
+                                  resultados,
+                                  torneos
                                 });
                               }
-                            }
-                          );
-                        }
+                            });
+                          }
+                        });
                       }
-                    );
-                  }
+                    }
+                  );
                 }
-              );
-            }
+              }
+            );
           }
-        );
-      }
+        }
+      );
     }
-  );
+  });
+});
+
+router.get("/torneos:codTorneo", (req, res) => {
+  let codTorneo = req.params.codTorneo;
+  // partidos proximos de torneo especifico
+  const sql = `SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, e1.imagen AS imagen1, e2.imagen AS imagen2, t.nombreTorneo, t.codTorneo, es.nombreEstadio, p.jornada, p.fecha, p.etapa, d.nombreDeporte, p.codPartido 
+  FROM partido p 
+  INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
+  INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
+  INNER JOIN estadio es ON p.codEstadio = es.codEstadio 
+  INNER JOIN deporte d ON p.codDeporte = d.id 
+  INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
+  WHERE p.fecha > NOW() AND t.codTorneo=? 
+  ORDER BY p.fecha ASC;`;
+  conexion.query(sql, [codTorneo], (error, partidos) => {
+    
+    if (error) {
+      console.log(error);
+    } else {
+        //  deportes con rankings del torneo especifico
+      const sql2 = `SELECT DISTINCT d.nombreDeporte, t.nombreTorneo, d.id, t.codTorneo
+      FROM ((rankini r INNER JOIN torneos t ON r.codTorneo = t.codTorneo) 
+       INNER JOIN deporte d ON r.codDeporte = d.id) 
+      WHERE t.codTorneo = ?
+        UNION 
+        SELECT DISTINCT d.nombreDeporte, t.nombreTorneo, d.id, t.codTorneo 
+          FROM (rankinge r INNER JOIN torneos t ON r.codTorneo = t.codTorneo) 
+          INNER JOIN deporte d ON r.codDeporte = d.id 
+        WHERE t.codTorneo = ?;`;
+      conexion.query(sql2, [codTorneo,codTorneo], (error, deportes) => {
+        if (error) {
+          console.log(error);
+        } else {
+            // partidos de clasificatoria del torneo especifivo
+          const sql3 = `SELECT t.nombreTorneo,p.fecha, p.jornada, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, p.puntos1, e2.nombreEquipo AS equipo2, p.puntos2 
+          FROM partido p 
+          INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
+          INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
+          INNER JOIN torneos t ON p.codTorneo = t.codTorneo
+          WHERE p.etapa = 'CLASIFICATORIA' AND p.fecha <= CURDATE() AND t.codTorneo=?
+          ORDER BY p.jornada ASC;`;
+          conexion.query(sql3, [codTorneo], (error, resultados) => {
+            if (error) {
+              console.log(error);
+            } else {
+              const sql4 = `SELECT p.fecha, p.jornada, p.etapa, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, p.puntos1, e2.nombreEquipo AS equipo2, p.puntos2 
+              FROM partido p 
+              INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo
+              INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
+              INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
+              WHERE p.etapa = 'TERCER LUGAR' OR p.etapa = 'CUARTOS DE FINAL' OR p.etapa = 'SEMIFINAL' OR p.etapa = 'FINAL' 
+                AND t.codTorneo = ?
+              ORDER BY CASE p.etapa 
+                WHEN 'CUARTOS DE FINAL' THEN 1 
+                WHEN 'SEMIFINAL' THEN 2 
+                WHEN 'TERCER LUGAR' THEN 3 
+                WHEN 'FINAL' THEN 4 
+              END`;
+              conexion.query(sql4, [codTorneo], (error, partidosTorneos) => {
+                if (error) {
+                  console.log(error);
+                } else {
+                    // eliminatorias de torneo especifico
+                  const sql5 = `SELECT eli.*, e.nombreEquipo, t.nombreTorneo FROM eliminatorias eli INNER JOIN torneos t ON eli.codTorneo = t.codTorneo INNER JOIN equipos e ON eli.codEquipo = e.codEquipo WHERE t.codTorneo = ?`;
+                  conexion.query(sql5, [codTorneo], (error, eliminatoria) => {
+                    if (error) {
+                      console.log(error);
+                    } else {
+                      const sql6 = `SELECT * FROM torneos`; // mas torneos para el menu
+                      conexion.query(sql6, (error, torneos) => {
+                        if (error) {
+                          console.log(error);
+                        } else {
+                          res.render("home.ejs", {
+                            partidos,
+                            resultados,
+                            partidosTorneos,
+                            eliminatoria,
+                            torneos,
+                            deportes,
+                          });
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
 });
 
 router.get("/rankingE", (req, res) => {
@@ -1157,66 +1235,126 @@ router.get("/rankingE", (req, res) => {
   );
 });
 
-router.get("/deportes-:id", (req, res) => {
-  let id = req.params.id;
-  conexion.query(
-    "SELECT r.puntos, e.nombreEquipo, d.nombreDeporte FROM rankinge r JOIN equipos e ON r.codEquipo = e.codEquipo JOIN deporte d ON r.codDeporte = d.id WHERE r.codDeporte = ?",
-    [id],
-    (error, rankinge) => {
-      if (error) {
-        console.log(error);
-      } else {
-        conexion.query(
-          "SELECT j.nombreJugador, c.nombreCarrera, d.nombreDeporte, r.puntos FROM rankini r JOIN jugador j ON j.codJugador = r.codJugador JOIN carreras c ON c.id = r.codCarrera JOIN deporte d ON d.id = r.codDeporte",
-          (error, ranking) => {
-            if (error) {
-              console.log(error);
-            } else {
-              conexion.query(
-                "SELECT DISTINCT d.nombreDeporte ,d.id FROM deporte d LEFT JOIN rankini r ON d.id = r.codDeporte LEFT JOIN rankinge re ON d.id = re.codDeporte WHERE r.codJugador IS NOT NULL OR re.codEquipo IS NOT NULL", // comprobar que el deporte tenga ranking
-                (error, deportes) => {
-                  if (error) {
-                    console.log(error);
-                  } else {
-                    conexion.query(
-                      "SELECT * FROM deporte WHERE id=?", // obtener deporte para saber si es individual o por equipos
-                      [id],
-                      (error, deporte) => {
-                        if (error) {
-                          console.log(error);
-                          throw error;
-                        } else {
-                          if (deporte[0].tipoDeporte == "Individual") {
-                            // si el deporte es individual muestra el ranking individual
+router.get("/ranking:id:codTorneo", (req, res) => {
+  let codTorneo = req.params.codTorneo;
+  let id = req.params.id; // id Deporte
+
+  const sql1 = `SELECT * FROM torneos`; // mas torneos para el menu
+
+  conexion.query(sql1, (error, torneos) => {
+        // Deporte Seleccionado
+        const sql2 = `SELECT DISTINCT d.id,d.nombreDeporte,d.tipoDeporte
+        FROM deporte d 
+        WHERE d.id = ?`;
+
+        conexion.query(sql2, [id], (error, deporte) => {
+          if (error) {
+            console.log(error);
+          } else {
+            const sql5 = `SELECT DISTINCT d.nombreDeporte, t.nombreTorneo, d.id, t.codTorneo
+            FROM ((rankini r INNER JOIN torneos t ON r.codTorneo = t.codTorneo) 
+             INNER JOIN deporte d ON r.codDeporte = d.id) 
+            WHERE t.codTorneo = ?
+              UNION 
+              SELECT DISTINCT d.nombreDeporte, t.nombreTorneo, d.id, t.codTorneo 
+                FROM (rankinge r INNER JOIN torneos t ON r.codTorneo = t.codTorneo) 
+                INNER JOIN deporte d ON r.codDeporte = d.id 
+              WHERE t.codTorneo = ?;`
+              conexion.query(sql5, [codTorneo, codTorneo], (error, deportes) => {
+                if (error) {
+                  console.log(error);
+                } else {
+            if(deporte[0].tipoDeporte == 'Individual'){
+              // datos Ranking Individual
+                  const sql3 = `SELECT 
+                            ri.puntos, 
+                            d.nombreDeporte,
+                            d.tipoDeporte,
+                            j.nombreJugador,
+                            t.nombreTorneo, 
+                            t.codTorneo,
+                            c.nombreCarrera 
+                          FROM 
+                            rankini ri 
+                            INNER JOIN deporte d ON ri.codDeporte = d.id 
+                            INNER JOIN torneos t ON ri.codTorneo = t.codTorneo 
+                            INNER JOIN carreras c ON ri.codCarrera = c.id 
+                            INNER JOIN jugador j ON ri.codJugador = j.codJugador
+                          WHERE 
+                            d.id = ?
+                            AND t.codTorneo = ?
+                          ORDER BY 
+                            ri.puntos DESC`; 
+                      conexion.query(
+                        sql3,
+                        [id, codTorneo],
+                        (error, ranking)=>{
+                          if (error) {
+                            console.log(error);
+                          } else {
                             res.render("ranking.ejs", {
-                              ranking: ranking,
-                              deportes: deportes,
-                              deporte: deporte[0],
-                            });
-                          } else if (deporte[0].tipoDeporte == "Equipos") {
-                            // si el deporte es por equipos muestra el ranking por equipos
-                            res.render("rankingE.ejs", {
-                              rankinge: rankinge,
-                              deporte: deporte[0],
-                              deportes: deportes,
+                              ranking,
+                              deportes,
+                              torneos
                             });
                           }
-                        }
+                        })
+                      }else if(deporte[0].tipoDeporte == 'Equipos'){
+                        // datos Ranking Equipo
+                        const sql4 = `SELECT
+                          re.puntos,d.nombreDeporte,d.tipoDeporte,e.nombreEquipo,t.nombreTorneo,t.codTorneo
+                        FROM
+                          rankinge re
+                          INNER JOIN deporte d ON re.codDeporte = d.id
+                          INNER JOIN torneos t ON re.codTorneo = t.codTorneo
+                          INNER JOIN equipos e ON re.codEquipo = e.codEquipo
+                        WHERE
+                          d.id = ?
+                          AND t.codTorneo = ?
+                        ORDER BY
+                          re.puntos DESC`;
+                        conexion.query(
+                          sql4,
+                          [id, codTorneo],
+                          (error, rankinge) => {
+                            if (error) {
+                              console.log(error);
+                            } else {
+                              res.render("rankingE.ejs", {
+                                rankinge,
+                                deportes,
+                                torneos
+                              });
+                            }
+                          }
+                        );
                       }
-                    );
-                  }
+                    }
+                  });
                 }
-              );
+              });
             }
-          }
-        );
-      }
-    }
-  );
-});
+            );
+          });
+        
+                    
+            
 
+
+                        
+                          
+                          
+                  
+                
+              
+
+
+                               
+                                  
+
+          
+          
 // IMAGEN
-
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -1285,6 +1423,52 @@ router.get("/actualizarEquipos/:codDeporte", async (req, res) => {
   }
 });
 
+//torneos vista
+router.get("/admin/torneos", requireLogin, (req, res) => {
+  conexion.query("SELECT * FROM torneos", (error, torneos) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.render("admin/torneos.ejs", { torneos: torneos }); //render muestra el archivo ejs
+    }
+  });
+});
+
+//torneos vista
+router.get("/admin/crearTorneo", requireLogin, (req, res) => {
+  res.render("admin/crearTorneo.ejs");
+});
+
+router.get("/admin/editarTorneo/:codTorneo", requireLogin, (req, res) => {
+  const codTorneo = req.params.codTorneo;
+  conexion.query(
+    "SELECT * FROM torneos WHERE codTorneo",
+    [codTorneo],
+    (error, torneos) => {
+      if (error) {
+        console.log(error);
+      } else {
+        res.render("admin/editarTorneo.ejs", { torneos: torneos[0] }); //render muestra el archivo ejs
+      }
+    }
+  );
+});
+
+router.get("/admin/deleteTorneo/:codTorneo", (req, res) => {
+  const codTorneo = req.params.codTorneo;
+  conexion.query(
+    "DELETE FROM torneos WHERE codTorneo = ?",
+    [codTorneo],
+    (error, results) => {
+      if (error) {
+        console.log(error);
+      } else {
+        res.redirect("/admin/torneos");
+      }
+    }
+  );
+});
+
 // Guardar registros
 router.post("/saveGrupo", mycrud.saveGrupo);
 router.post("/saveJugador", mycrud.saveJugador);
@@ -1299,7 +1483,7 @@ router.post("/saveEstadios", mycrud.saveEstadios);
 router.post("/saveDeporte", mycrud.saveDeporte);
 router.post("/saveRI", mycrud.saveRI);
 router.post("/saveRE", mycrud.saveRE);
-
+router.post("/saveTorneo", mycrud.saveTorneo);
 
 // actualizar registros
 router.post("/updateJugador", mycrud.updateJugador);
@@ -1312,5 +1496,6 @@ router.post("/updateEstadisticasGenerales", mycrud.updateEstadisticasGenerales);
 router.post("/updateDeporte", mycrud.updateDeporte);
 router.post("/updateRI", mycrud.updateRI);
 router.post("/updateRE", mycrud.updateRE);
+router.post("/updateTorneo", mycrud.updateTorneo);
 
 export default router;

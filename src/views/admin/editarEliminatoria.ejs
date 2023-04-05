@@ -21,15 +21,32 @@
                         <div class="card-body">
                             <form action="/updateEliminatoria" method="POST">
                                 <div class="mb-3">
-                                    <label for="nombreEquipo" class="form-label">Equipo: <%= eliminatoria.nombreEquipo
-                                            %></label>
-
+                                    <input name="id" value="<%= eliminatoria.id %>" type="hidden">
+                                    <select name="codEquipo" id="codEquipo" class="form-select">
+                                        <option selected value="<%= eliminatoria.codEquipo %>"><%= eliminatoria.nombreEquipo %></option>
+                                        <% equipos.forEach((equipos)=>{ %>
+                                            <option value="<%= equipos.codEquipo %>">
+                                                <%= equipos.nombreEquipo %>
+                                            </option>
+                                            <% }) %>
+                                    </select>
                                 </div>
-
+                                <div class="mb-3">
+                                    <label for="codTorneo" class="form-label">Torneo</label>
+                                    <select name="codTorneo" id="codTorneo" class="form-select">
+                                        <option value="<%= eliminatoria.codTorneo %>" selected><%= eliminatoria.nombreTorneo %></option>
+                                        <% torneos.forEach((torneos)=>{ %>
+                                            <option value="<%= torneos.codTorneo %>">
+                                                <%= torneos.nombreTorneo %>
+                                            </option>
+                                            <% }) %>
+                                    </select>
+                                </div>
                                 <div class="mb-3">
                                     <label for="Partidos Jugados" class="form-label">Partidos Jugados</label>
-                                    <input value="<%= eliminatoria.juegos_jugados %>" type="number" required class="form-control" id="juegos_jugados" name="juegos_jugados" tabindex="1">
-                                </div> 
+                                    <input value="<%= eliminatoria.juegos_jugados %>" type="number" required
+                                        class="form-control" id="juegos_jugados" name="juegos_jugados" tabindex="1">
+                                </div>
 
                                 <div class="mb-3">
                                     <label for="Partidos Ganados" class="form-label">Partidos Ganados</label>
@@ -38,8 +55,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="Partidos Empate" class="form-label">Partidos Empate</label>
-                                    <input value="<%= eliminatoria.juegos_empate %>" type="number" required class="form-control" id="juegos_empate" name="juegos_empate" tabindex="1">
-                                </div> 
+                                    <input value="<%= eliminatoria.juegos_empate %>" type="number" required
+                                        class="form-control" id="juegos_empate" name="juegos_empate" tabindex="1">
+                                </div>
                                 <div class="mb-3">
                                     <label for="Partidos Perdidos" class="form-label">Partidos Perdidos</label>
                                     <input value="<%= eliminatoria.juegos_perdidos %>" type="number" required
@@ -57,19 +75,21 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="Diferencia Goles" class="form-label">Diferencia Goles</label>
-                                    <input value="<%= eliminatoria.diferencia_goles %>" type="number" required class="form-control" id="diferencia_goles" name="diferencia_goles" tabindex="1">
-                                </div> 
+                                    <input value="<%= eliminatoria.diferencia_goles %>" type="number" required
+                                        class="form-control" id="diferencia_goles" name="diferencia_goles" tabindex="1">
+                                </div>
 
                                 <div class="mb-3">
                                     <label for="Puntos" class="form-label">Puntos</label>
-                                    <input value="<%= eliminatoria.puntos %>" type="number" required class="form-control" id="puntos" name="puntos" tabindex="1">
-                                </div> 
+                                    <input value="<%= eliminatoria.puntos %>" type="number" required
+                                        class="form-control" id="puntos" name="puntos" tabindex="1">
+                                </div>
 
 
 
                                 <button id="submit-btn" type="submit" class="btn btn-primary"
                                     tabindex="5">Guardar</button>
-                                <a href="/eliminatorias" class="btn btn-secondary">Cancelar</a>
+                                <a href="/admin/eliminatorias" class="btn btn-secondary">Cancelar</a>
                             </form>
                         </div>
                     </div>

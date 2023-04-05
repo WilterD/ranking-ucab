@@ -26,41 +26,16 @@
 
       <div class="swiper-container">
         <div class="swiper-wrapper">
-          <div class="swiper-slide"><img src="images/1.jpg" alt="Slide 1"></div>
-          <div class="swiper-slide"><img src="images/2.jpg" alt="Slide 2"></div>
-          <div class="swiper-slide"><img src="images/3.jpg" alt="Slide 3"></div>
-          <div class="swiper-slide"><img src="images/7.jpg" alt="Slide 4"></div>
+          <div class="swiper-slide"><img src="images/21.jpg" alt="Slide 4"></div>
+          <div class="swiper-slide"><img src="images/9.jpg" alt="Slide 4"></div>
+          <div class="swiper-slide"><img src="images/19.jpg" alt="Slide 4"></div>
         </div>
         <div class="swiper-pagination"></div>
       </div>
 
       <% if (deportes.length> 0) { %>
-        <div class="container mt-5">
-          <h1 class="text-center">Ranking Deportivo UCAB SPORT 🔥</h1>
-        </div>
-        <div class="container mb-5 mt-3">
-          <div class="row">
-            <% deportes.forEach((deportes)=>{ %>
-              <div class="col-lg-3 col-md-6 col-sm-12">
-                <a href="/deportes-<%= deportes.id %>">
-                  <div class="card">
-                    <div class="card-body">
-                      <i class='bx bx-medal icon'></i>
-                      <h5 class="card-title">
-                        <%= deportes.nombreDeporte %>
-                      </h5>
-                    </div>
-                  </div>
-                </a>
-              </div>
-              <% }) %>
-          </div>
-        </div>
-        <% } %>
-
-
-
-
+        <%- include('partials/rankingsDisponibles.ejs') %>
+    <% } %>
 
           <!-- tabla de posiciones -->
           <!-- si no hay tabla, no mostrar nada -->
@@ -68,7 +43,7 @@
             <div class="container mt-3 mb-3">
               <div class="row">
                 <div class="col-12 col-md-10 col-lg-10 mt-3 mx-auto">
-                  <h2 class="text-center">Tabla de posiciones ⚽</h2>
+                  <h2 class="text-center">Tabla de posiciones - <%= eliminatoria[0].nombreTorneo %></h2>
                   <div class="table-responsive">
                     <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
                       <thead>
@@ -131,12 +106,12 @@
                   <div class="container">
                     <div class="row">
                       <div class="col-12 mt-5">
-                        <h2 class="text-center text-white">Próximos Partidos ⚽</h2>
+                        <h2 class="text-center text-white">Próximos Partidos - <%= partidos[0].nombreTorneo %></h2>
                       </div>
                       <% partidos.forEach((partidos,i)=>{ %>
                         <div class="col-12 mt-5">
                           <h3 class="text-white text-center">
-                            <%= partidos.nombrePartido %> - <%= partidos.nombreDeporte %>
+                             <%= partidos.nombreDeporte %>
                           </h3>
                           <div class="matchup-container d-flex justify-content-center align-items-center">
                             <div class="team-container">
@@ -157,7 +132,7 @@
                           </div>
                           <div class="text-center mt-5">
                             <h5 class="text-white">
-                              <%= fechaPartidos[i] %> <i class='bx bxs-calendar'></i>
+                              <%= new Date(partidos.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partidos.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %><i class='bx bxs-calendar'></i>
                             </h5>
                           </div>
                           <div class="text-center">
@@ -172,14 +147,11 @@
                   </div>
                 </section>
                 <% } %>
-
                   <!-- Si no hay resultados, no mostrar nada -->
                   <% if (resultados.length> 0) { %>
                     <div class="container text-center mt-5 mb-5">
-                      <h2 class="text-center">Resultados Clasificatoria ⚽</h2>
+                      <h2 class="text-center">Resultados Clasificatoria - <%= resultados[0].nombreTorneo %></h2>
                     </div>
-                    
-
                       <div class="col-md-3 mx-auto">
                         <select class="form-select" aria-label="Default select example" id="selectJornada">
                           <% const idMap=new Map(); %>
@@ -198,7 +170,6 @@
                       </div>
                       <% } %>
 
-
                       <% let lastJornada=null; %>
                         <% resultados.forEach((resultado, index)=> { %>
                           <% if (resultado.jornada !==lastJornada) { %>
@@ -206,8 +177,7 @@
                               class="tabcontent <%= index === resultados.length - 1 ? 'show' : '' %>">
                               <% } %>
                                 <div class="d-flex flex-wrap text-center justify-content-center align-items-center">
-                                  <h2 class="text-center TituloJornada">Jornada <%= resultado.jornada %> - <%=
-                                        fechaPartidos[index] %>
+                                  <h2 class="text-center TituloJornada"><%= new Date(resultado.fecha).toLocaleDateString('es-ES') %> - <%= new Date(resultado.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>
                                   </h2>
                                 </div>
                                 <div class="matchup-container d-flex justify-content-center align-items-center">
@@ -263,11 +233,8 @@
                     <% if (fechaPartido> new Date()) { %>
                       <br>
                         <time>Próximamente</time>
-                    <% } else { %>
-                        <time datetime="<%= fechaPartido.toISOString() %>">
-                            <%= fechaPartido.toLocaleDateString('es-ES') %> - <%= fechaPartido.toLocaleString("en-US", {hour12: true, hour: "numeric" , minute: "numeric"}) %>
-                        </time>
                     <% } %>
+                       
                                                   </caption>
                                                   <tbody class="tournament-bracket__content">
                                                     <tr class="tournament-bracket__team">
@@ -359,6 +326,11 @@
                                                   <table class="tournament-bracket__table">
                                                     <caption class="tournament-bracket__caption">
                                                       <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>"><%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %></time>
+                                                      <% var fechaPartido=new Date(partido.fecha); %>
+                                                      <% if (fechaPartido> new Date()) { %>
+                                                        <br>
+                                                          <time>Próximamente</time>
+                                                      <% } %>
                                                     </caption>
 
                                                     <tbody class="tournament-bracket__content">
@@ -451,10 +423,15 @@
                                               <table class="tournament-bracket__table">
                                                 <caption class="tournament-bracket__caption">
                                                   <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>"><%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %></time>
+                                                  <% var fechaPartido=new Date(partido.fecha); %>
+                                                  <% if (fechaPartido> new Date()) { %>
+                                                    <br>
+                                                      <time>Próximamente</time>
+                                                  <% } %>
                                                 </caption>
 
                                                 <tbody class="tournament-bracket__content">
-                                                  <tr class="tournament-bracket__team tournament-bracket__team--winner">
+                                                  <tr class="tournament-bracket__team">
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"
                                                         ><img width="65px"
@@ -547,10 +524,15 @@
                                               <table class="tournament-bracket__table">
                                                 <caption class="tournament-bracket__caption">
                                                   <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>"><%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %></time>
+                                                  <% var fechaPartido=new Date(partido.fecha); %>
+                                                  <% if (fechaPartido> new Date()) { %>
+                                                    <br>
+                                                      <time>Próximamente</time>
+                                                  <% } %>
                                                 </caption>
 
                                                 <tbody class="tournament-bracket__content">
-                                                  <tr class="tournament-bracket__team tournament-bracket__team--winner">
+                                                  <tr class="tournament-bracket__team">
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"
                                                         ><img width="65px"
@@ -570,8 +552,8 @@
                                                   <tr class="tournament-bracket__team">
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"
-                                                        title="Russia"><img width="60px"
-                                                        height="50px"
+                                                        ><img width="65px"
+                                                        height="65px"
                                                         src="<%= partido.imagen2 ? partido.imagen2 : 'images/logo-wolfleague.png' %>"
                                                         alt="<%= partido.equipo2 %>"></abbr>
                                                       <span class="tournament-bracket__flag flag-icon flag-icon-ru"

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('partials/head.ejs') %>
+        <link rel="stylesheet" href="/css/main.css">
+        <title>Crera Torneo</title>
+</head>
+
+<body>
+    <%- include('partials/navigation.ejs') %>
+        <section class="home-section">
+            <div class="home-content">
+                <i class='bx bx-menu'></i>
+            </div>
+
+                <div class="container mt-4">
+                    <div class="card border-secondary">
+                        <div class="card-header">Crear Torneo</div>
+                        <div class="card-body">
+                            <form action="/saveTorneo" method="POST">
+                                <div class="mb-3">
+                                    <label for="nombreTorneo" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombreTorneo" name="nombreTorneo"
+                                        tabindex="1">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fecha_inicio" class="form-label">Fecha Inicio</label>
+                                    <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio"
+                                        tabindex="1">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fecha_fin" class="form-label">Fecha Final (Opcional)</label>
+                                    <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" tabindex="1">
+                                </div>
+                                <button id="submit-btn" type="submit" class="btn btn-primary"
+                                    tabindex="5">Guardar</button>
+                                <a href="/admin/torneos" class="btn btn-secondary">Cancelar</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+        </section>
+            <section class="home-section">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 mx-auto">
+                            <div id="mensajes">
+                                <p id="mensaje"></p>
+                                <img class="rounded" src="/../../images/medioAmbiente.png" width="330" height="230">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <script>
+                // Obtener la fecha actual
+                var today = new Date();
+                // Formatear la fecha como una cadena en el formato "yyyy-mm-dd"
+                var yyyy = today.getFullYear();
+                var mm = String(today.getMonth() + 1).padStart(2, '0');
+                var dd = String(today.getDate()).padStart(2, '0');
+                var fechaActual = yyyy + '-' + mm + '-' + dd;
+
+                // Establecer el valor predeterminado en el campo de entrada de fecha
+                document.getElementById("fecha_inicio").defaultValue = fechaActual;
+            </script>
+
+            <%- include('partials/scripts.ejs') %>
+
+                <script
+                    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

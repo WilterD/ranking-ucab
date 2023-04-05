@@ -13,7 +13,7 @@
         <%- include('partials/navHome.ejs') %>
 
             <div class="col-xs-12 col-md-10 col-lg-11 mx-auto tablaPosiciones">
-                <h1 class="text-center">RANKING DE <%= deporte.nombreDeporte %> 
+                <h1 class="text-center">RANKING DE <%= deportes[0].nombreDeporte %> 
                 </h1>
                 <div class="row">
                     <div class="table-responsive">
@@ -43,20 +43,25 @@
                     </div>
                 </div>
             </div>
+
+            <% if (deportes.length> 0) { %>
+                <%- include('partials/rankingsDisponibles.ejs') %>
+            <% } %>
+
+
     </div> <!-- Cierre del preloader -->
     <%- include('partials/scripts2.ejs') %>
         <script>
             $(document).ready(function () {
-
-                
                     var tabla = $('#miTabla').DataTable({
-                        "order": [[3, "desc"]], // Ordenar por la columna de Puntos en orden descendente
+                        "order": [[2, "desc"]], // Ordenar por la columna de Puntos en orden descendente
+                        lengthMenu: [[10, 20, 30, 50, 100, -1], [10, 20, 30, 50, 100, 'Todos']],
                         columnDefs: [{
                             orderable: false,
                             targets: [0, 1, 2] // deshabilitar ordenamiento en la columna "Acciones"
                         }],
                         "language": {
-                            "lengthMenu": "Mostrar _MENU_ ",
+                            "lengthMenu": "Mostrar TOP _MENU_ ",
                             "zeroRecords": "No se encontraron registros",
                             "info": "",
                             "infoEmpty": "No hay registros disponibles",
@@ -93,7 +98,7 @@
                         tabla.draw(false);
                     });
                 // mostrar variable de nombreDeporte evniada desde el controlador
-                let receivedVariable = "<%= deporte.nombreDeporte %>"; // recibimos la variable del controlador
+                let receivedVariable = "<%= deportes.nombreDeporte %>"; // recibimos la variable del controlador
                 //Función para filtrar los valores
                 function filterTable(receivedVariable) {
                     tabla.search(receivedVariable).draw();

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('partials/head.ejs') %>
+        <link rel="stylesheet" href="/css/main.css">
+        <title>Editar Torneo</title>
+</head>
+
+<body>
+    <%- include('partials/navigation.ejs') %>
+        <section class="home-section">
+            <div class="home-content">
+                <i class='bx bx-menu'></i>
+            </div>
+            <% if (torneos) { %>
+
+                <div class="container mt-4">
+                    <div class="card border-secondary">
+                        <div class="card-header">Editar Torneo</div>
+                        <div class="card-body">
+                            <form action="/updateTorneo" method="POST">
+                                <input id="codTorneo" hidden name="codTorneo" value="<%= torneos.codTorneo %>">
+                                <div class="mb-3">
+                                    <label for="nombreTorneo" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombreTorneo" name="nombreTorneo"
+                                        tabindex="1" value="<%= torneos.nombreTorneo  %>">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fecha_inicio" class="form-label">Fecha Inicio</label>
+                                    <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio"
+                                        tabindex="1"
+                                        value="<%= torneos.fecha_inicio && (torneos.fecha_inicio instanceof Date) ? torneos.fecha_inicio.toISOString().substr(0, 10) : '' %>">
+
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="fecha_fin" class="form-label">Fecha Final (Opcional)</label>
+                                    <input type="date" class="form-control" id="fecha_fin" name="fecha_fin" tabindex="1"
+                                        value="<%= torneos.fecha_fin && (torneos.fecha_fin instanceof Date) ? torneos.fecha_fin.toISOString().substr(0, 10) : '' %>">
+                                </div>
+                                <button id="submit-btn" type="submit" class="btn btn-primary"
+                                    tabindex="5">Guardar</button>
+                                <a href="/admin/torneos" class="btn btn-secondary">Cancelar</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+        </section>
+        <% } %>
+            <section class="home-section">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 mx-auto">
+                            <div id="mensajes">
+                                <p id="mensaje"></p>
+                                <img class="rounded" src="/../../images/medioAmbiente.png" width="330" height="230">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <%- include('partials/scripts.ejs') %>
+
+                <script
+                    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
