@@ -97,7 +97,8 @@
                   <div class="container">
                     <div class="row">
                       <div class="col-12 mt-5">
-                        <h2 class="text-center text-white">Próximos Partidos - <%= partidos[0].nombreTorneo %></h2>
+                        <h2 class="text-center text-white"><%= partidos[0].nombreTorneo %></h2>
+                        <h2 class="text-center text-white">Próximos Partidos</h2>
                       </div>
                       <% partidos.forEach((partidos,i)=>{ %>
                         <div class="col-12 mt-5">
@@ -143,7 +144,7 @@
                     <div class="container text-center mt-5 mb-5">
                       <h2 class="text-center">Resultados Clasificatoria - <%= resultados[0].nombreTorneo %></h2>
                     </div>
-                      <div class="col-md-3 mx-auto ms-5 me-5">
+                      <div class="col-md-3 mx-auto ms-5 me-5 text-center">
                         <select class="form-select border-3" aria-label="Default select example" id="selectJornada">
                           <% const idMap=new Map(); %>
                             <% resultados.forEach((resultado, index)=> { %>
