@@ -91,8 +91,6 @@
               </div>
             </div>
             <% } %>
-
-
               <!-- Si no hay partidos, no mostrar nada aquii  -->
               <% if (partidos.length> 0) { %>
                 <section style="background-color:#19115e">
@@ -145,8 +143,8 @@
                     <div class="container text-center mt-5 mb-5">
                       <h2 class="text-center">Resultados Clasificatoria - <%= resultados[0].nombreTorneo %></h2>
                     </div>
-                      <div class="col-md-3 mx-auto">
-                        <select class="form-select" aria-label="Default select example" id="selectJornada">
+                      <div class="col-md-3 mx-auto ms-5 me-5">
+                        <select class="form-select border-3" aria-label="Default select example" id="selectJornada">
                           <% const idMap=new Map(); %>
                             <% resultados.forEach((resultado, index)=> { %>
                               <% if (!idMap.has(resultado.jornada)) { %>
@@ -203,7 +201,7 @@
                                 <% }); %>
 
                                   <!-- Eliminatoria Torneo -->
-<% if (partidosTorneos.length> 0) { %>
+                                <% if (partidosTorneos.length> 0) { %>
                                   <div class="container">
                                     <h1>Eliminatoria</h1>
                                     <div class="tournament-bracket tournament-bracket--rounded">
@@ -223,17 +221,17 @@
                                                       <%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>
                                                     </time>
                                                     <% var fechaPartido=new Date(partido.fecha); %>
-                    <% if (fechaPartido> new Date()) { %>
-                      <br>
-                        <time>Próximamente</time>
-                    <% } %>
+                                                    <% if (fechaPartido> new Date()) { %>
+                                                      <br>
+                                                        <time>Próximamente</time>
+                                                    <% } %>
                        
                                                   </caption>
                                                   <tbody class="tournament-bracket__content">
                                                     <tr class="tournament-bracket__team">
                                                       <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code"><img width="65px"
-                                                            height="65px"
+                                                        <abbr class="tournament-bracket__code"><img width="50px"
+                                                            height="50px"
                                                             src="<%= partido.imagen1 ? partido.imagen1 : 'images/logo-wolfleague.png' %>"
                                                             alt="<%= partido.equipo1 %>"></abbr>
                                                         <span class="tournament-bracket__flag flag-icon flag-icon-ca"
@@ -247,8 +245,8 @@
                                                     </tr>
                                                     <tr class="tournament-bracket__team">
                                                       <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code"><img width="65px"
-                                                            height="65px"
+                                                        <abbr class="tournament-bracket__code"><img width="50px"
+                                                            height="50px"
                                                             src="<%= partido.imagen2 ? partido.imagen2 : 'images/logo-wolfleague.png' %>"
                                                             alt="<%= partido.equipo2 %>"></abbr>
                                                         <span class="tournament-bracket__flag flag-icon flag-icon-kz"
@@ -330,8 +328,8 @@
                                                       <tr class="tournament-bracket__team">
                                                         <td class="tournament-bracket__country">
                                                           <abbr class="tournament-bracket__code"
-                                                            ><img width="65px"
-                                                            height="65px"
+                                                            ><img width="50px"
+                                                            height="50px"
                                                             src="<%= partido.imagen1 ? partido.imagen1 : 'images/logo-wolfleague.png' %>"
                                                             alt="<%= partido.equipo1 %>"></abbr>
                                                           <span class="tournament-bracket__flag flag-icon flag-icon-ca"
@@ -344,8 +342,8 @@
                                                       <tr
                                                         class="tournament-bracket__team">
                                                         <td class="tournament-bracket__country">
-                                                          <abbr class="tournament-bracket__code"><img width="65px"
-                                                            height="65px"
+                                                          <abbr class="tournament-bracket__code"><img width="50px"
+                                                            height="50px"
                                                             src="<%= partido.imagen2 ? partido.imagen2 : 'images/logo-wolfleague.png' %>"
                                                             alt="<%= partido.equipo1 %>"></abbr>
                                                           <span class="tournament-bracket__flag flag-icon flag-icon-cz"
@@ -427,8 +425,8 @@
                                                   <tr class="tournament-bracket__team">
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"
-                                                        ><img width="65px"
-                                                        height="65px"
+                                                        ><img width="50px"
+                                                        height="50px"
                                                         src="<%= partido.imagen1 ? partido.imagen1 : 'images/logo-wolfleague.png' %>"
                                                         alt="<%= partido.equipo1 %>"></abbr>
                                                       <span class="tournament-bracket__flag flag-icon flag-icon-fi"
@@ -444,8 +442,8 @@
                                                   <tr class="tournament-bracket__team">
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"
-                                                       ><img width="65px"
-                                                        height="65px"
+                                                       ><img width="50px"
+                                                        height="50px"
                                                         src="<%= partido.imagen2 ? partido.imagen2 : 'images/logo-wolfleague.png' %>"
                                                         alt="<%= partido.equipo2 %>"></abbr>
                                                       <span class="tournament-bracket__flag flag-icon flag-icon-ca"
@@ -528,8 +526,8 @@
                                                   <tr class="tournament-bracket__team">
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"
-                                                        ><img width="65px"
-                                                        height="65px"
+                                                        ><img width="50px"
+                                                        height="50px"
                                                         src="<%= partido.imagen1 ? partido.imagen1 : 'images/logo-wolfleague.png' %>"
                                                         alt="<%= partido.equipo1 %>"></abbr>
                                                       <span class="tournament-bracket__flag flag-icon flag-icon-cz"
@@ -545,8 +543,8 @@
                                                   <tr class="tournament-bracket__team">
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"
-                                                        ><img width="65px"
-                                                        height="65px"
+                                                        ><img width="50px"
+                                                        height="50px"
                                                         src="<%= partido.imagen2 ? partido.imagen2 : 'images/logo-wolfleague.png' %>"
                                                         alt="<%= partido.equipo2 %>"></abbr>
                                                       <span class="tournament-bracket__flag flag-icon flag-icon-ru"
