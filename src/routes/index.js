@@ -1060,18 +1060,19 @@ router.get(["/", "/home"], (req, res) => {
             console.log(error);
           } else {
             const sql = `SELECT p.fecha, p.jornada, p.etapa, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, p.puntos1, e2.nombreEquipo AS equipo2, p.puntos2 
-              FROM partido p 
-              INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo
-              INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
-              INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
-              WHERE p.etapa = 'TERCER LUGAR' OR p.etapa = 'CUARTOS DE FINAL' OR p.etapa = 'SEMIFINAL' OR p.etapa = 'FINAL' 
-                AND t.status = 1
-              ORDER BY CASE p.etapa 
-                WHEN 'CUARTOS DE FINAL' THEN 1 
-                WHEN 'SEMIFINAL' THEN 2 
-                WHEN 'TERCER LUGAR' THEN 3 
-                WHEN 'FINAL' THEN 4 
-              END`;
+            FROM partido p 
+            INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo
+            INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
+            INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
+            WHERE (p.etapa = 'TERCER LUGAR' OR p.etapa = 'CUARTOS DE FINAL' OR p.etapa = 'SEMIFINAL' OR p.etapa = 'FINAL') 
+              AND t.status = 1
+            ORDER BY CASE p.etapa 
+              WHEN 'CUARTOS DE FINAL' THEN 1 
+              WHEN 'SEMIFINAL' THEN 2 
+              WHEN 'TERCER LUGAR' THEN 3 
+              WHEN 'FINAL' THEN 4 
+            END
+            `;
             conexion.query(
               // partidos con Clasificatoria de Cuartos, semifinal, final, tercer lugar
               sql,
@@ -1177,14 +1178,15 @@ router.get("/torneos:codTorneo", (req, res) => {
               INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo
               INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
               INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
-              WHERE p.etapa = 'TERCER LUGAR' OR p.etapa = 'CUARTOS DE FINAL' OR p.etapa = 'SEMIFINAL' OR p.etapa = 'FINAL' 
+              WHERE (p.etapa = 'TERCER LUGAR' OR p.etapa = 'CUARTOS DE FINAL' OR p.etapa = 'SEMIFINAL' OR p.etapa = 'FINAL') 
                 AND t.codTorneo = ?
               ORDER BY CASE p.etapa 
                 WHEN 'CUARTOS DE FINAL' THEN 1 
                 WHEN 'SEMIFINAL' THEN 2 
                 WHEN 'TERCER LUGAR' THEN 3 
                 WHEN 'FINAL' THEN 4 
-              END`;
+              END
+              `;
               conexion.query(sql4, [codTorneo], (error, partidosTorneos) => {
                 if (error) {
                   console.log(error);
