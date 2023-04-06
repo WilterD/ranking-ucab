@@ -59,6 +59,36 @@
           </div>
         </div>
       </div>
+      <div class="container mt-4">
+        <div class="card border-secondary">
+            <div class="card-header">Torneo Publicado</div>
+            <div class="card-body">
+                <form action="/saveTorneoStatus" method="POST">
+                  <div class="mb-3">
+                    <select id="codTorneo" name="codTorneo" class="form-select" aria-label="Default select example"
+                      tabindex="2" required>
+                      <option selected value="<%= torneosPublicados.codTorneo %>">
+                        <%= torneosPublicados.nombreTorneo %>
+                      </option>
+                      <% torneos.forEach((torneos)=>{ %>
+                        <% if(torneos.codTorneo != torneosPublicados.codTorneo){  %>
+                        <option value="<%= torneos.codTorneo %>">
+                          <%= torneos.nombreTorneo %> %>
+                        </option>
+                        <% } %>
+                        <% }) %>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="publicar" class="form-label">Nota(Este será el torneo que aparecerá en la página principal)</label>
+                  <br>
+                        <button type="submit" class="btn btn-primary">Publicar</button>
+                        <a href="/admin/torneos" style="visibility: hidden;" class="btn btn-secondary">Cancelar</a>
+                      </div>
+                </form>
+            </div>
+        </div>
+    </div>
     </section>
 
     <section class="home-section">

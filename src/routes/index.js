@@ -1429,7 +1429,13 @@ router.get("/admin/torneos", requireLogin, (req, res) => {
     if (error) {
       console.log(error);
     } else {
-      res.render("admin/torneos.ejs", { torneos: torneos }); //render muestra el archivo ejs
+      conexion.query("SELECT * FROM torneos WHERE status=1", (error, torneosPublicados) => {
+        if(error){
+          console.log(error);
+        }else{
+          res.render("admin/torneos.ejs", { torneos, torneosPublicados: torneosPublicados[0] });
+        }
+      })
     }
   });
 });
@@ -1484,6 +1490,8 @@ router.post("/saveDeporte", mycrud.saveDeporte);
 router.post("/saveRI", mycrud.saveRI);
 router.post("/saveRE", mycrud.saveRE);
 router.post("/saveTorneo", mycrud.saveTorneo);
+
+router.post("/saveTorneoStatus", mycrud.saveTorneoStatus);
 
 // actualizar registros
 router.post("/updateJugador", mycrud.updateJugador);
