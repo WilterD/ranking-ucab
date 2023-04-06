@@ -605,7 +605,6 @@ exports.saveRI = (req, res) => {
 };
 
 exports.updateRI = (req, res) => {
-  console.log(req.body)
   const id = req.body.id;
   const puntos = req.body.puntos;
   const codCarrera = req.body.codCarrera;

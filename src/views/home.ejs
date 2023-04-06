@@ -13,7 +13,7 @@
   </script>
   <%- include('partials/headHome.ejs') %>
     <title>Home - UCAB SPORT</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    
 </head>
 
 <body>
@@ -24,14 +24,7 @@
   <div class="content">
     <%- include('partials/navHome.ejs') %>
 
-      <div class="swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide"><img src="images/21.jpg" alt="Slide 4"></div>
-          <div class="swiper-slide"><img src="images/9.jpg" alt="Slide 4"></div>
-          <div class="swiper-slide"><img src="images/19.jpg" alt="Slide 4"></div>
-        </div>
-        <div class="swiper-pagination"></div>
-      </div>
+      <%- include('partials/sliders.ejs') %>
 
       <% if (deportes.length> 0) { %>
         <%- include('partials/rankingsDisponibles.ejs') %>
@@ -768,19 +761,7 @@
 
       });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-    <script>
-      const swiper = new Swiper('.swiper-container', {
-        loop: true,
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true,
-        },
-        autoplay: {
-          delay: 5000,
-        },
-      });
-    </script>
+    
 </body>
 
 </html>

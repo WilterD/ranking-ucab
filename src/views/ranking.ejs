@@ -12,9 +12,11 @@
     <div class="content">
         <%- include('partials/navHome.ejs') %>
 
+        <%- include('partials/sliders.ejs') %>
 
-            <div class="col-xs-12 col-md-10 col-lg-11 mx-auto tablaPosiciones">
-                <h1 class="text-center">RANKING DE <%= deportes.nombreDeporte %>
+
+            <div class="col-xs-12 col-md-10 col-lg-11 mx-auto mt-5">
+                <h1 class="text-center">RANKING DE <%= ranking[0].nombreDeporte %> 
                 </h1>
 
                 <div class="row">
@@ -57,10 +59,11 @@
             <% } %>
 
 
-
+            <%- include('partials/footer.ejs') %>
 
 
     </div> <!-- Cierre del preloader -->
+
     <%- include('partials/scripts2.ejs') %>
         <script>
             $(document).ready(function () {
