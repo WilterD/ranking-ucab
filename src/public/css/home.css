@@ -882,3 +882,50 @@ h2 {
 .tournament-bracket__medal--bronze {
   color: #cd7f32;
 }
+
+/*Seccion motivacion*/
+
+.motivacion {
+  background-color: #f7f7f7;
+  padding: 50px;
+  margin: 0;
+}
+
+.motivacion-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.motivacion-container img {
+  max-width: 100%;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.motivacion-container h2 {
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+.motivacion-container p {
+  font-size: 18px;
+  line-height: 1.5;
+  margin-bottom: 30px;
+}
+
+/* .cta-btn {
+  display: inline-block;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 18px;
+  padding: 10px 30px;
+  border-radius: 30px;
+  text-decoration: none;
+  margin-top: 30px;
+  transition: .5s;
+}
+.cta-btn:hover {
+  background-color: #115297;
+  color:#fff;
+} */

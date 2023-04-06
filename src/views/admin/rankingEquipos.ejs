@@ -25,6 +25,7 @@
                             <thead>
                                 <tr class="bg-primary text-white">
                                     <th scope="col">#</th>
+                                    <th scope="col">Torneo</th>
                                     <th scope="col">Nombre Equipo</th>
                                     <th scope="col">Deporte</th>
                                     <th scope="col">Puntos</th>
@@ -35,6 +36,9 @@
                                 <% rankinge.forEach((rankinge)=>{ %>
                                     <tr>
                                         <td> </td>
+                                        <td>
+                                            <%= rankinge.nombreTorneo %>
+                                        </td>
                                         <td>
                                             <%= rankinge.nombreEquipo %>
                                         </td>

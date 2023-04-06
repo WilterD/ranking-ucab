@@ -861,7 +861,7 @@ router.get("/admin/deleteRI/:id", requireLogin, (req, res) => {
 
 router.get("/admin/rankingEquipos", requireLogin, (req, res) => {
   conexion.query(
-    "SELECT e.nombreEquipo, d.nombreDeporte, r.puntos, r.id FROM rankinge r JOIN equipos e ON r.codEquipo = e.codEquipo JOIN deporte d ON r.codDeporte = d.id",
+    "SELECT t.nombreTorneo,e.nombreEquipo, d.nombreDeporte, r.puntos, r.id FROM rankinge r JOIN equipos e ON r.codEquipo = e.codEquipo JOIN deporte d ON r.codDeporte = d.id JOIN torneos t ON r.codTorneo = t.codTorneo",
     (error, rankinge) => {
       if (error) {
         console.log(error);
