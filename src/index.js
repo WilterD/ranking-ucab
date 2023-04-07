@@ -12,12 +12,14 @@ import { check, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import crypto from "crypto";
+import forceSSL from 'express-force-ssl';
 
 dotenv.config();
 
 import { imgDir } from "./helpers/fileManager.cjs";
 
 const app = express(); // referenciar a express
+app.use(forceSSL);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -164,7 +166,6 @@ app.use(express.json());
 
 app.use("/", indexRoutes);
 app.use(express.static(join(__dirname, "public")));
-console.log(join(__dirname, "public"))
 
 const port = process.env.PORT || 3000;
 

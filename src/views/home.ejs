@@ -37,64 +37,7 @@
           </style>
          
           <% if (eliminatoria.length> 0) { %>
-            <div class="container mt-3 mb-3">
-              <div class="row">
-                <div class="col-12 col-md-10 col-lg-10 mt-3 mx-auto">
-                  <h2 class="text-center"><%= eliminatoria[0].nombreTorneo %></h2>
-                  <h2 class="text-center">Tabla de posiciones</h2>
-                  <div class="table-responsive">
-                    <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
-                      <thead>
-                        <tr class="bg-primary text-white">
-                          <th class="position-sticky posiciones-th" style="left: 0;" scope="col">Equipo</th>
-                          <th scope="col">PJ</th>
-                          <th scope="col">PG</th>
-                          <th scope="col">PE</th>
-                          <th scope="col">PP</th>
-                          <th scope="col">GF</th>
-                          <th scope="col">GC</th>
-                          <th scope="col">DIF</th>
-                          <th scope="col">PTS</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% eliminatoria.forEach((elim)=>{ %>
-                          <tr>
-                            <td class="position-sticky equipo-td" style="left: 0">
-                              <%= elim.nombreEquipo %>
-                            </td>
-                            <td>
-                              <%= elim.juegos_jugados %>
-                            </td>
-                            <td>
-                              <%= elim.juegos_ganados %>
-                            </td>
-                            <td>
-                              <%= elim.juegos_empate %>
-                            </td>
-                            <td>
-                              <%= elim.juegos_perdidos %>
-                            </td>
-                            <td>
-                              <%= elim.goles_a_favor %>
-                            </td>
-                            <td>
-                              <%= elim.goles_en_contra %>
-                            </td>
-                            <td>
-                              <%= elim.diferencia_goles%>
-                            </td>
-                            <td>
-                              <%= elim.puntos%>
-                            </td>
-                          </tr>
-                          <% }) %>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
+            npm install express-force-ssl --save
             <% } %>
               <!-- Si no hay partidos, no mostrar nada aquii  -->
               <% if (partidos.length> 0) { %>
