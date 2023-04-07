@@ -1080,6 +1080,10 @@ router.get(["/", "/home"], (req, res) => {
                 if (error) {
                   console.log(error);
                 } else {
+                  const sql = 
+                  `
+                  SELECT eli.*, e.nombreEquipo, t.nombreTorneo FROM eliminatorias eli INNER JOIN torneos t ON eli.codTorneo = t.codTorneo INNER JOIN equipos e ON eli.codEquipo = e.codEquipo WHERE t.status = 1
+                  `
                   conexion.query(
                     "SELECT eli.*, e.nombreEquipo, t.nombreTorneo FROM eliminatorias eli INNER JOIN torneos t ON eli.codTorneo = t.codTorneo INNER JOIN equipos e ON eli.codEquipo = e.codEquipo WHERE t.status = 1",
                     (error, eliminatoria) => {
@@ -1104,6 +1108,7 @@ router.get(["/", "/home"], (req, res) => {
                               if (error) {
                                 console.log(error);
                               } else {
+                                console.log(eliminatoria)
 
                                 res.render("home.ejs", {
                                   partidos,
