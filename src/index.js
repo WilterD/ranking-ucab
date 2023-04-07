@@ -19,7 +19,7 @@ dotenv.config();
 import { imgDir } from "./helpers/fileManager.cjs";
 
 const app = express(); // referenciar a express
-app.use(forceSSL);
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
