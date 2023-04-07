@@ -953,3 +953,22 @@ h2 {
   background-color: #f2f2f2;
   z-index: -1;
 }
+
+.posiciones-th {
+  position: relative;
+  z-index: 1;
+}
+
+.posiciones-th:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #192281 !important; /* elige el color de fondo que desees */
+  z-index: -1;
+}
+th.position-sticky {
+  background-color: #192281 !important;
+}

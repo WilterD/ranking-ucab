@@ -32,6 +32,10 @@
 
           <!-- tabla de posiciones -->
           <!-- si no hay tabla, no mostrar nada -->
+          <style>
+            
+          </style>
+         
           <% if (eliminatoria.length> 0) { %>
             <div class="container mt-3 mb-3">
               <div class="row">
@@ -42,7 +46,7 @@
                     <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
                       <thead>
                         <tr class="bg-primary text-white">
-                          <th scope="col">Equipo</th>
+                          <th class="position-sticky posiciones-th" style="left: 0;" scope="col">Equipo</th>
                           <th scope="col">PJ</th>
                           <th scope="col">PG</th>
                           <th scope="col">PE</th>
@@ -734,6 +738,10 @@
           order: [[8, "desc"]],
           lengthChange: false,
           pageLength: 10,
+          columnDefs: [{
+                            orderable: false,
+                            targets: [0, 1, 2, 3, 4,5,6,7] // deshabilitar ordenamiento en la columna "Acciones"
+                        }],
           lengthMenu: [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, 'Todos']],
           "language": {
             "lengthMenu": "Mostrar _MENU_ ",
@@ -753,8 +761,6 @@
 
         });
         $('.dataTables_filter').hide(); // ocultar el buscador
-
-
       });
     </script>
     
