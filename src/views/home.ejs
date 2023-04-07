@@ -42,7 +42,7 @@
                     <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
                       <thead>
                         <tr class="bg-primary text-white">
-                          <th scope="col" class="position-sticky" style="left: 0">Equipo</th>
+                          <th scope="col">Equipo</th>
                           <th scope="col">PJ</th>
                           <th scope="col">PG</th>
                           <th scope="col">PE</th>
@@ -56,8 +56,8 @@
                       <tbody>
                         <% eliminatoria.forEach((elim)=>{ %>
                           <tr>
-                            <td>
-                              <%= elim.nombreEquipo %>
+                            <td class="position-sticky equipo-td" style="left: 0">
+                              <%= elim.nombreEquipo %> hola
                             </td>
                             <td>
                               <%= elim.juegos_jugados %>
