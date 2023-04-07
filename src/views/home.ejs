@@ -143,7 +143,8 @@
                   <!-- Si no hay resultados, no mostrar nada -->
                   <% if (resultados.length> 0) { %>
                     <div class="container text-center mt-5 mb-5">
-                      <h2 class="text-center">Resultados Clasificatoria - <%= resultados[0].nombreTorneo %></h2>
+                      <h2 class="text-center"><%= resultados[0].nombreTorneo %></h2>
+                      <h2 class="text-center">Resultados Clasificatoria</h2>
                     </div>
                       <div class="col-md-3 mx-auto ms-5 me-5 text-center">
                         <select class="form-select border-3" aria-label="Default select example" id="selectJornada">
