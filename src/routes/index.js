@@ -1081,8 +1081,10 @@ router.get(["/", "/home"], (req, res) => {
                   console.log(error);
                 } else {
                   const sql = 
-                  `
-                  SELECT eli.*, e.nombreEquipo, t.nombreTorneo FROM eliminatorias eli INNER JOIN torneos t ON eli.codTorneo = t.codTorneo INNER JOIN equipos e ON eli.codEquipo = e.codEquipo WHERE t.status = 1
+                  `SELECT eli.*, e.nombreEquipo, t.nombreTorneo 
+                  FROM eliminatorias eli
+                  INNER JOIN torneos t ON eli.codTorneo = t.codTorneo 
+                  INNER JOIN equipos e ON eli.codEquipo = e.codEquipo 
                   `
                   conexion.query(
                     sql,

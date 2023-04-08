@@ -23,22 +23,12 @@
   </div>
   <div class="content">
     <%- include('partials/navHome.ejs') %>
-
+    <!-- sliders -->
       <%- include('partials/sliders.ejs') %>
-
-      <% if (deportes.length> 0) { %>
         <%- include('partials/rankingsDisponibles.ejs') %>
-    <% } %>
-
           <!-- tabla de posiciones -->
-          <!-- si no hay tabla, no mostrar nada -->
-          <style>
-            
-          </style>
-         
-          <% if (eliminatoria.length> 0) { %>
-            <% } %>
-              <!-- Si no hay partidos, no mostrar nada aquii  -->
+          <%- include('partials/tablaPosiciones.ejs') %>
+              <!-- partidos  -->
               <% if (partidos.length> 0) { %>
                 <section style="background-color:#19115e">
                   <div class="container">
