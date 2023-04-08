@@ -1048,7 +1048,7 @@ router.get(["/", "/home"], (req, res) => {
       SELECT DISTINCT d.nombreDeporte, t.nombreTorneo, d.id, t.codTorneo
     FROM ((rankini r INNER JOIN torneos t ON r.codTorneo = t.codTorneo) 
      INNER JOIN deporte d ON r.codDeporte = d.id) 
-    WHERE t.status = 1
+    WHERE t.status = 1 
       UNION 
       SELECT DISTINCT d.nombreDeporte, t.nombreTorneo, d.id, t.codTorneo 
         FROM (rankinge r INNER JOIN torneos t ON r.codTorneo = t.codTorneo) 
@@ -1067,7 +1067,7 @@ router.get(["/", "/home"], (req, res) => {
             INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
             INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
             WHERE (p.etapa = 'TERCER LUGAR' OR p.etapa = 'CUARTOS DE FINAL' OR p.etapa = 'SEMIFINAL' OR p.etapa = 'FINAL') 
-              AND t.status = 1
+              AND t.status = 1 
             ORDER BY CASE p.etapa 
               WHEN 'CUARTOS DE FINAL' THEN 1 
               WHEN 'SEMIFINAL' THEN 2 
@@ -1087,7 +1087,7 @@ router.get(["/", "/home"], (req, res) => {
                   JOIN equipos eq ON e.codEquipo = eq.codEquipo
                   JOIN deporte d ON eq.codDeporte = d.id
                   JOIN torneos t ON e.codTorneo = t.codTorneo
-                  WHERE t.status = 1
+                  WHERE t.status = 1 
                   ORDER BY d.nombreDeporte;
                   
                   `;
@@ -1101,7 +1101,7 @@ router.get(["/", "/home"], (req, res) => {
                           INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
                           INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
                           INNER JOIN torneos t ON p.codTorneo = t.codTorneo
-                          WHERE p.etapa = 'CLASIFICATORIA' AND p.fecha <= CURDATE() AND t.status=1
+                          WHERE p.etapa = 'CLASIFICATORIA' AND p.fecha <= CURDATE() AND t.status=1 
                           ORDER BY p.jornada ASC;`;
                       conexion.query(sql2, (error, resultados) => {
                         // resultados de partidos

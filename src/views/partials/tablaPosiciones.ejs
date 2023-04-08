@@ -5,7 +5,8 @@
     <% eliminatorias.forEach((fila) => {
       if (fila.nombreDeporte !== deporteActual) { %>
         <% deporteActual = fila.nombreDeporte; %>
-        <h2 class="text-center uppercase">TABLA DE POSICIONES - <%= deporteActual %></h2>
+        <h2 class="text-center">TABLA DE POSICIONES</h2>
+        <h2 class="text-center"><%= deporteActual %></h2>
         <div class="table-responsive">
         <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
           <thead>
