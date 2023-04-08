@@ -1085,7 +1085,7 @@ router.get(["/", "/home"], (req, res) => {
                   FROM eliminatorias eli
                   INNER JOIN torneos t ON eli.codTorneo = t.codTorneo 
                   INNER JOIN equipos e ON eli.codEquipo = e.codEquipo 
-                  `
+                  WHERE t.status = 1`
                   conexion.query(
                     sql,
                     (error, eliminatoria) => {
