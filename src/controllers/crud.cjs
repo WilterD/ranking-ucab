@@ -280,6 +280,7 @@ exports.updateCarrera = (req, res) => {
 
 exports.saveEliminatoria = (req, res) => {
   const codEquipo = req.body.codEquipo;
+  const codDeporte = req.body.codDeporte;
   const juegos_ganados = req.body.juegos_ganados;
   const juegos_perdidos = req.body.juegos_perdidos;
   const goles_a_favor = req.body.goles_a_favor;
@@ -294,6 +295,7 @@ exports.saveEliminatoria = (req, res) => {
     "INSERT INTO eliminatorias SET ?",
     {
       codEquipo,
+      codDeporte,
       codTorneo,
       juegos_ganados,
       juegos_perdidos,
