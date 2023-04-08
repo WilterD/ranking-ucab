@@ -1219,7 +1219,7 @@ router.get("/torneos:codTorneo", (req, res) => {
                             partidos,
                             resultados,
                             partidosTorneos,
-                            eliminatoria,
+                            eliminatorias,
                             torneos,
                             deportes,
                           });
