@@ -1113,13 +1113,13 @@ router.get(["/", "/home"], (req, res) => {
                             if (error) {
                               console.log(error);
                             } else {
-                              const sql4 = `SELECT DISTINCT d.nombreDeporte,r.codJugador, j.nombreJugador, c.nombreCarrera, SUM(r.puntos) AS total_puntos
+                              const sql4 = `SELECT DISTINCT j.nombreJugador,c.nombreCarrera,d.nombreDeporte, SUM(r.puntos) AS total_puntos
                               FROM rankini r
                               JOIN jugador j ON j.codJugador = r.codJugador
                               JOIN carreras c ON c.id = r.codCarrera
                               JOIN deporte d ON d.id = r.codDeporte
                               WHERE r.codUniversidad = 1
-                              GROUP BY r.codJugador, j.nombreJugador, c.nombreCarrera
+                              GROUP BY j.nombreJugador, c.nombreCarrera,d.nombreDeporte,r.puntos
                               ORDER BY d.nombredeporte DESC,total_puntos DESC`;
                           conexion.query(sql4, (error, rankingGeneral) => {
                             // torneos
@@ -1140,7 +1140,6 @@ router.get(["/", "/home"], (req, res) => {
                                 if (error) {
                                   console.log(error);
                                 } else {
-                                  console.log(rankingGeneralEquipos)
                                   res.render("home.ejs", {
                                     partidos,
                                     deportes,
