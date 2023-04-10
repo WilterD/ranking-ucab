@@ -1119,7 +1119,7 @@ router.get(["/", "/home"], (req, res) => {
                               JOIN carreras c ON c.id = r.codCarrera
                               JOIN deporte d ON d.id = r.codDeporte
                               WHERE r.codUniversidad = 1
-                              GROUP BY j.nombreJugador, c.nombreCarrera,d.nombreDeporte,r.puntos
+                              GROUP BY j.nombreJugador, c.nombreCarrera,d.nombreDeporte
                               ORDER BY d.nombredeporte DESC,total_puntos DESC`;
                           conexion.query(sql4, (error, rankingGeneral) => {
                             // torneos
@@ -1127,13 +1127,12 @@ router.get(["/", "/home"], (req, res) => {
                               console.log(error);
                             } else {
                               const sql5 = 
-                              //   GROUP BY d.nombredeporte, e.nombreequipo;
                               `SELECT DISTINCT d.nombreDeporte, e.nombreEquipo, SUM(r.puntos) AS total_puntos
                               FROM rankinge r
                               JOIN deporte d ON d.id = r.codDeporte
                               JOIN equipos e ON e.codEquipo = r.codEquipo
                               WHERE r.codUniversidad = 1
-                              GROUP BY e.nombreEquipo,r.puntos
+                              GROUP BY d.nombreDeporte, e.nombreEquipo
                               ORDER BY d.nombredeporte DESC,total_puntos DESC`
                               conexion.query(sql5, (error, rankingGeneralEquipos) => {
                                 // torneos
