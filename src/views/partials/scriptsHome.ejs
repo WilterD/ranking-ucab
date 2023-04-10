@@ -1,0 +1,140 @@
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<!-- SWIPER SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script>
+      // PRELOADER HOME
+      // Oculta el preloader y muestra el contenido cuando todo haya cargado
+      window.addEventListener('load', function () {
+          const preloader = document.querySelector('.preloader');
+          preloader.classList.add('hidden');
+
+          const content = document.querySelector('.content');
+          content.style.display = 'block';
+        });
+      // FIN PRELOADER HOME
+
+        // TABLAS RANKINGS
+
+        $(document).ready(function () {
+          $('.rankingGeneral').each(function() { // selecciona todas las tablas con la clase "tabla-ranking" y aplica DataTable a cada una
+  var tablaRankingGeneral = $(this).DataTable({
+   
+    lengthMenu: [[10, 20, 30, 50, 100, -1], [10, 20, 30, 50, 100, 'Todos']],
+    columnDefs: [{
+      orderable: false,
+      targets: [0, 1, 2, 3] // deshabilitar ordenamiento en la columna "Acciones"
+    }],"language": {
+                       "lengthMenu": "Mostrar TOP _MENU_ ",
+                       "zeroRecords": "No se encontraron registros",
+                       "info": "",
+                       "infoEmpty": "No hay registros disponibles",
+                       "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                       "search": "Buscar:",
+                       "paginate": {
+                           "first": "Primero",
+                           "last": "Último",
+                           "next": "Siguiente",
+                           "previous": "Anterior"
+                       }
+                   }
+                  })
+       $('.dataTables_filter').hide(); // ocultar el buscador
+     });
+
+     $('.rankingGeneralEquipos').each(function() { 
+  var RankingGeneralEquipos = $(this).DataTable({
+   
+    lengthMenu: [[10, 20, 30, 50, 100, -1], [10, 20, 30, 50, 100, 'Todos']],
+    columnDefs: [{
+      orderable: false,
+      targets: [0, 1, 2] // deshabilitar ordenamiento en la columna "Acciones"
+    }],"language": {
+                       "lengthMenu": "Mostrar TOP _MENU_ ",
+                       "zeroRecords": "No se encontraron registros",
+                       "info": "",
+                       "infoEmpty": "No hay registros disponibles",
+                       "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                       "search": "Buscar:",
+                       "paginate": {
+                           "first": "Primero",
+                           "last": "Último",
+                           "next": "Siguiente",
+                           "previous": "Anterior"
+                       }
+                   }
+                  })
+       $('.dataTables_filter').hide(); // ocultar el buscador
+     });
+
+
+     $('.rankingPosiciones').each(function() { 
+  var rankingEliminatoria = $(this).DataTable({
+    lengthMenu: [[10, 20, 30, 50, 100, -1], [10, 20, 30, 50, 100, 'Todos']],
+    lengthChange: false, // desactivar mostrar
+      bPaginate: false, // desactivar paginación
+    columnDefs: [{
+      orderable: false,
+      targets: [0, 1, 2, 3,4,5,6,7,8], // deshabilitar ordenamiento en la columna "Acciones"
+    }],"language": {
+                       "lengthMenu": "Mostrar TOP _MENU_ ",
+                       "zeroRecords": "No se encontraron registros",
+                       "info": "",
+                       "infoEmpty": "No hay registros disponibles",
+                       "infoFiltered": "(filtrado de _MAX_ registros totales)",
+                       "search": "Buscar:",
+                       "paginate": {
+                           "first": "Primero",
+                           "last": "Último",
+                           "next": "Siguiente",
+                           "previous": "Anterior"
+                       }
+                   }
+        });
+        $('.dataTables_filter').hide(); // ocultar el buscador
+             })
+            })
+    
+    
+                   
+
+        // FIN TABLAS RANKINGS
+
+
+      // NAVBAR HOME
+       // seleccionar el botón del navbar para abrir el menú desplegable
+    const dropdownMenu = document.querySelector('.dropdown-toggle');
+    const navbarDropdown = document.querySelector('.dropdown-menu2');
+
+    // seleccionar el menú desplegable
+
+    // función para comprobar el tamaño de la pantalla y mostrar u ocultar el menú desplegable en consecuencia
+    function checkScreenSize() {
+        if (window.innerWidth < 991) {
+            dropdownMenu.classList.add('show');
+            navbarDropdown.classList.add('show');
+        } else {
+            dropdownMenu.classList.remove('show');
+            navbarDropdown.classList.remove('show');
+        }
+    }
+
+    // llamar a la función cuando se cargue la página y cada vez que se redimensione la pantalla
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+      // FIN NAVBAR HOME
+      const swiper = new Swiper('.swiper-container', {
+        loop: true,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        autoplay: {
+          delay: 5000,
+        },
+      });
+    </script>

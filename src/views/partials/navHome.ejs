@@ -45,27 +45,3 @@
             <% } %>
     </div>
 </nav>
-
-<script>
-    // seleccionar el botón del navbar para abrir el menú desplegable
-    const dropdownMenu = document.querySelector('.dropdown-toggle');
-    const navbarDropdown = document.querySelector('.dropdown-menu2');
-
-    // seleccionar el menú desplegable
-
-    // función para comprobar el tamaño de la pantalla y mostrar u ocultar el menú desplegable en consecuencia
-    function checkScreenSize() {
-        if (window.innerWidth < 991) {
-            dropdownMenu.classList.add('show');
-            navbarDropdown.classList.add('show');
-        } else {
-            dropdownMenu.classList.remove('show');
-            navbarDropdown.classList.remove('show');
-        }
-    }
-
-    // llamar a la función cuando se cargue la página y cada vez que se redimensione la pantalla
-    checkScreenSize();
-    window.addEventListener('resize', checkScreenSize);
-
-</script>

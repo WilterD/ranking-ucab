@@ -1088,9 +1088,8 @@ router.get(["/", "/home"], (req, res) => {
                   JOIN deporte d ON eq.codDeporte = d.id
                   JOIN torneos t ON e.codTorneo = t.codTorneo
                   WHERE t.status = 1 
-                  ORDER BY d.nombreDeporte;
+                  ORDER BY e.puntos DESC;`;
                   
-                  `;
 
                   conexion.query(sql, (error, eliminatorias) => {
                     if (error) {
@@ -1114,13 +1113,45 @@ router.get(["/", "/home"], (req, res) => {
                             if (error) {
                               console.log(error);
                             } else {
-                              res.render("home.ejs", {
-                                partidos,
-                                deportes,
-                                partidosTorneos,
-                                eliminatorias,
-                                resultados,
-                                torneos,
+                              const sql4 = `SELECT DISTINCT d.nombreDeporte,r.codJugador, j.nombreJugador, c.nombreCarrera, SUM(r.puntos) AS total_puntos
+                              FROM rankini r
+                              JOIN jugador j ON j.codJugador = r.codJugador
+                              JOIN carreras c ON c.id = r.codCarrera
+                              JOIN deporte d ON d.id = r.codDeporte
+                              WHERE r.codUniversidad = 1
+                              GROUP BY r.codJugador, j.nombreJugador, c.nombreCarrera
+                              ORDER BY d.nombredeporte DESC,total_puntos DESC`;
+                          conexion.query(sql4, (error, rankingGeneral) => {
+                            // torneos
+                            if (error) {
+                              console.log(error);
+                            } else {
+                              const sql5 = 
+                              //   GROUP BY d.nombredeporte, e.nombreequipo;
+                              `SELECT DISTINCT d.nombreDeporte, e.nombreEquipo, SUM(r.puntos) AS total_puntos
+                              FROM rankinge r
+                              JOIN deporte d ON d.id = r.codDeporte
+                              JOIN equipos e ON e.codEquipo = r.codEquipo
+                              WHERE r.codUniversidad = 1
+                              GROUP BY e.nombreEquipo,r.puntos
+                              ORDER BY d.nombredeporte DESC,total_puntos DESC`
+                              conexion.query(sql5, (error, rankingGeneralEquipos) => {
+                                // torneos
+                                if (error) {
+                                  console.log(error);
+                                } else {
+                                  console.log(rankingGeneralEquipos)
+                                  res.render("home.ejs", {
+                                    partidos,
+                                    deportes,
+                                    partidosTorneos,
+                                    eliminatorias,
+                                    resultados,
+                                    torneos,
+                                    rankingGeneral,
+                                    rankingGeneralEquipos
+                                  });
+                                }
                               });
                             }
                           });
@@ -1129,14 +1160,23 @@ router.get(["/", "/home"], (req, res) => {
                     }
                   });
                 }
-              }
-            );
-          }
+              });
+            }
+          });
         }
-      );
+      });
     }
   });
 });
+
+        
+
+
+           
+
+  
+
+  
 
 router.get("/torneos:codTorneo", (req, res) => {
   let codTorneo = req.params.codTorneo;
