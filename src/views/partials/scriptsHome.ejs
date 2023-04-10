@@ -75,11 +75,12 @@
      $('.rankingPosiciones').each(function() { 
   var rankingEliminatoria = $(this).DataTable({
     lengthMenu: [[10, 20, 30, 50, 100, -1], [10, 20, 30, 50, 100, 'Todos']],
+    "order": [[8, "desc"]], // Ordenar por la columna de Puntos en orden descendente
     lengthChange: false, // desactivar mostrar
       bPaginate: false, // desactivar paginación
     columnDefs: [{
       orderable: false,
-      targets: [0, 1, 2, 3,4,5,6,7,8], // deshabilitar ordenamiento en la columna "Acciones"
+      targets: [0, 1, 2, 3,4,5,6,7], // deshabilitar ordenamiento en las columnas
     }],"language": {
                        "lengthMenu": "Mostrar TOP _MENU_ ",
                        "zeroRecords": "No se encontraron registros",

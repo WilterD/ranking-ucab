@@ -972,3 +972,10 @@ h2 {
 th.position-sticky {
   background-color: #192281 !important;
 }
+
+
+.titulosRankings{
+  background-color: #1f147f;
+  color: white;
+  padding: 14px;
+}
