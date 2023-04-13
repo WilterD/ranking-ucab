@@ -33,6 +33,9 @@ exports.savePartido = (req, res) => {
   const puntos1 = req.body.puntos1;
   const puntos2 = req.body.puntos2;
 
+
+  console.log(req.body);
+
   conexion.query(
     "INSERT INTO partido SET ?",
     {
@@ -50,7 +53,7 @@ exports.savePartido = (req, res) => {
     (error, results) => {
       if (error) {
         console.log(error);
-        res.status(400).json({ msg: "error" });
+        res.status(400).json({ msg: "Error al insertar los datos" });
       } else {
         res.redirect("/admin/partidos");
       }

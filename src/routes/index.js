@@ -273,8 +273,6 @@ router.get("/admin/partidos", requireLogin, (req, res) => {
         return `${dia}/${mes}/${anio} ${hora}:${minutos}`;
       });
 
-      console.log(partidos);
-
       res.render("admin/partidos.ejs", {
         partidos: partidos,
         fecha: fecha,
