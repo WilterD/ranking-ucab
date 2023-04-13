@@ -1033,7 +1033,7 @@ router.get(["/", "/home"], (req, res) => {
   INNER JOIN estadio es ON p.codEstadio = es.codEstadio 
   INNER JOIN deporte d ON p.codDeporte = d.id 
   INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
-  WHERE p.fecha > NOW() AND t.status=1 
+  WHERE p.fecha >= NOW() AND t.status=1 
   ORDER BY p.fecha ASC;`;
 
   conexion.query(sql, (error, partidos) => {
