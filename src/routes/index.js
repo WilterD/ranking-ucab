@@ -1184,7 +1184,7 @@ router.get("/torneos:codTorneo", (req, res) => {
   INNER JOIN estadio es ON p.codEstadio = es.codEstadio 
   INNER JOIN deporte d ON p.codDeporte = d.id 
   INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
-  WHERE p.fecha > NOW() AND t.codTorneo=? 
+  WHERE p.fecha >= NOW() AND t.codTorneo=? 
   ORDER BY p.fecha ASC;`;
   conexion.query(sql, [codTorneo], (error, partidos) => {
     if (error) {
