@@ -3,7 +3,7 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
 const { imgDir } = require('./fileManager.cjs');
-const mimetypes = ['image/jpeg', 'image/png'];
+const mimetypes = ['image/jpeg', 'image/png','image/svg+xml'];
 
 const imgStorage = multer.diskStorage({
   destination: (req, file, cb) => {
