@@ -312,7 +312,6 @@ router.get("/admin/editarPartido/:codPartido", (req, res) => {
                           if (error) {
                             console.log(error);
                           } else {
-                            console.log(results[0]);
                             res.render("admin/editarPartido.ejs", {
                               partido: results[0],
                               estadios: estadios,
@@ -829,7 +828,6 @@ router.get("/admin/editarRankingRI/:id", requireLogin, (req, res) => {
                       if (error) {
                         console.log(error);
                       } else {
-                        console.log(ranking);
                         res.render("admin/editarRankingRI", {
                           ranking: ranking[0],
                           deportes: deportes,

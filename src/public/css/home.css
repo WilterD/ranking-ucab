@@ -693,6 +693,10 @@ h2 {
   text-align: center;
   padding: 0.2em 0.1em;
 }
+.tournament-bracket__content.hide::after {
+  content: none;
+}
+
 
 @media (min-width: 38em) {
   .tournament-bracket__content::after {

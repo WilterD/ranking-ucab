@@ -154,9 +154,12 @@
                                           <% partidosCuartos.forEach((partido,i)=>{ %>
                                             <li class="tournament-bracket__item">
                                               <div class="tournament-bracket__match" tabindex="0">
-                                                <table class="tournament-bracket__table">
+                                                <table class="tournament-bracket__table text-center">
                                                   <caption class="tournament-bracket__caption">
-                                                    <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>">
+                                                    <% if (partido.imagen1 == partido.imagen2){ %>
+                                                      <time>Clasificado</time>
+                                                      <% } else { %>
+                                                    <time>
                                                       <%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>
                                                     </time>
                                                     <% var fechaPartido=new Date(partido.fecha); %>
@@ -164,8 +167,22 @@
                                                       <br>
                                                         <time>Próximamente</time>
                                                     <% } %>
-                       
+                                                   <% } %>
                                                   </caption>
+                                                  <% if (partido.imagen1 == partido.imagen2){ %>
+                                                    <tbody class="mx-auto">
+                                                      <tr class="">
+                                                        <td class="">
+                                                          <abbr class=""><img width="50px"
+                                                              height="50px"
+                                                              src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                                              alt="<%= partido.equipo1 %>"></abbr>
+                                                          <span class="tournament-bracket__flag flag-icon flag-icon-ca"
+                                                            aria-label="Flag"></span>
+                                                        </td>
+                                                      </tr>
+                                                    </tbody>
+                                                    <% } else { %>
                                                   <tbody class="tournament-bracket__content">
                                                     <tr class="torneo-bracket-equipo">
                                                       <td class="tournament-bracket__country">
@@ -198,6 +215,7 @@
                                                       </td>
                                                     </tr>
                                                   </tbody>
+                                                  <% } %>
                                                 </table>
                                               </div>
                                             </li>
@@ -206,14 +224,14 @@
                                             <% for (var i = 0; i < partidosPorDefinir; i++) { %>
                                               <li class="tournament-bracket__item">
                                                 <div class="tournament-bracket__match" tabindex="0">
-                                                  <table class="tournament-bracket__table">
+                                                  <table class="tournament-bracket__table text-center">
                                                     <caption class="tournament-bracket__caption">
                                                       <time datetime="Por definir">Por definir</time>
                                                     </caption>
                                                     <tbody class="tournament-bracket__content">
                                                       <tr class="torneo-bracket-equipo">
                                                         <td class="tournament-bracket__country">
-                                                          <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.svg"></abbr>
+                                                          <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
                                                           <span
                                                             class="tournament-bracket__flag flag-icon flag-icon-fi"
                                                             aria-label="Flag"></span>
@@ -226,7 +244,7 @@
                                                         class="torneo-bracket-equipo">
                                                         <td class="tournament-bracket__country">
                                                           <abbr class="tournament-bracket__code"
-                                                            ><img width="40px" height="40px" src="images/ShieldGray.svg"></abbr>
+                                                            ><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
                                                           <span
                                                             class="tournament-bracket__flag flag-icon flag-icon-ru"
                                                             aria-label="Flag"></span>
@@ -251,51 +269,73 @@
                                           }); %>
                                          <% var partidoSemi = 2; %>
                                          <% partidosSemi.forEach((partido,i)=>{ %>
-                                              <li class="tournament-bracket__item">
-                                                <div class="tournament-bracket__match" tabindex="0">
-                                                  <table class="tournament-bracket__table">
-                                                    <caption class="tournament-bracket__caption">
-                                                      <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>"><%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %></time>
-                                                      <% var fechaPartido=new Date(partido.fecha); %>
-                                                      <% if (fechaPartido> new Date()) { %>
-                                                        <br>
-                                                          <time>Próximamente</time>
-                                                      <% } %>
-                                                    </caption>
-
-                                                    <tbody class="tournament-bracket__content">
-                                                      <tr class="torneo-bracket-equipo">
-                                                        <td class="tournament-bracket__country">
-                                                          <abbr class="tournament-bracket__code"
-                                                            ><img width="50px"
+                                          <li class="tournament-bracket__item">
+                                            <div class="tournament-bracket__match" tabindex="0">
+                                              <table class="tournament-bracket__table text-center">
+                                                <caption class="tournament-bracket__caption">
+                                                  <% if (partido.imagen1 == partido.imagen2){ %>
+                                                    <time>Clasificado</time>
+                                                    <% } else { %>
+                                                  <time>
+                                                    <%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>
+                                                  </time>
+                                                  <% var fechaPartido=new Date(partido.fecha); %>
+                                                  <% if (fechaPartido> new Date()) { %>
+                                                    <br>
+                                                      <time>Próximamente</time>
+                                                  <% } %>
+                                                 <% } %>
+                                                </caption>
+                                                <% if (partido.imagen1 == partido.imagen2){ %>
+                                                  <tbody class="mx-auto">
+                                                    <tr class="">
+                                                      <td class="">
+                                                        <abbr class=""><img width="50px"
                                                             height="50px"
                                                             src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
                                                             alt="<%= partido.equipo1 %>"></abbr>
-                                                          <span class="tournament-bracket__flag flag-icon flag-icon-ca"
-                                                            aria-label="Flag"></span>
-                                                        </td>
-                                                        <td class="tournament-bracket__score">
-                                                          <span class="tournament-bracket__number"><%= partido.puntos1 %></span>
-                                                        </td>
-                                                      </tr>
-                                                      <tr
-                                                        class="torneo-bracket-equipo">
-                                                        <td class="tournament-bracket__country">
-                                                          <abbr class="tournament-bracket__code"><img width="50px"
-                                                            height="50px"
-                                                            src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
-                                                            alt="<%= partido.equipo1 %>"></abbr>
-                                                          <span class="tournament-bracket__flag flag-icon flag-icon-cz"
-                                                            aria-label="Flag"></span>
-                                                        </td>
-                                                        <td class="tournament-bracket__score">
-                                                          <span class="tournament-bracket__number"><%= partido.puntos2 %></span>
-                                                        </td>
-                                                      </tr>
-                                                    </tbody>
-                                                  </table>
-                                                </div>
-                                              </li>
+                                                        <span class="tournament-bracket__flag flag-icon flag-icon-ca"
+                                                          aria-label="Flag"></span>
+                                                      </td>
+                                                    </tr>
+                                                  </tbody>
+                                                  <% } else { %>
+                                                <tbody class="tournament-bracket__content">
+                                                  <tr class="torneo-bracket-equipo">
+                                                    <td class="tournament-bracket__country">
+                                                      <abbr class="tournament-bracket__code"><img width="50px"
+                                                          height="50px"
+                                                          src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                                          alt="<%= partido.equipo1 %>"></abbr>
+                                                      <span class="tournament-bracket__flag flag-icon flag-icon-ca"
+                                                        aria-label="Flag"></span>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                      <span class="tournament-bracket__number">
+                                                        <%= partido.puntos1 %>
+                                                      </span>
+                                                    </td>
+                                                  </tr>
+                                                  <tr class="torneo-bracket-equipo">
+                                                    <td class="tournament-bracket__country">
+                                                      <abbr class="tournament-bracket__code"><img width="50px"
+                                                          height="50px"
+                                                          src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
+                                                          alt="<%= partido.equipo2 %>"></abbr>
+                                                      <span class="tournament-bracket__flag flag-icon flag-icon-kz"
+                                                        aria-label="Flag"></span>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                      <span class="tournament-bracket__number">
+                                                        <%= partido.puntos2 %>
+                                                      </span>
+                                                    </td>
+                                                  </tr>
+                                                </tbody>
+                                                <% } %>
+                                              </table>
+                                            </div>
+                                          </li>
                                               <% partidoSemi--; %>
                                             <% }) %>
                                             <% for (var i = 0; i < partidoSemi; i++) { %>
@@ -309,7 +349,7 @@
                                                     <tbody class="tournament-bracket__content">
                                                       <tr class="torneo-bracket-equipo">
                                                         <td class="tournament-bracket__country">
-                                                          <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.svg"></abbr>
+                                                          <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
                                                           <span
                                                             class="tournament-bracket__flag flag-icon flag-icon-fi"
                                                             aria-label="Flag"></span>
@@ -322,7 +362,7 @@
                                                         class="torneo-bracket-equipo">
                                                         <td class="tournament-bracket__country">
                                                           <abbr class="tournament-bracket__code"
-                                                            ><img width="40px" height="40px" src="images/ShieldGray.svg"></abbr>
+                                                            ><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
                                                           <span
                                                             class="tournament-bracket__flag flag-icon flag-icon-ru"
                                                             aria-label="Flag"></span>
@@ -350,49 +390,68 @@
                                          <% partidoTercer.forEach((partido,i)=>{ %>
                                           <li class="tournament-bracket__item">
                                             <div class="tournament-bracket__match" tabindex="0">
-                                              <table class="tournament-bracket__table">
+                                              <table class="tournament-bracket__table text-center">
                                                 <caption class="tournament-bracket__caption">
-                                                  <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>"><%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %></time>
+                                                  <% if (partido.imagen1 == partido.imagen2){ %>
+                                                    <time>Clasificado</time>
+                                                    <% } else { %>
+                                                  <time>
+                                                    <%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>
+                                                  </time>
                                                   <% var fechaPartido=new Date(partido.fecha); %>
                                                   <% if (fechaPartido> new Date()) { %>
                                                     <br>
                                                       <time>Próximamente</time>
                                                   <% } %>
+                                                 <% } %>
                                                 </caption>
-
+                                                <% if (partido.imagen1 == partido.imagen2){ %>
+                                                  <tbody class="mx-auto">
+                                                    <tr class="">
+                                                      <td class="">
+                                                        <abbr class=""><img width="50px"
+                                                            height="50px"
+                                                            src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                                            alt="<%= partido.equipo1 %>"></abbr>
+                                                        <span class="tournament-bracket__flag flag-icon flag-icon-ca"
+                                                          aria-label="Flag"></span>
+                                                      </td>
+                                                    </tr>
+                                                  </tbody>
+                                                  <% } else { %>
                                                 <tbody class="tournament-bracket__content">
                                                   <tr class="torneo-bracket-equipo">
                                                     <td class="tournament-bracket__country">
-                                                      <abbr class="tournament-bracket__code"
-                                                        ><img width="50px"
-                                                        height="50px"
-                                                        src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
-                                                        alt="<%= partido.equipo1 %>"></abbr>
-                                                      <span class="tournament-bracket__flag flag-icon flag-icon-fi"
-                                                        aria-label="Flag"></span>
-                                                    </td>
-                                                    <td class="tournament-bracket__score">
-                                                      <span class="tournament-bracket__number"><%= partido.puntos1 %></span>
-                                                      <span
-                                                        class="tournament-bracket__medal tournament-bracket__medal--bronze fa fa-trophy"
-                                                        aria-label="Tercer lugar"></span>
-                                                    </td>
-                                                  </tr>
-                                                  <tr class="torneo-bracket-equipo">
-                                                    <td class="tournament-bracket__country">
-                                                      <abbr class="tournament-bracket__code"
-                                                       ><img width="50px"
-                                                        height="50px"
-                                                        src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
-                                                        alt="<%= partido.equipo2 %>"></abbr>
+                                                      <abbr class="tournament-bracket__code"><img width="50px"
+                                                          height="50px"
+                                                          src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                                          alt="<%= partido.equipo1 %>"></abbr>
                                                       <span class="tournament-bracket__flag flag-icon flag-icon-ca"
                                                         aria-label="Flag"></span>
                                                     </td>
                                                     <td class="tournament-bracket__score">
-                                                      <span class="tournament-bracket__number"><%= partido.puntos2 %></span>
+                                                      <span class="tournament-bracket__number">
+                                                        <%= partido.puntos1 %>
+                                                      </span>
+                                                    </td>
+                                                  </tr>
+                                                  <tr class="torneo-bracket-equipo">
+                                                    <td class="tournament-bracket__country">
+                                                      <abbr class="tournament-bracket__code"><img width="50px"
+                                                          height="50px"
+                                                          src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
+                                                          alt="<%= partido.equipo2 %>"></abbr>
+                                                      <span class="tournament-bracket__flag flag-icon flag-icon-kz"
+                                                        aria-label="Flag"></span>
+                                                    </td>
+                                                    <td class="tournament-bracket__score">
+                                                      <span class="tournament-bracket__number">
+                                                        <%= partido.puntos2 %>
+                                                      </span>
                                                     </td>
                                                   </tr>
                                                 </tbody>
+                                                <% } %>
                                               </table>
                                             </div>
                                           </li>
@@ -409,7 +468,7 @@
                                                   <tbody class="tournament-bracket__content">
                                                     <tr class="torneo-bracket-equipo">
                                                       <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.svg"></abbr>
+                                                        <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
                                                         <span
                                                           class="tournament-bracket__flag flag-icon flag-icon-fi"
                                                           aria-label="Flag"></span>
@@ -422,7 +481,7 @@
                                                       class="torneo-bracket-equipo">
                                                       <td class="tournament-bracket__country">
                                                         <abbr class="tournament-bracket__code"
-                                                          ><img width="40px" height="40px" src="images/ShieldGray.svg"></abbr>
+                                                          ><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
                                                         <span
                                                           class="tournament-bracket__flag flag-icon flag-icon-ru"
                                                           aria-label="Flag"></span>
@@ -451,52 +510,68 @@
                                          <% partidoFinal.forEach((partido,i)=>{ %>
                                           <li class="tournament-bracket__item">
                                             <div class="tournament-bracket__match" tabindex="0">
-                                              <table class="tournament-bracket__table">
+                                              <table class="tournament-bracket__table text-center">
                                                 <caption class="tournament-bracket__caption">
-                                                  <time datetime="<%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>"><%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %></time>
+                                                  <% if (partido.imagen1 == partido.imagen2){ %>
+                                                    <time>Clasificado</time>
+                                                    <% } else { %>
+                                                  <time>
+                                                    <%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>
+                                                  </time>
                                                   <% var fechaPartido=new Date(partido.fecha); %>
                                                   <% if (fechaPartido> new Date()) { %>
                                                     <br>
                                                       <time>Próximamente</time>
                                                   <% } %>
+                                                 <% } %>
                                                 </caption>
-
+                                                <% if (partido.imagen1 == partido.imagen2){ %>
+                                                  <tbody class="mx-auto">
+                                                    <tr class="">
+                                                      <td class="">
+                                                        <abbr class=""><img width="50px"
+                                                            height="50px"
+                                                            src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                                            alt="<%= partido.equipo1 %>"></abbr>
+                                                        <span class="tournament-bracket__flag flag-icon flag-icon-ca"
+                                                          aria-label="Flag"></span>
+                                                      </td>
+                                                    </tr>
+                                                  </tbody>
+                                                  <% } else { %>
                                                 <tbody class="tournament-bracket__content">
                                                   <tr class="torneo-bracket-equipo">
                                                     <td class="tournament-bracket__country">
-                                                      <abbr class="tournament-bracket__code"
-                                                        ><img width="50px"
-                                                        height="50px"
-                                                        src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
-                                                        alt="<%= partido.equipo1 %>"></abbr>
-                                                      <span class="tournament-bracket__flag flag-icon flag-icon-cz"
+                                                      <abbr class="tournament-bracket__code"><img width="50px"
+                                                          height="50px"
+                                                          src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                                          alt="<%= partido.equipo1 %>"></abbr>
+                                                      <span class="tournament-bracket__flag flag-icon flag-icon-ca"
                                                         aria-label="Flag"></span>
                                                     </td>
                                                     <td class="tournament-bracket__score">
-                                                      <span class="tournament-bracket__number"><%= partido.puntos1 %></span>
-                                                      <span
-                                                        class="tournament-bracket__medal tournament-bracket__medal--gold fa fa-trophy"
-                                                        aria-label="Gold medal"></span>
+                                                      <span class="tournament-bracket__number">
+                                                        <%= partido.puntos1 %>
+                                                      </span>
                                                     </td>
                                                   </tr>
                                                   <tr class="torneo-bracket-equipo">
                                                     <td class="tournament-bracket__country">
-                                                      <abbr class="tournament-bracket__code"
-                                                        ><img width="50px"
-                                                        height="50px"
-                                                        src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
-                                                        alt="<%= partido.equipo2 %>"></abbr>
-                                                      <span class="tournament-bracket__flag flag-icon flag-icon-ru"
+                                                      <abbr class="tournament-bracket__code"><img width="50px"
+                                                          height="50px"
+                                                          src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
+                                                          alt="<%= partido.equipo2 %>"></abbr>
+                                                      <span class="tournament-bracket__flag flag-icon flag-icon-kz"
                                                         aria-label="Flag"></span>
                                                     </td>
                                                     <td class="tournament-bracket__score">
-                                                      <span class="tournament-bracket__number"><%= partido.puntos2 %></span>
-                                                      <span
-                                                        class="tournament-bracket__medal tournament-bracket__medal--silver fa fa-trophy"
-                                                        aria-label="Silver medal"></span>
+                                                      <span class="tournament-bracket__number">
+                                                        <%= partido.puntos2 %>
+                                                      </span>
                                                     </td>
                                                   </tr>
                                                 </tbody>
+                                                <% } %>
                                               </table>
                                             </div>
                                           </li>
@@ -513,7 +588,7 @@
                                                   <tbody class="tournament-bracket__content">
                                                     <tr class="torneo-bracket-equipo">
                                                       <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.svg"></abbr>
+                                                        <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
                                                         <span
                                                           class="tournament-bracket__flag flag-icon flag-icon-fi"
                                                           aria-label="Flag"></span>
@@ -526,7 +601,7 @@
                                                       class="torneo-bracket-equipo">
                                                       <td class="tournament-bracket__country">
                                                         <abbr class="tournament-bracket__code"
-                                                          ><img width="40px" height="40px" src="images/ShieldGray.svg"></abbr>
+                                                          ><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
                                                         <span
                                                           class="tournament-bracket__flag flag-icon flag-icon-ru"
                                                           aria-label="Flag"></span>
@@ -683,27 +758,46 @@
                                         });
                                       });
                                     </script>
-    <script>
-      $(document).ready(function () {
-        // Obtenemos todos los elementos tbody que tienen dos elementos tr con la clase torneo-bracket-equipo
-        const tbodies = document.querySelectorAll('tbody:has(.torneo-bracket-equipo:first-child):has(.torneo-bracket-equipo:last-child)');
-        // Iteramos por cada tbody
-        tbodies.forEach(tbody => {
-          // Obtenemos los dos elementos tr con la clase torneo-bracket-equipo
-          const [team1, team2] = tbody.querySelectorAll('.torneo-bracket-equipo');
-          // Obtenemos los valores numéricos de ambos equipos
-          const value1 = parseFloat(team1.textContent);
-          const value2 = parseFloat(team2.textContent);
-          // Comparamos los valores y añadimos la clase torneo-bracket-equipo--winner al equipo con el valor más alto
-          if (value1 > value2) {
-            team1.classList.add('torneo-bracket-equipo--winner');
-            team2.classList.remove('torneo-bracket-equipo--winner');
-          } else if (value2 > value1) {
-            team2.classList.add('torneo-bracket-equipo--winner');
-            team1.classList.remove('torneo-bracket-equipo--winner');
-          }
-        });
-      });
-    </script>
+                                    <script>
+                                      $(document).ready(function () {
+                                        // Obtenemos todos los elementos tbody que tienen dos elementos tr con la clase torneo-bracket-equipo
+                                        const tbodies = document.querySelectorAll('tbody:has(.torneo-bracket-equipo:first-child):has(.torneo-bracket-equipo:last-child)');
+                                        // Iteramos por cada tbody
+                                        tbodies.forEach(tbody => {
+                                          // Obtenemos los dos elementos tr con la clase torneo-bracket-equipo
+                                          const [team1, team2] = tbody.querySelectorAll('.torneo-bracket-equipo');
+
+                                          // Obtenemos los valores numéricos de ambos equipos
+                                          const value1 = parseFloat(team1.textContent);
+                                          const value2 = parseFloat(team2.textContent);
+                                          // Comparamos los valores y añadimos la clase torneo-bracket-equipo--winner al equipo con el valor más alto
+
+                                          // si equipo1 tiene la misma imagen que equipo2 y el atributo es <time datetime="Por definir">, entonces borramos equipo1
+                                          
+                                          if (value1 > value2) {
+                                            team1.classList.add('torneo-bracket-equipo--winner');
+                                            team2.classList.remove('torneo-bracket-equipo--winner');
+                                          } else if (value2 > value1) {
+                                            team2.classList.add('torneo-bracket-equipo--winner');
+                                            team1.classList.remove('torneo-bracket-equipo--winner');
+                                          }
+                                          if(value1 == 0 && value2 == 0){
+                                            // borramos los elementos con la clase tournament-bracket__score y los elementos con la clase .tournament-bracket__content::after
+                                            const score = tbody.querySelectorAll('.tournament-bracket__score');
+                                            //colocar el estilo content: "" a los elementos con la clase .tournament-bracket__content::after
+                                            score.forEach(element => {
+                                              element.remove();
+                                            });
+                                                
+                                          }
+                                          // si equipo1 tiene la misma imagen que equipo2 y el atributo es <time datetime="Por definir">, entonces borramos equipo1 
+                                          // if(team1.querySelector('img').src == team2.querySelector('img').src){
+                                          //   team1.remove();
+                                          // }
+                                        });
+                                      });
+                                    </script>
+                                              </body>
+                                            </html>
 </body>
 </html>
