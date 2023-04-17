@@ -50,7 +50,7 @@ body {
   top: 0;
   left: 0;
   object-fit: cover;
-  max-height: 100vh; /* Cambiar el valor según se desee */
+  max-height: 100vh;
   object-position: center;
   display: block;
   width: 100%;
@@ -319,9 +319,10 @@ h2.TituloJornada {
 }
 
 .team-container img {
-  /* object-fit: contain; */
-  max-width: 240px;
-  max-height: 240px;
+  max-width: 100%;
+  max-height: 100%;
+  /* object-fit: cover; */
+  margin-bottom: 14px;
 }
 
 .vs {
@@ -434,12 +435,18 @@ h2 {
 }
 
 .tournament-bracket__round-title {
-  color: #9e9e9e;
+  color: #ffffff;
   font-size: 0.95rem;
   font-weight: 400;
   text-align: center;
-  font-style: italic;
   margin-bottom: 0.5em;
+  padding: 8px;
+  background-color: #07013d;
+  border-color: #fff solid 1px;
+  border-width: 3px;
+  border-style: solid;
+  border-radius: 15px;
+
 }
 
 .tournament-bracket__list {
@@ -449,7 +456,7 @@ h2 {
   justify-content: center;
   height: 100%;
   min-height: 100%;
-  border-bottom: 1px dashed #e5e5e5;
+  /* border-bottom: 1px dashed #e5e5e5; */
   padding-bottom: 2em;
   margin-bottom: 2em;
   transition: padding 0.2s ease-in-out, margin 0.2s ease-in-out;
@@ -466,7 +473,7 @@ h2 {
   .tournament-bracket__list {
     margin-bottom: 0;
     padding-bottom: 0;
-    border-right: 1px dashed #e5e5e5;
+    /* border-right: 1px dashed #e5e5e5; */
     border-bottom: 0;
   }
 }
@@ -580,9 +587,11 @@ h2 {
   }
 }
 @media (max-width: 585px) {
-  .tournament-bracket__round {
+  
+  .tournament-bracket__list
+  {
     margin-left: -36px;
-  } 
+  }
 }
 
 .tournament-bracket__match {
@@ -785,7 +794,7 @@ h2 {
 }
 
 .torneo-bracket-equipo {
-  display: flex;
+  /* display: flex; */
   flex-direction: row-reverse;
   justify-content: space-between;
 }
@@ -982,4 +991,11 @@ th.position-sticky {
   background-color: #1f147f;
   color: white;
   padding: 14px;
+}
+
+/* .resultadosClasificatoria{
+  background-color: #c6c6c6;
+} */
+.proximosPartidos{
+  background-color: #19115e;
 }

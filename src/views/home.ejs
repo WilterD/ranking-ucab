@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <!-- Google Analitycs -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-45JXRHZ9MB"></script>
@@ -8,14 +7,11 @@
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-
     gtag('config', 'G-45JXRHZ9MB');
   </script>
   <%- include('partials/headHome.ejs') %>
     <title>Home - UCAB SPORT</title>
-    
 </head>
-
 <body>
 
   <div class="preloader">
@@ -30,7 +26,7 @@
           <%- include('partials/tablaPosiciones.ejs') %>
               <!-- partidos  -->
               <% if (partidos.length> 0) { %>
-                <section style="background-color:#19115e">
+                <section class="proximosPartidos">
                   <div class="container">
                     <div class="row">
                       <div class="col-12 mt-5">
@@ -77,8 +73,9 @@
                 </section>
                 <% } %>
                   <!-- Si no hay resultados, no mostrar nada -->
+                  <section class="resultadosClasificatoria">
                   <% if (resultados.length> 0) { %>
-                    <div class="container text-center mt-5 mb-5">
+                    <div class="container text-center">
                       <h2 class="text-center"><%= resultados[0].nombreTorneo %></h2>
                       <h2 class="text-center">Resultados Clasificatoria</h2>
                     </div>
@@ -112,8 +109,7 @@
                                 </div>
                                 <div class="matchup-container d-flex justify-content-center align-items-center">
                                   <div class="team-container">
-                                    <img
-                                      src="<%= resultado.imagen1 ? resultado.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                    <img src="<%= resultado.imagen1 ? resultado.imagen1 : 'images/UCAB-LOBOS.svg' %>"
                                       alt="Logo del equipo 1">
                                     <h4 class="text-center tituloEquipo">
                                       <%= resultado.equipo1 %>
@@ -138,6 +134,7 @@
                             <% } %>
                               <% lastJornada=resultado.jornada; %>
                                 <% }); %>
+                              </section>
 
                                   <!-- Eliminatoria Torneo -->
                                 <% if (partidosTorneos.length> 0) { %>
