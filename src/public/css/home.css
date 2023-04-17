@@ -991,6 +991,7 @@ th.position-sticky {
   background-color: #1f147f;
   color: white;
   padding: 14px;
+  border-radius: 10px; 
 }
 
 /* .resultadosClasificatoria{
