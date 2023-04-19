@@ -5,6 +5,13 @@
     <%- include('partials/head.ejs') %>
         <link rel="stylesheet" href="/css/main.css">
         <title>Editar</title>
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+
 </head>
 
 <body>
@@ -19,23 +26,23 @@
                     <div class="card-header">Editar Partido
                     </div>
                     <div class="card-body">
-                        <form action="/updatePartido" method="POST">
+                        <form action="/updatePartido" method="POST" id="formulario">
                             <input type="hidden" class="form-control" id="codPartido" name="codPartido" tabindex="1"
                                 value="<%= partido.codPartido %>" />
-                                <div class="mb-3">
-                                    <label for="codTorneo" class="form-label">Nombre Torneo</label>
-                                    <select id="codTorneo" name="codTorneo" class="form-select"
-                                        aria-label="Default select example" tabindex="2" required>
-                                        <option selected value="<%= partido.codTorneo %>">
-                                            <%= partido.nombreTorneo %>
+                            <div class="mb-3">
+                                <label for="codTorneo" class="form-label">Nombre Torneo</label>
+                                <select id="codTorneo" name="codTorneo" class="form-select"
+                                    aria-label="Default select example" tabindex="2" required>
+                                    <option selected value="<%= partido.codTorneo %>">
+                                        <%= partido.nombreTorneo %>
+                                    </option>
+                                    <% torneos.forEach((torneos)=>{ %>
+                                        <option value="<%= torneos.codTorneo %>">
+                                            <%= torneos.nombreTorneo %> %>
                                         </option>
-                                        <% torneos.forEach((torneos)=>{ %>
-                                            <option value="<%= torneos.codTorneo %>">
-                                                <%= torneos.nombreTorneo %> %>
-                                            </option>
-                                            <% }) %>
-                                    </select>
-                                </div>
+                                        <% }) %>
+                                </select>
+                            </div>
                             <div class="mb-3">
                                 <label for="etapa" class="form-label">Etapa</label>
                                 <select id="etapa" name="etapa" class="form-select" aria-label="Default select example"
@@ -132,8 +139,6 @@
                             </div>
 
 
-
-
                             <div class="mb-3">
                                 <label for="codEquipo2" class="form-label">Equipo Visitante</label>
                                 <select id="codEquipo2" name="codEquipo2" class="form-select"
@@ -170,13 +175,26 @@
                                     tabindex="5">Guardar</button>
                                 <a href="/admin/partidos" class="btn btn-secondary">Cancelar</a>
                             </div>
+                            <div class="mb-3">
+                                <button class="btn btn-primary" id="agregar-goleador-btn">Agregar Goleador +</button>
+                                <div id="goleadores-container"></div>
+                            </div>
+                            <% if(goleadores.length>0){ %>
+                            <div class="mb-3">
+                                <h3>Goleadores</h3>
+                                
+                                <% goleadores.forEach((goleadores) => { %>
+                                    <h5><%= goleadores.nombreJugador %> Goles: <%= goleadores.goles %> <a href="/admin/deleteGoleador/<%= goleadores.codPartido %>" class="btn btn-outline-danger"> <i class='bx bxs-trash'></i></a></h4>
+                                    <% }) %>
+                            </div>
+                            <% } %>
                         </form>
+
+
                     </div>
                 </div>
             </div>
         </section>
-        </form>
-
         <section class="home-section">
             <div class="container">
                 <div class="row">
@@ -189,8 +207,73 @@
                 </div>
             </div>
         </section>
-
         <%- include('partials/scripts.ejs') %>
+
+            <script>
+                var i = 0;
+                $(document).ready(function () {
+                    // Manejador de eventos para el botón "Agregar Goleador"
+                    $("#agregar-goleador-btn").click(function (e) {
+                        e.preventDefault();
+                        const div = $(`<div class="mb-3 mt-3"></div>`);
+                        const select1 =
+                            `<select id="codEquipo" name="codEquipo[${i}]" class="codEquipo form-select" tabindex="2" onchange="handleEquipoSelectChange(this,${i})">
+                                <option disabled selected>Seleccione un equipo</option>
+                                <% equipos.forEach((equipo)=>{ %>
+                                    <option value="<%= equipo.codEquipo %>">
+                                    <%= equipo.nombreEquipo %> %>
+                                    </option>
+                                    <% }) %>
+                                </select>`
+                                i++;
+                        // agregar seleccionar equipos
+                        div.append(select1);
+                        $("#goleadores-container").append(div);
+                        // Manejador de eventos para el último select de equipos
+                        let todosLosSelects = document.querySelectorAll('select.codEquipo');
+                        let ultimoSelect = todosLosSelects[todosLosSelects.length - 1];
+                    });
+                });
+
+                function handleEquipoSelectChange(select,i) {
+                    const codEquipo = select.value;
+
+                    // Realizar solicitud AJAX para obtener los datos de los jugadores
+                    $.ajax({
+                        url: `/actualizarJugadores/${codEquipo}`,
+                        method: "GET",
+                        dataType: "json",
+                        data: $("#formulario").serialize(),
+                        success: function (data) {
+                            // Crear un nuevo elemento de formulario para cada goleador
+                            const select2 = $(`<select class="form-select mt-3" name="codJugador[${i}]"></select>`).addClass("jugador-select");
+                            $.each(data, function (index, jugador) {
+                                const option = $("<option></option>")
+                                    .val(jugador.codJugador)
+                                    .text(jugador.nombreJugador);
+                                select2.append(option);
+                            });
+                            const input = $(`<div class="mt-3 mb-3" ><input name="goles[${i}]" class='form-control' placeholder="goles" autocomplete="off" type="number">`)
+
+                            const div = $(`<div class="mb-3 mt-3"></div>`);
+                            
+                            div.append(select2).append(input);
+                            $("#goleadores-container").append(div);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error(errorThrown);
+                        }
+                    });
+                }
+
+
+                
+
+
+
+            </script>
+
+
             <script>
                 const select = document.getElementById('etapa');
                 const jornadaInput = document.getElementById('jornada');

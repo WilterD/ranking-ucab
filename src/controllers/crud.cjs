@@ -3,6 +3,7 @@ const conexion = require("../database/db.cjs");
 // Hector estuvo aqui c:
 const { getImageUrl } = require("../helpers/get-image-url.cjs");
 const moment = require("moment");
+const bodyParser = require("body-parser");
 
 exports.saveGrupo = (req, res) => {
   const letraGrupo = req.body.letraGrupo;
@@ -33,7 +34,6 @@ exports.savePartido = (req, res) => {
   const puntos1 = req.body.puntos1;
   const puntos2 = req.body.puntos2;
 
-
   console.log(req.body);
 
   conexion.query(
@@ -62,6 +62,22 @@ exports.savePartido = (req, res) => {
 };
 
 exports.updatePartido = (req, res) => {
+  const bodyEntries = Object.entries(req.body);
+  const equiposEntries = bodyEntries.filter(([key, value]) =>
+    key.match(/^codEquipo\[[^\]]+\]$/)
+  );
+  const golesEntries = bodyEntries.filter(([key, value]) =>
+    key.startsWith("goles")
+  );
+  const codJugadorEntries = bodyEntries.filter(([key, value]) =>
+    key.startsWith("codJugador")
+  );
+
+  const codEquipo = equiposEntries.map(([key, value]) => value);
+
+  const codJugador = codJugadorEntries.map(([key, value]) => value);
+  const goles = golesEntries.map(([key, value]) => value);
+
   const codPartido = req.body.codPartido;
   const codTorneo = req.body.codTorneo;
   const codDeporte = req.body.codDeporte;
@@ -74,32 +90,100 @@ exports.updatePartido = (req, res) => {
   const etapa = req.body.etapa;
   const jornada = req.body.jornada;
 
-  conexion.query(
-    "UPDATE partido SET ? WHERE codPartido = ?",
-    [
-      {
-        codTorneo,
-        fecha,
-        codEstadio,
-        codDeporte,
-        puntos1,
-        puntos2,
-        etapa,
-        jornada,
-        codEquipo1,
-        codEquipo2,
-      },
-      codPartido,
-    ],
-    (error, results) => {
-      if (error) {
-        console.log(error);
-        res.status(400).json({ msg: "error" });
-      } else {
-        res.redirect("/admin/partidos");
-      }
+  const sql = `
+  SELECT * FROM goleadores WHERE codPartido = ? AND codJugador IN (?)
+  `;
+  conexion.query(sql, [codPartido, codJugador], (error, results) => {
+    if (error) {
+      console.log(error);
+      res.status(400).json({ msg: "Error al consultar goleadores" });
+    } else {
+      // Si no esta ese goleador en ese partido, se inserta
+      if (results && results.length === 0) {
+        // Definir la sentencia SQL para insertar los datos
+        const sql = "INSERT INTO goleadores (codEquipo, codTorneo, codDeporte, codPartido, codJugador, goles) VALUES (?, ?, ?, ?, ?, ?)";
+
+for (let i = 0; i < codJugador.length; i++) {
+  const codEquipoItem = codEquipo[i];
+  const codJugadorItem = codJugador[i];
+  const golesItem = parseInt(goles[i], 10); // Convertir a número entero
+
+  const valores = [
+    codEquipoItem,
+    codTorneo,
+    codDeporte,
+    codPartido,
+    codJugadorItem,
+    golesItem,
+  ];
+
+  conexion.query(sql, valores, (err, result) => {
+    if (err) {
+      console.log(err);
     }
-  );
+  });
+}
+
+      } else {
+        // si hay goleadores, entonces se actualizan
+
+
+        const sql =
+          "UPDATE goleadores SET goles = ? WHERE codDeporte = ? AND codEquipo = ? AND codTorneo = ? AND codPartido = ? AND codJugador = ?";
+
+        for (let [i, gol] of goles.entries()) {
+          const codEquipoItem = codEquipo[i];
+          const codJugadorItem = codJugador[i];
+          const golesInt = parseInt(gol); // convertir a número entero
+          console.log(codEquipoItem)
+          console.log(codJugadorItem)
+          console.log(golesInt)
+          const valores = [
+            golesInt,
+            codDeporte,
+            codEquipoItem,
+            codTorneo,
+            codPartido,
+            codJugadorItem,
+          ];
+          conexion.query(sql, valores, (err, result) => {
+            if (err) throw err;
+          });
+        }
+
+        if (error) {
+          console.log(error);
+        }
+      }
+      // actualizar el partido
+      conexion.query(
+        "UPDATE partido SET ? WHERE codPartido = ?",
+        [
+          {
+            codTorneo,
+            fecha,
+            codEstadio,
+            codDeporte,
+            puntos1,
+            puntos2,
+            etapa,
+            jornada,
+            codEquipo1,
+            codEquipo2,
+          },
+          codPartido,
+        ],
+        (error, results) => {
+          if (error) {
+            console.log(error);
+            res.status(400).json({ msg: "Error al actualizar el partido" });
+          } else {
+            res.redirect("/admin/partidos");
+          }
+        }
+      );
+    }
+  });
 };
 
 // Equipos
@@ -119,11 +203,9 @@ exports.saveEquipo = (req, res) => {
       (error, results) => {
         if (error) {
           console.log(error);
-          res
-            .status(400)
-            .json({
-              msg: "Este equipo, ya existe, crea otro con un nombre diferente",
-            });
+          res.status(400).json({
+            msg: "Este equipo, ya existe, crea otro con un nombre diferente",
+          });
         } else {
           res.redirect("/admin/equipos");
         }
@@ -455,19 +537,6 @@ exports.updateEstadisticasGenerales = (req, res) => {
   const pasesLargos = req.body.pasesLargos;
   const entradas = req.body.entradas;
 
-  console.log(codEquipo);
-  console.log(codPartido);
-  console.log(posesionBalon);
-  console.log(tirosArco);
-  console.log(tirosArcoAcertados);
-  console.log(tirosArcoFallados);
-  console.log(tiroSEsquina);
-  console.log(atajadasPortero);
-  console.log(pases);
-  console.log(pasesCortos);
-  console.log(pasesLargos);
-  console.log(entradas);
-
   conexion.query(
     "UPDATE estadisticasgenerales SET ? WHERE codEquipo = ? AND codPartido = ?",
     [
@@ -593,11 +662,9 @@ exports.saveRI = (req, res) => {
     (error, carreras) => {
       if (error) {
         console.log(error);
-        res
-          .status(400)
-          .json({
-            msg: "Error: El Jugador ya se encuenta en el Ranking de este deporte en este torneo",
-          });
+        res.status(400).json({
+          msg: "Error: El Jugador ya se encuenta en el Ranking de este deporte en este torneo",
+        });
         return;
       }
       conexion.query(
@@ -613,11 +680,9 @@ exports.saveRI = (req, res) => {
           if (error) {
             console.log(error);
             if (error.code === "ER_DUP_ENTRY") {
-              res
-                .status(400)
-                .json({
-                  msg: "Error: El Jugador ya se encuenta en el Ranking de este deporte para este torneo",
-                });
+              res.status(400).json({
+                msg: "Error: El Jugador ya se encuenta en el Ranking de este deporte para este torneo",
+              });
             } else {
               res.status(400).json({ msg: "Ha Ocurrido un error inesperado" });
             }
@@ -758,7 +823,7 @@ exports.saveTorneoStatus = (req, res) => {
       console.log(error);
       res.status(400).json({ msg: "Error: Fallo al actualizar torneo" });
     } else {
-    const sql2 = `UPDATE torneos
+      const sql2 = `UPDATE torneos
       SET status = 0
       WHERE codTorneo != ? AND status != 0`;
 
@@ -767,7 +832,7 @@ exports.saveTorneoStatus = (req, res) => {
           console.log(error);
           res.status(400).json({ msg: "Error: Fallo al actualizar torneo" });
         } else {
-        res.redirect("/admin/torneos");
+          res.redirect("/admin/torneos");
         }
       });
     }

@@ -87,7 +87,11 @@
                                 <option selected data-tab-id="<%= resultado.jornada %>"
                                   class="tablinks <%= index === resultados.length - 1 ? 'active' : '' %>"
                                   onclick="openTab(event, '<%= resultado.jornada %>')" value="<%= resultado.jornada %>">
+                                  <% if (resultado.jornada == 0) { %>
+                                    <%= "Eliminatorias" %>
+                                    <% } else { %>
                                   Jornada - <%= resultado.jornada %>
+                                  <% } %>
                                 </option>
                                 <% idMap.set(resultado.jornada, true); %>
                                   <% } %>
@@ -102,6 +106,9 @@
                           <% if (resultado.jornada !==lastJornada) { %>
                             <div id="<%= resultado.jornada %>"
                               class="tabcontent <%= index === resultados.length - 1 ? 'show' : '' %>">
+                              <% } %>
+                              <% if (resultado.jornada ==0) { %>
+                              <h2 class="text-center TituloJornada"> <%= resultado.etapa %> </h2>
                               <% } %>
                                 <div class="d-flex flex-wrap text-center justify-content-center align-items-center">
                                   <h2 class="text-center TituloJornada"><%= new Date(resultado.fecha).toLocaleDateString('es-ES') %> - <%= new Date(resultado.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>
@@ -127,7 +134,16 @@
                                     </h4>
                                   </div>
                                 </div>
-
+                                
+                                <div class="goleadores">
+                                  <div class="tituloEquipo float-start text-start">
+                                    
+                                    <div><%= resultado.codEquipo1 === resultado.codEquipo1 ? resultado.goleadores_equipo1 : '' %></div>
+                                  </div>
+                                  <div class="tituloEquipo float-end text-end">
+                                    <div><%= resultado.codEquipo2 === resultado.codEquipo2 ? resultado.goleadores_equipo2 : '' %></div>
+                                  </div>
+                                </div>
                                 <% if (index===resultados.length - 1 || resultado.jornada
                                   !==resultados[index+1].jornada) { %>
                             </div>
@@ -138,7 +154,7 @@
 
                                   <!-- Eliminatoria Torneo -->
                                 <% if (partidosTorneos.length> 0) { %>
-                                  <div class="container">
+                                  <div class="container mb-5">
                                     <h1>Eliminatoria</h1>
                                     <div class="tournament-bracket tournament-bracket--rounded">
                                       <div class="tournament-bracket__round tournament-bracket__round--quarterfinals">
@@ -620,6 +636,44 @@
 <% }; %>
 
                                   <!-- Fin eliminatoria torneo -->
+
+                                  <!--RANKING GENERAL DEPORTES POR EQUIPOS-->
+                                  <% if (goleadores.length > 0) { %>
+                                    <div class="container mt-2 mb-3">
+                                      <% var deporteActual = ""; %>
+                                      <% var posicion = 0; %>
+                                      <% goleadores.forEach((fila) => {
+                                        if (fila.nombreDeporte !== deporteActual) {
+                                          deporteActual = fila.nombreDeporte;
+                                          posicion = 0; // reinicia la posición para el nuevo deporte
+                                      %>
+                                          <h2 class="text-center titulosRankings">Goleadores <%= deporteActual %></h2>
+                                          <div class="table-responsive mt-4 mb-4">
+                                            <table class="rankingGeneralEquipos table table-bordered table-striped text-center mt-4" id="rankingGeneralEquipos">
+                                              <thead>
+                                                <tr class="bg-primary text-white">
+                                                  <th scope="col">#</th> 
+                                                  <th scope="col">Jugador</th>
+                                                  <th scope="col">Equipo</th>
+                                                  <th scope="col">Goles</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                        <% } %>
+                                                <tr>
+                                                  <td><%= ++posicion %></td> <!-- Incrementa la posición y muestra en la tabla -->
+                                                  <td><%= fila.nombreJugador %></td>
+                                                  <td><%= fila.nombreEquipo %></td>
+                                                  <td><%= fila.goles_totales %></td>
+                                                </tr>
+                                        <% if (goleadores.indexOf(fila) === goleadores.length - 1 || fila.nombreDeporte !== goleadores[goleadores.indexOf(fila) + 1].nombreDeporte) { %>
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                        <% } %>
+                                      <% }) %>
+                                    </div>
+                                  <% } %>
 
                                   <!-- Ranking General UCAB SPORT TODOS LOS DEPORTES -->
                                   <% if (rankingGeneral.length > 0) { %>

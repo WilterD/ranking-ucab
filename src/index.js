@@ -12,16 +12,12 @@ import { check, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 import crypto from "crypto";
-import forceSSL from 'express-force-ssl';
 
 dotenv.config();
 
 import { imgDir } from "./helpers/fileManager.cjs";
 
 const app = express(); // referenciar a express
-// if (process.env.NODE_ENV !== 'local') {
-//   app.use(forceSSL);
-// }
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -45,124 +41,7 @@ app.use(
   })
 );
 
-
 app.use(flash());
-
-// Rutas de registro y login
-
-app.get("/login", (req, res) => {
-  res.render("login", { message: req.flash("message") });
-});
-
-app.post("/login", (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    // Buscar el usuario en la base de datos y comparar la contraseña cifrada
-    conexion.query(
-      "SELECT * FROM users WHERE email = ?",
-      [email],
-      (error, results) => {
-        if (results.length > 0) {
-          conexion.query(
-            "SELECT * FROM users WHERE password = ?",
-            [password],
-            (error, results) => {
-              if (results.length > 0) {
-                const user = results[0];
-                const validPassword = bcrypt.compare(password, user.password);
-                if (validPassword) {
-                  req.session.user = user; // almacenar información del usuario en la sesión
-                  req.session.userId = user.id;
-                  req.session.email = user.email;
-                  req.session.password = user.password;
-                  req.session.loggedin = true;
-                  res.redirect("/admin/dashboard");
-                } else {
-                  req.flash("message", "La contraseña es incorrecta.");
-                  res.redirect("/login");
-                }
-              } else {
-                req.flash("message", "La contraseña es incorrecta.");
-                res.redirect("/login");
-              }
-            }
-          );
-        } else {
-          req.flash("message", "El correo electrónico no está registrado.");
-          res.redirect("/login");
-        }
-      }
-    );
-  } catch (error) {
-    console.error(error);
-    res.render("login");
-  }
-});
-
-app.get("/register", (req, res) => {
-  res.render("register", { message: req.flash("message") });
-});
-
-app.post(
-  "/register",
-  [check("email", "El correo electrónico no es válido").isEmail()],
-  (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const messages = [];
-      errors.array().forEach((error) => messages.push(error.msg));
-      req.flash("message", messages);
-      res.redirect("/register");
-    } else {
-      const { email, password } = req.body;
-      const saltRounds = 10;
-      bcrypt.hash(password, saltRounds, (err, hash) => {
-        // Guardar el usuario en la base de datos
-        try {
-          // Verificar si el usuario ya existe en la base de datos
-          conexion.query(
-            "SELECT * FROM users WHERE email = ?",
-            [email],
-            (error, results) => {
-              if (results.length > 0) {
-                req.flash("message", "no se puede registrar");
-              } else {
-                // Si el usuario no existe, se registra en la base de datos
-                const hashedPassword = bcrypt.hash(password, 10);
-
-                const status = {
-                  status: "disabled",
-                };
-
-                conexion.query(
-                  "INSERT INTO users SET ?",
-                  {
-                    email: email,
-                    password: password,
-                    status: status.status,
-                  },
-                  (error, results) => {
-                    if (error) {
-                      console.log(error);
-                      req.flash("message", "no se puede registrar");
-                      res.status(400).json({ msg: "error" });
-                    } else {
-                      res.redirect("/login");
-                    }
-                  }
-                );
-              }
-            }
-          );
-        } catch (error) {
-          console.error(error);
-          res.render("register");
-        }
-      });
-    }
-  }
-);
 
 app.use(express.json());
 

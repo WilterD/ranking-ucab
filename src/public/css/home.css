@@ -1000,3 +1000,16 @@ th.position-sticky {
 .proximosPartidos{
   background-color: #19115e;
 }
+.goleadores{
+  color: #000;
+  padding: 14px;
+  display: block;
+  margin-left: 60px;
+  margin-right: 60px;
+}
+
+@media (max-width: 395px) {
+  .goleadores {
+    margin: 0;
+  }
+}

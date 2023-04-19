@@ -284,54 +284,84 @@ router.get("/admin/partidos", requireLogin, (req, res) => {
 router.get("/admin/editarPartido/:codPartido", (req, res) => {
   const { codPartido } = req.params;
 
-  conexion.query(
-    "SELECT p.codPartido, d.id, d.nombreDeporte, p.codEstadio, p.codEquipo1, p.codEquipo2, e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, t.nombreTorneo,t.codTorneo, es.nombreEstadio, p.jornada, p.fecha, p.etapa, p.puntos1, p.puntos2, p.codDeporte FROM partido p INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo INNER JOIN estadio es ON p.codEstadio = es.codEstadio INNER JOIN deporte d ON p.codDeporte = d.id JOIN torneos t ON p.codTorneo = t.codTorneo WHERE p.codPartido = ?",
-    [codPartido],
-    (error, results) => {
-      if (error) {
-        console.log(error);
-      } else {
-        conexion.query("SELECT * FROM estadio", (error, estadios) => {
-          if (error) {
-            console.log(error);
-          } else {
-            conexion.query(
-              "SELECT * FROM equipos WHERE codDeporte = ?",
-              [results[0].codDeporte],
-              (error, equipos) => {
-                if (error) {
-                  console.log(error);
-                } else {
-                  conexion.query("SELECT * FROM deporte", (error, deporte) => {
-                    if (error) {
-                      console.log(error);
-                    } else {
-                      conexion.query(
-                        "SELECT * FROM torneos",
-                        (error, torneos) => {
-                          if (error) {
-                            console.log(error);
-                          } else {
-                            res.render("admin/editarPartido.ejs", {
-                              partido: results[0],
-                              estadios: estadios,
-                              equipos: equipos,
-                              deporte: deporte,
-                              torneos: torneos,
-                            });
-                          }
+  const sql = `SELECT p.codPartido, d.id, d.nombreDeporte, p.codEstadio, p.codEquipo1, p.codEquipo2, e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, t.nombreTorneo,t.codTorneo, es.nombreEstadio, p.jornada, p.fecha, p.etapa, p.puntos1, p.puntos2, p.codDeporte 
+  FROM partido p 
+  INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
+  INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
+  INNER JOIN estadio es ON p.codEstadio = es.codEstadio 
+  INNER JOIN deporte d ON p.codDeporte = d.id 
+  JOIN torneos t ON p.codTorneo = t.codTorneo 
+  WHERE p.codPartido = ?`;
+
+  conexion.query(sql, [codPartido], (error, results) => {
+    if (error) {
+      console.log(error);
+    } else {
+      conexion.query("SELECT * FROM estadio", (error, estadios) => {
+        if (error) {
+          console.log(error);
+        } else {
+          conexion.query(
+            "SELECT * FROM equipos WHERE codDeporte = ?",
+            [results[0].codDeporte],
+            (error, equipos) => {
+              if (error) {
+                console.log(error);
+              } else {
+                conexion.query("SELECT * FROM deporte", (error, deporte) => {
+                  if (error) {
+                    console.log(error);
+                  } else {
+                    conexion.query(
+                      "SELECT * FROM torneos",
+                      (error, torneos) => {
+                        if (error) {
+                          console.log(error);
+                        } else {
+                          const sql = `SELECT * FROM jugador`;
+                          conexion.query(sql, (error, jugadores) => {
+                            if (error) {
+                              console.log(error);
+                            } else {
+                              const sql = `SELECT j.nombreJugador, g.goles, g.codPartido
+                               FROM goleadores g
+                               INNER JOIN jugador j ON j.codJugador = g.codJugador
+                               INNER JOIN partido p ON p.codPartido = g.codPartido
+                               WHERE p.codPartido = ?`;
+                              conexion.query(
+                                sql,
+                                [codPartido],
+                                (error, goleadores) => {
+                                  if (error) {
+                                    console.log(error);
+                                  } else {
+                                    console.log(goleadores);
+                                    res.render("admin/editarPartido.ejs", {
+                                      partido: results[0],
+                                      estadios,
+                                      equipos,
+                                      deporte,
+                                      torneos,
+                                      jugadores,
+                                      goleadores,
+                                    });
+                                  }
+                                }
+                              );
+                            }
+                          });
                         }
-                      );
-                    }
-                  });
-                }
+                      }
+                    );
+                  }
+                });
               }
-            );
-          }
-        });
-      }
+            }
+          );
+        }
+      });
     }
-  );
+  });
 });
 
 router.get("/admin/crearPartido", requireLogin, (req, res) => {
@@ -471,13 +501,17 @@ router.get("/admin/crearEliminatoria", requireLogin, (req, res) => {
           console.log(error);
         } else {
           const sql3 = `SELECT * FROM deporte`;
-      conexion.query(sql3, (error, deportes) => {
-        if (error) {
-          console.log(error);
-        } else {
-          res.render("admin/crearEliminatoria.ejs", { equipos, torneos,deportes });
-        }
-      });
+          conexion.query(sql3, (error, deportes) => {
+            if (error) {
+              console.log(error);
+            } else {
+              res.render("admin/crearEliminatoria.ejs", {
+                equipos,
+                torneos,
+                deportes,
+              });
+            }
+          });
         }
       });
     }
@@ -1085,19 +1119,51 @@ router.get(["/", "/home"], (req, res) => {
                   JOIN torneos t ON e.codTorneo = t.codTorneo
                   WHERE t.status = 1 
                   ORDER BY e.puntos DESC;`;
-                  
 
                   conexion.query(sql, (error, eliminatorias) => {
                     if (error) {
                       console.log(error);
                     } else {
-                      const sql2 = `SELECT t.nombreTorneo,p.fecha, p.jornada, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, p.puntos1, e2.nombreEquipo AS equipo2, p.puntos2 
-                          FROM partido p 
-                          INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
-                          INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
-                          INNER JOIN torneos t ON p.codTorneo = t.codTorneo
-                          WHERE p.etapa = 'CLASIFICATORIA' AND p.fecha <= CURDATE() AND t.status=1 
-                          ORDER BY p.jornada ASC;`;
+                      const sql2 = `SELECT 
+                      GROUP_CONCAT(
+                        CASE 
+                          WHEN g.codEquipo = e1.codEquipo THEN CONCAT(j.nombreJugador, ' (', g.goles, ')') 
+                          ELSE NULL 
+                        END
+                        ORDER BY g.goles DESC
+                        SEPARATOR ', '
+                      ) AS goleadores_equipo1,
+                      GROUP_CONCAT(
+                        CASE 
+                          WHEN g.codEquipo = e2.codEquipo THEN CONCAT(j.nombreJugador, ' (', g.goles, ')') 
+                          ELSE NULL 
+                        END
+                        ORDER BY g.goles DESC
+                        SEPARATOR ', '
+                      ) AS goleadores_equipo2,
+                      t.nombreTorneo,
+                      p.fecha,
+                      p.jornada,
+                      p.etapa,
+                      e1.nombreEquipo AS equipo1,
+                      e1.imagen AS imagen1,
+                      e2.imagen AS imagen2,
+                      p.puntos1,
+                      e2.nombreEquipo AS equipo2,
+                      p.puntos2,
+                      e1.codEquipo AS codEquipo1,
+                      e2.codEquipo AS codEquipo2,
+                      p.codPartido 
+                    FROM partido p 
+                    INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
+                    INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
+                    INNER JOIN torneos t ON p.codTorneo = t.codTorneo
+                    LEFT JOIN goleadores g ON p.codPartido = g.codPartido
+                    LEFT JOIN jugador j ON g.codJugador = j.codJugador
+                    WHERE p.codTorneo = 1 AND t.status = 1
+                    GROUP BY p.codPartido, e1.codEquipo, e2.codEquipo
+                    ORDER BY p.jornada ASC, p.etapa ASC
+                    ;`;
                       conexion.query(sql2, (error, resultados) => {
                         // resultados de partidos
                         if (error) {
@@ -1117,34 +1183,57 @@ router.get(["/", "/home"], (req, res) => {
                               WHERE r.codUniversidad = 1
                               GROUP BY j.nombreJugador, c.nombreCarrera,d.nombreDeporte
                               ORDER BY d.nombredeporte DESC,total_puntos DESC`;
-                          conexion.query(sql4, (error, rankingGeneral) => {
-                            // torneos
-                            if (error) {
-                              console.log(error);
-                            } else {
-                              const sql5 = 
-                              `SELECT DISTINCT d.nombreDeporte, e.nombreEquipo, SUM(r.puntos) AS total_puntos
+                              conexion.query(sql4, (error, rankingGeneral) => {
+                                // torneos
+                                if (error) {
+                                  console.log(error);
+                                } else {
+                                  const sql5 = `SELECT DISTINCT d.nombreDeporte, e.nombreEquipo, SUM(r.puntos) AS total_puntos
                               FROM rankinge r
                               JOIN deporte d ON d.id = r.codDeporte
                               JOIN equipos e ON e.codEquipo = r.codEquipo
                               WHERE r.codUniversidad = 1
                               GROUP BY d.nombreDeporte, e.nombreEquipo
-                              ORDER BY d.nombredeporte DESC,total_puntos DESC`
-                              conexion.query(sql5, (error, rankingGeneralEquipos) => {
-                                // torneos
-                                if (error) {
-                                  console.log(error);
-                                } else {
-                                  res.render("home.ejs", {
-                                    partidos,
-                                    deportes,
-                                    partidosTorneos,
-                                    eliminatorias,
-                                    resultados,
-                                    torneos,
-                                    rankingGeneral,
-                                    rankingGeneralEquipos
-                                  });
+                              ORDER BY d.nombredeporte DESC,total_puntos DESC`;
+                                  conexion.query(
+                                    sql5,
+                                    (error, rankingGeneralEquipos) => {
+                                      // torneos
+                                      if (error) {
+                                        console.log(error);
+                                      } else {
+                                        const sql6 = `SELECT j.nombreJugador, e.nombreEquipo, d.nombreDeporte, SUM(g.goles) AS goles_totales
+                                  FROM goleadores g
+                                  INNER JOIN jugador j ON g.codJugador = j.codJugador
+                                  INNER JOIN equipos e ON e.codEquipo = g.codEquipo
+                                  INNER JOIN deporte d ON d.id = g.codDeporte
+                                  WHERE g.codTorneo = 1
+                                  GROUP BY j.codJugador, j.nombreJugador, e.nombreEquipo
+                                  ORDER BY goles_totales DESC`;
+                                        conexion.query(
+                                          sql6,
+                                          (error, goleadores) => {
+                                            // torneos
+                                            if (error) {
+                                              console.log(error);
+                                            } else {
+                                              res.render("home.ejs", {
+                                                goleadores,
+                                                partidos,
+                                                deportes,
+                                                partidosTorneos,
+                                                eliminatorias,
+                                                resultados,
+                                                torneos,
+                                                rankingGeneral,
+                                                rankingGeneralEquipos,
+                                              });
+                                            }
+                                          }
+                                        );
+                                      }
+                                    }
+                                  );
                                 }
                               });
                             }
@@ -1154,23 +1243,14 @@ router.get(["/", "/home"], (req, res) => {
                     }
                   });
                 }
-              });
-            }
-          });
+              }
+            );
+          }
         }
-      });
+      );
     }
   });
 });
-
-        
-
-
-           
-
-  
-
-  
 
 router.get("/torneos:codTorneo", (req, res) => {
   let codTorneo = req.params.codTorneo;
@@ -1382,12 +1462,13 @@ router.get("/ranking:id:codTorneo", (req, res) => {
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// login
-
-//registro
-
 // Middleware para restringir el acceso a páginas que requieren inicio de sesión
 function requireLogin(req, res, next) {
+  if (process.env.NODE_ENV === "local") {
+    // Si estás en desarrollo, permitir el acceso sin iniciar sesión
+    return next();
+  }
+
   if (req.session && req.session.userId) {
     // Obtener el usuario de la base de datos
     conexion.query(
@@ -1504,6 +1585,166 @@ router.get("/admin/deleteTorneo/:codTorneo", (req, res) => {
     }
   );
 });
+
+// Obtener jugadores de un equipo con ajax con Ajax
+router.get("/actualizarJugadores/:codEquipo", async (req, res) => {
+  const codEquipo = req.params.codEquipo;
+  try {
+    const sql = `SELECT j.codJugador, j.nombreJugador
+    FROM jugador j
+    INNER JOIN equipos e ON j.codEquipo = e.codEquipo
+    INNER JOIN deporte d ON e.codDeporte = d.id
+    WHERE UPPER(d.nombreDeporte) LIKE 'F%' AND e.codEquipo = ?;`;
+    conexion.query(sql, [codEquipo], (error, jsonJugadores) => {
+      if (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error del servidor" });
+      } else {
+        res.json(jsonJugadores);
+      }
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error del servidor" });
+  }
+});
+
+// login y registro
+
+router.get("/login", (req, res) => {
+  res.render("login", { message: req.flash("message") });
+});
+
+router.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Buscar el usuario en la base de datos y comparar la contraseña cifrada
+    conexion.query(
+      "SELECT * FROM users WHERE email = ?",
+      [email],
+      (error, results) => {
+        if (results.length > 0) {
+          conexion.query(
+            "SELECT * FROM users WHERE password = ?",
+            [password],
+            (error, results) => {
+              if (results.length > 0) {
+                const user = results[0];
+                const validPassword = bcrypt.compare(password, user.password);
+                if (validPassword) {
+                  req.session.user = user; // almacenar información del usuario en la sesión
+                  req.session.userId = user.id;
+                  req.session.email = user.email;
+                  req.session.password = user.password;
+                  req.session.loggedin = true;
+                  res.redirect("/admin/dashboard");
+                } else {
+                  req.flash("message", "La contraseña es incorrecta.");
+                  res.redirect("/login");
+                }
+              } else {
+                req.flash("message", "La contraseña es incorrecta.");
+                res.redirect("/login");
+              }
+            }
+          );
+        } else {
+          req.flash("message", "El correo electrónico no está registrado.");
+          res.redirect("/login");
+        }
+      }
+    );
+  } catch (error) {
+    console.error(error);
+    res.render("login");
+  }
+});
+
+router.get("/register", (req, res) => {
+  res.render("register", { message: req.flash("message") });
+});
+
+router.post(
+  "/register",
+  [check("email", "El correo electrónico no es válido").isEmail()],
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const messages = [];
+      errors.array().forEach((error) => messages.push(error.msg));
+      req.flash("message", messages);
+      res.redirect("/register");
+    } else {
+      const { email, password } = req.body;
+      const saltRounds = 10;
+      bcrypt.hash(password, saltRounds, (err, hash) => {
+        // Guardar el usuario en la base de datos
+        try {
+          // Verificar si el usuario ya existe en la base de datos
+          conexion.query(
+            "SELECT * FROM users WHERE email = ?",
+            [email],
+            (error, results) => {
+              if (results.length > 0) {
+                req.flash("message", "no se puede registrar");
+              } else {
+                // Si el usuario no existe, se registra en la base de datos
+                const hashedPassword = bcrypt.hash(password, 10);
+
+                const status = {
+                  status: "disabled",
+                };
+
+                conexion.query(
+                  "INSERT INTO users SET ?",
+                  {
+                    email: email,
+                    password: password,
+                    status: status.status,
+                  },
+                  (error, results) => {
+                    if (error) {
+                      console.log(error);
+                      req.flash("message", "no se puede registrar");
+                      res.status(400).json({ msg: "error" });
+                    } else {
+                      res.redirect("/login");
+                    }
+                  }
+                );
+              }
+            }
+          );
+        } catch (error) {
+          console.error(error);
+          res.render("register");
+        }
+      });
+    }
+  }
+);
+
+// borrar goleador
+
+router.get("/admin/deleteGoleador/:codPartido", (req, res) => {
+  const codPartido = req.params.codPartido;
+  conexion.query(
+    "DELETE FROM goleadores WHERE codPartido = ?",
+    [codPartido],
+    (error, results) => {
+      if (error) {
+        console.log(error);
+      } else {
+        // admin partidos
+        res.redirect("/admin/partidos");
+      }
+    }
+  );
+});
+
+
+
 
 // Guardar registros
 router.post("/saveGrupo", mycrud.saveGrupo);
