@@ -108,7 +108,9 @@
                               class="tabcontent <%= index === resultados.length - 1 ? 'show' : '' %>">
                               <% } %>
                               <% if (resultado.jornada ==0) { %>
+                                <div class="container">
                               <h2 class="text-center TituloJornada"> <%= resultado.etapa %> </h2>
+                            </div>
                               <% } %>
                                 <div class="d-flex flex-wrap text-center justify-content-center align-items-center">
                                   <h2 class="text-center TituloJornada"><%= new Date(resultado.fecha).toLocaleDateString('es-ES') %> - <%= new Date(resultado.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>
@@ -134,7 +136,8 @@
                                     </h4>
                                   </div>
                                 </div>
-                                
+                                <div class="container">
+                                  <div class="row">
                                 <div class="goleadores">
                                   <div class="tituloEquipo float-start text-start">
                                     <% if (resultado.codEquipo1 === resultado.codEquipo1 && resultado.goleadores_equipo1) { %>
@@ -146,6 +149,7 @@
                                       </div>
                                     <% } %>
                                   </div>
+
                                   <div class="tituloEquipo float-end text-end">
                                     <% if (resultado.codEquipo2 === resultado.codEquipo2 && resultado.goleadores_equipo2) { %>
                                       <% var goleadores2 = resultado.goleadores_equipo2.split(", "); %>
@@ -157,7 +161,8 @@
                                     <% } %>
                                   </div>
                                 </div>
-                                
+                              </div>
+                              </div>
                                 <% if (index===resultados.length - 1 || resultado.jornada
                                   !==resultados[index+1].jornada) { %>
                             </div>
