@@ -1125,45 +1125,47 @@ router.get(["/", "/home"], (req, res) => {
                       console.log(error);
                     } else {
                       const sql2 = `SELECT 
-                      GROUP_CONCAT(
-                        CASE 
-                          WHEN g.codEquipo = e1.codEquipo THEN CONCAT(j.nombreJugador, ' (', g.goles, ')') 
-                          ELSE NULL 
-                        END
-                        ORDER BY g.goles DESC
-                        SEPARATOR ', '
-                      ) AS goleadores_equipo1,
-                      GROUP_CONCAT(
-                        CASE 
-                          WHEN g.codEquipo = e2.codEquipo THEN CONCAT(j.nombreJugador, ' (', g.goles, ')') 
-                          ELSE NULL 
-                        END
-                        ORDER BY g.goles DESC
-                        SEPARATOR ', '
-                      ) AS goleadores_equipo2,
-                      t.nombreTorneo,
-                      p.fecha,
-                      p.jornada,
-                      p.etapa,
-                      e1.nombreEquipo AS equipo1,
-                      e1.imagen AS imagen1,
-                      e2.imagen AS imagen2,
-                      p.puntos1,
-                      e2.nombreEquipo AS equipo2,
-                      p.puntos2,
-                      e1.codEquipo AS codEquipo1,
-                      e2.codEquipo AS codEquipo2,
+                      j1.nombreJugador AS goleadores_equipo1, 
+                      j2.nombreJugador AS goleadores_equipo2, 
+                      t.nombreTorneo, 
+                      p.fecha, 
+                      p.jornada, 
+                      p.etapa, 
+                      e1.nombreEquipo AS equipo1, 
+                      e1.imagen AS imagen1, 
+                      e2.imagen AS imagen2, 
+                      p.puntos1, 
+                      e2.nombreEquipo AS equipo2, 
+                      p.puntos2, 
+                      e1.codEquipo AS codEquipo1, 
+                      e2.codEquipo AS codEquipo2, 
                       p.codPartido 
                     FROM partido p 
                     INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
                     INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
-                    INNER JOIN torneos t ON p.codTorneo = t.codTorneo
-                    LEFT JOIN goleadores g ON p.codPartido = g.codPartido
-                    LEFT JOIN jugador j ON g.codJugador = j.codJugador
-                    WHERE p.codTorneo = 1 AND t.status = 1
-                    GROUP BY p.codPartido, e1.codEquipo, e2.codEquipo
-                    ORDER BY p.jornada ASC, p.etapa ASC
-                    ;`;
+                    INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
+                    LEFT JOIN (
+                      SELECT 
+                        g.codPartido, 
+                        g.codEquipo, 
+                        GROUP_CONCAT(CONCAT(j.nombreJugador, ' (', g.goles, ')') ORDER BY g.goles DESC SEPARATOR ', ') AS nombreJugador
+                      FROM goleadores g 
+                      INNER JOIN jugador j ON g.codJugador = j.codJugador 
+                      GROUP BY g.codPartido, g.codEquipo
+                    ) j1 ON p.codPartido = j1.codPartido AND e1.codEquipo = j1.codEquipo 
+                    LEFT JOIN (
+                      SELECT 
+                        g.codPartido, 
+                        g.codEquipo, 
+                        GROUP_CONCAT(CONCAT(j.nombreJugador, ' (', g.goles, ')') ORDER BY g.goles DESC SEPARATOR ', ') AS nombreJugador
+                      FROM goleadores g 
+                      INNER JOIN jugador j ON g.codJugador = j.codJugador 
+                      GROUP BY g.codPartido, g.codEquipo
+                    ) j2 ON p.codPartido = j2.codPartido AND e2.codEquipo = j2.codEquipo 
+                    WHERE p.codTorneo = 1 AND t.status = 1 
+                    GROUP BY p.codPartido, e1.codEquipo, e2.codEquipo 
+                    ORDER BY p.jornada ASC, p.etapa ASC;`;
+
                       conexion.query(sql2, (error, resultados) => {
                         // resultados de partidos
                         if (error) {
