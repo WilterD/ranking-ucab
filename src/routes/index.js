@@ -1205,13 +1205,14 @@ router.get(["/", "/home"], (req, res) => {
                                         console.log(error);
                                       } else {
                                         const sql6 = `SELECT j.nombreJugador, e.nombreEquipo, d.nombreDeporte, SUM(g.goles) AS goles_totales
-                                  FROM goleadores g
-                                  INNER JOIN jugador j ON g.codJugador = j.codJugador
-                                  INNER JOIN equipos e ON e.codEquipo = g.codEquipo
-                                  INNER JOIN deporte d ON d.id = g.codDeporte
-                                  WHERE g.codTorneo = 1
-                                  GROUP BY j.codJugador, j.nombreJugador, e.nombreEquipo
-                                  ORDER BY goles_totales DESC`;
+                                        FROM goleadores g
+                                        INNER JOIN jugador j ON g.codJugador = j.codJugador
+                                        INNER JOIN equipos e ON e.codEquipo = g.codEquipo
+                                        INNER JOIN deporte d ON d.id = g.codDeporte
+                                        WHERE g.codTorneo = 1
+                                        GROUP BY j.codJugador, j.nombreJugador, e.nombreEquipo, d.nombreDeporte
+                                        ORDER BY goles_totales DESC
+                                        `;
                                         conexion.query(
                                           sql6,
                                           (error, goleadores) => {
