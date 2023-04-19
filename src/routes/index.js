@@ -1170,7 +1170,14 @@ router.get(["/", "/home"], (req, res) => {
                     ) j2 ON p.codPartido = j2.codPartido AND e2.codEquipo = j2.codEquipo 
                     WHERE p.codTorneo = 1 AND t.status = 1 
                     GROUP BY p.codPartido, e1.codEquipo, e2.codEquipo 
-                    ORDER BY p.jornada ASC, p.etapa ASC;`;
+                    ORDER BY p.jornada ASC, 
+                             CASE p.etapa 
+                             WHEN 'CUARTOS DE FINAL' THEN 1 
+                             WHEN 'SEMIFINAL' THEN 2 
+                             WHEN 'TERCER LUGAR' THEN 3 
+                             WHEN 'FINAL SELECT' THEN 4 
+                             ELSE 5 
+                             END;`;
 
                       conexion.query(sql2, (error, resultados) => {
                         // resultados de partidos
