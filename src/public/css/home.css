@@ -1008,8 +1008,9 @@ th.position-sticky {
   margin-right: 60px;
 }
 
-@media (max-width: 395px) {
+@media (max-width: 570px) {
   .goleadores {
-    margin: 0;
+    margin-left: 0px;
+    margin-right: 0px;
   }
 }

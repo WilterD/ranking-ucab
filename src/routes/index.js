@@ -342,7 +342,6 @@ router.get("/admin/editarPartido/:codPartido", (req, res) => {
                                   if (error) {
                                     console.log(error);
                                   } else {
-                                    console.log(goleadores);
                                     res.render("admin/editarPartido.ejs", {
                                       partido: results[0],
                                       estadios,
