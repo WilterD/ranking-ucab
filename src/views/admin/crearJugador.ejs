@@ -24,8 +24,22 @@
                                     tabindex="1">
                             </div>
                             <div class="mb-3">
+                                <label for="nombreDeporte" class="form-label">Nombre Deporte</label>
+                                <select id="nombreDeporte" name="codDeporte" class="form-select" aria-label="Default select example"
+                                  tabindex="2" required>
+                                  <option selected disabled>
+                                    Seleccione un deporte
+                                  </option>
+                                  <% deporte.forEach((deporte)=>{ %>
+                                    <option value="<%= deporte.id %>">
+                                      <%= deporte.nombreDeporte %> %>
+                                    </option>
+                                    <% }) %>
+                                </select>
+                              </div>
+                            <div class="mb-3">
                                 <label for="codEquipo" class="form-label">Equipo</label>
-                                <select name="codEquipo" id="codEquipo" class="form-select">
+                                <select name="codEquipo" id="codEquipo1" class="form-select">
                                     <option disabled selected>Seleccione un equipo</option>
                                     <% equipo.forEach((equipo)=>{ %>
                                         <option value="<%= equipo.codEquipo %>">
@@ -64,6 +78,7 @@
                 </div>
             </div>
         </section>
+        <%- include('partials/selectEquipos.ejs') %>
         <%- include('partials/scripts.ejs') %>
 </body>
 

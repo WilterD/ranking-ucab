@@ -123,10 +123,17 @@ router.get("/admin/crearJugador", requireLogin, (req, res) => {
             if (error) {
               console.log(error);
             } else {
-              res.render("admin/crearJugador.ejs", {
-                jugador: jugador,
-                carrera: carrera,
-                equipo: equipo,
+              conexion.query("SELECT * FROM deporte", (error, deporte) => {
+                if (error) {
+                  console.log(error);
+                } else {
+                  res.render("admin/crearJugador.ejs", {
+                    jugador,
+                    carrera,
+                    equipo,
+                    deporte
+                  });
+                }
               });
             }
           });

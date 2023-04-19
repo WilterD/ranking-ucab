@@ -277,7 +277,6 @@ exports.updateEquipo = (req, res) => {
 // jugadores
 
 exports.saveJugador = (req, res) => {
-  console.log(req.body);
   const codCarrera = req.body.codCarrera;
   const nombreJugador = req.body.nombreJugador;
   const codEquipo = req.body.codEquipo;
