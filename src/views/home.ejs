@@ -137,12 +137,27 @@
                                 
                                 <div class="goleadores">
                                   <div class="tituloEquipo float-start text-start">
-                                    <div><%= resultado.codEquipo1 === resultado.codEquipo1 ? resultado.goleadores_equipo1 : '' %></div>
+                                    <% if (resultado.codEquipo1 === resultado.codEquipo1 && resultado.goleadores_equipo1) { %>
+                                      <% var goleadores1 = resultado.goleadores_equipo1.split(", "); %>
+                                      <div>
+                                        <% for (var i = 0; i < goleadores1.length; i++) { %>
+                                          <p><%= goleadores1[i] %></p>
+                                        <% } %>
+                                      </div>
+                                    <% } %>
                                   </div>
                                   <div class="tituloEquipo float-end text-end">
-                                    <div><%= resultado.codEquipo2 === resultado.codEquipo2 ? resultado.goleadores_equipo2 : '' %></div>
+                                    <% if (resultado.codEquipo2 === resultado.codEquipo2 && resultado.goleadores_equipo2) { %>
+                                      <% var goleadores2 = resultado.goleadores_equipo2.split(", "); %>
+                                      <div>
+                                        <% for (var j = 0; j < goleadores2.length; j++) { %>
+                                          <p><%= goleadores2[j] %></p>
+                                        <% } %>
+                                      </div>
+                                    <% } %>
                                   </div>
                                 </div>
+                                
                                 <% if (index===resultados.length - 1 || resultado.jornada
                                   !==resultados[index+1].jornada) { %>
                             </div>
