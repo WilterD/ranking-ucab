@@ -35,6 +35,11 @@
                       <% partidos.forEach((partido,i)=>{ %>
                         <div class="col-12 mt-5 mb-5">
                           <h2 class="text-white text-center"><%= partidos[0].nombreTorneo %> - <%= partido.etapa %></h2>
+                          <% if (partido.jornada> 0) { %>
+                            <div class="contenedorJornada">
+                             <h2 class="text-white text-center mx-auto" id="jornada">Jornada <%= partido.jornada %></h2>
+                            </div>
+                          <% } %>
                           <h3 class="text-white text-center">
                              <%= partido.nombreDeporte %>
                           </h3>

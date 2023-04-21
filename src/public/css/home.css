@@ -1007,6 +1007,21 @@ th.position-sticky {
   border-radius: 55px;
   }
 
+  .proximosPartidos h2#jornada{
+  color: white;
+  background-color: #0bceaf;
+  border-radius: 55px;
+  padding: 5px 15px;
+  display: inline-block;
+  text-align: center;
+  margin: 12px;
+  }
+  .contenedorJornada {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
 .goleadores{
   color: #000;
   padding: 14px;
