@@ -1222,7 +1222,8 @@ router.get(["/", "/home"], (req, res) => {
                                         INNER JOIN jugador j ON g.codJugador = j.codJugador
                                         INNER JOIN equipos e ON e.codEquipo = g.codEquipo
                                         INNER JOIN deporte d ON d.id = g.codDeporte
-                                        WHERE g.codTorneo = 1
+                                        INNER JOIN torneos t ON t.codTorneo = g.codTorneo
+                                        WHERE t.status = 1
                                         GROUP BY j.codJugador, j.nombreJugador, e.nombreEquipo, d.nombreDeporte
                                         ORDER BY goles_totales DESC
                                         `;
@@ -1268,9 +1269,8 @@ router.get(["/", "/home"], (req, res) => {
   });
 });
 
-router.get("/torneos:codTorneo", (req, res) => {
-  let codTorneo = req.params.codTorneo;
-  // partidos proximos de torneo especifico
+router.get(["/torneos:codTorneo"], (req, res) => {
+  const codTorneo = req.params.codTorneo;
   const sql = `SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, e1.imagen AS imagen1, e2.imagen AS imagen2, t.nombreTorneo, t.codTorneo, es.nombreEstadio, p.jornada, p.fecha, p.etapa, d.nombreDeporte, p.codPartido 
   FROM partido p 
   INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
@@ -1280,89 +1280,198 @@ router.get("/torneos:codTorneo", (req, res) => {
   INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
   WHERE p.fecha >= NOW() AND t.codTorneo=? 
   ORDER BY p.fecha ASC;`;
-  conexion.query(sql, [codTorneo], (error, partidos) => {
+
+  conexion.query(sql,[codTorneo], (error, partidos) => {
+    // proximos partidos
     if (error) {
       console.log(error);
     } else {
-      //  deportes con rankings del torneo especifico
-      const sql2 = `SELECT DISTINCT d.nombreDeporte, t.nombreTorneo, d.id, t.codTorneo
-      FROM ((rankini r INNER JOIN torneos t ON r.codTorneo = t.codTorneo) 
-       INNER JOIN deporte d ON r.codDeporte = d.id) 
-      WHERE t.codTorneo = ?
-        UNION 
-        SELECT DISTINCT d.nombreDeporte, t.nombreTorneo, d.id, t.codTorneo 
-          FROM (rankinge r INNER JOIN torneos t ON r.codTorneo = t.codTorneo) 
-          INNER JOIN deporte d ON r.codDeporte = d.id 
-        WHERE t.codTorneo = ?;`;
-      conexion.query(sql2, [codTorneo, codTorneo], (error, deportes) => {
-        if (error) {
-          console.log(error);
-        } else {
-          // partidos de clasificatoria del torneo especifivo
-          const sql3 = `SELECT t.nombreTorneo,p.fecha, p.jornada, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, p.puntos1, e2.nombreEquipo AS equipo2, p.puntos2 
-          FROM partido p 
-          INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
-          INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
-          INNER JOIN torneos t ON p.codTorneo = t.codTorneo
-          WHERE p.etapa = 'CLASIFICATORIA' AND p.fecha <= CURDATE() AND t.codTorneo=?
-          ORDER BY p.jornada ASC;`;
-          conexion.query(sql3, [codTorneo], (error, resultados) => {
-            if (error) {
-              console.log(error);
-            } else {
-              const sql4 = `SELECT p.fecha, p.jornada, p.etapa, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, p.puntos1, e2.nombreEquipo AS equipo2, p.puntos2 
-              FROM partido p 
-              INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo
-              INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
-              INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
-              WHERE (p.etapa = 'TERCER LUGAR' OR p.etapa = 'CUARTOS DE FINAL' OR p.etapa = 'SEMIFINAL' OR p.etapa = 'FINAL') 
-                AND t.codTorneo = ?
-              ORDER BY CASE p.etapa 
-                WHEN 'CUARTOS DE FINAL' THEN 1 
-                WHEN 'SEMIFINAL' THEN 2 
-                WHEN 'TERCER LUGAR' THEN 3 
-                WHEN 'FINAL' THEN 4 
-              END
-              `;
-              conexion.query(sql4, [codTorneo], (error, partidosTorneos) => {
+      // completar llave foranea de codTorneo de rankinge a torneos
+      const sql = ` 
+      SELECT DISTINCT d.nombreDeporte, t.nombreTorneo, d.id, t.codTorneo
+    FROM ((rankini r INNER JOIN torneos t ON r.codTorneo = t.codTorneo) 
+     INNER JOIN deporte d ON r.codDeporte = d.id) 
+    WHERE t.status = 1 
+      UNION 
+      SELECT DISTINCT d.nombreDeporte, t.nombreTorneo, d.id, t.codTorneo 
+        FROM (rankinge r INNER JOIN torneos t ON r.codTorneo = t.codTorneo) 
+        INNER JOIN deporte d ON r.codDeporte = d.id 
+      WHERE t.codTorneo = ?;`;
+      conexion.query(
+        // Rankging individual y por equipos
+        sql,[codTorneo],
+        (error, deportes) => {
+          if (error) {
+            console.log(error);
+          } else {
+            const sql = `SELECT p.fecha, p.jornada, p.etapa, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, p.puntos1, e2.nombreEquipo AS equipo2, p.puntos2 
+            FROM partido p 
+            INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo
+            INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
+            INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
+            WHERE (p.etapa = 'TERCER LUGAR' OR p.etapa = 'CUARTOS DE FINAL' OR p.etapa = 'SEMIFINAL' OR p.etapa = 'FINAL') 
+              AND t.codTorneo = ?
+            ORDER BY CASE p.etapa 
+              WHEN 'CUARTOS DE FINAL' THEN 1 
+              WHEN 'SEMIFINAL' THEN 2 
+              WHEN 'TERCER LUGAR' THEN 3 
+              WHEN 'FINAL' THEN 4 
+            END
+            `;
+            conexion.query(
+              // partidos con Clasificatoria de Cuartos, semifinal, final, tercer lugar
+              sql,[codTorneo],
+              (error, partidosTorneos) => {
                 if (error) {
                   console.log(error);
                 } else {
-                  // eliminatorias de torneo especifico
-                  const sql5 = `SELECT t.nombreTorneo,eq.nombreEquipo,d.nombreDeporte, e.*
+                  const sql = `SELECT t.nombreTorneo,eq.nombreEquipo,d.nombreDeporte, e.*
                   FROM eliminatorias e
                   JOIN equipos eq ON e.codEquipo = eq.codEquipo
                   JOIN deporte d ON eq.codDeporte = d.id
                   JOIN torneos t ON e.codTorneo = t.codTorneo
-                  WHERE t.codTorneo = ?
-                  ORDER BY d.nombreDeporte`;
-                  conexion.query(sql5, [codTorneo], (error, eliminatoria) => {
+                  WHERE t.codTorneo = ? 
+                  ORDER BY e.puntos DESC;`;
+
+                  conexion.query(sql,[codTorneo], (error, eliminatorias) => {
                     if (error) {
                       console.log(error);
                     } else {
-                      const sql6 = `SELECT * FROM torneos`; // mas torneos para el menu
-                      conexion.query(sql6, (error, torneos) => {
+                      const sql2 = `SELECT 
+                      j1.nombreJugador AS goleadores_equipo1, 
+                      j2.nombreJugador AS goleadores_equipo2, 
+                      t.nombreTorneo, 
+                      p.fecha, 
+                      p.jornada, 
+                      p.etapa, 
+                      e1.nombreEquipo AS equipo1, 
+                      e1.imagen AS imagen1, 
+                      e2.imagen AS imagen2, 
+                      p.puntos1, 
+                      e2.nombreEquipo AS equipo2, 
+                      p.puntos2, 
+                      e1.codEquipo AS codEquipo1, 
+                      e2.codEquipo AS codEquipo2, 
+                      p.codPartido 
+                    FROM partido p 
+                    INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
+                    INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
+                    INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
+                    LEFT JOIN (
+                      SELECT 
+                        g.codPartido, 
+                        g.codEquipo, 
+                        GROUP_CONCAT(CONCAT(j.nombreJugador, ' (', g.goles, ')') ORDER BY g.goles DESC SEPARATOR ', ') AS nombreJugador
+                      FROM goleadores g 
+                      INNER JOIN jugador j ON g.codJugador = j.codJugador 
+                      GROUP BY g.codPartido, g.codEquipo
+                    ) j1 ON p.codPartido = j1.codPartido AND e1.codEquipo = j1.codEquipo 
+                    LEFT JOIN (
+                      SELECT 
+                        g.codPartido, 
+                        g.codEquipo, 
+                        GROUP_CONCAT(CONCAT(j.nombreJugador, ' (', g.goles, ')') ORDER BY g.goles DESC SEPARATOR ', ') AS nombreJugador
+                      FROM goleadores g 
+                      INNER JOIN jugador j ON g.codJugador = j.codJugador 
+                      GROUP BY g.codPartido, g.codEquipo
+                    ) j2 ON p.codPartido = j2.codPartido AND e2.codEquipo = j2.codEquipo 
+                    WHERE p.codTorneo = 1 AND t.codTorneo = ? 
+                    GROUP BY p.codPartido, e1.codEquipo, e2.codEquipo 
+                    ORDER BY p.jornada ASC, 
+                             CASE p.etapa 
+                             WHEN 'CUARTOS DE FINAL' THEN 1 
+                             WHEN 'SEMIFINAL' THEN 2 
+                             WHEN 'TERCER LUGAR' THEN 3 
+                             WHEN 'FINAL SELECT' THEN 4 
+                             ELSE 5 
+                             END;`;
+
+                      conexion.query(sql2,[codTorneo], (error, resultados) => {
+                        // resultados de partidos
                         if (error) {
                           console.log(error);
                         } else {
-                          res.render("home.ejs", {
-                            partidos,
-                            resultados,
-                            partidosTorneos,
-                            eliminatorias,
-                            torneos,
-                            deportes,
+                          const sql3 = `SELECT * FROM torneos`;
+                          conexion.query(sql3, (error, torneos) => {
+                            // torneos
+                            if (error) {
+                              console.log(error);
+                            } else {
+                              const sql4 = `SELECT DISTINCT j.nombreJugador,c.nombreCarrera,d.nombreDeporte, SUM(r.puntos) AS total_puntos
+                              FROM rankini r
+                              JOIN jugador j ON j.codJugador = r.codJugador
+                              JOIN carreras c ON c.id = r.codCarrera
+                              JOIN deporte d ON d.id = r.codDeporte
+                              WHERE r.codUniversidad = 1
+                              GROUP BY j.nombreJugador, c.nombreCarrera,d.nombreDeporte
+                              ORDER BY d.nombredeporte DESC,total_puntos DESC`;
+                              conexion.query(sql4, (error, rankingGeneral) => {
+                                // torneos
+                                if (error) {
+                                  console.log(error);
+                                } else {
+                                  const sql5 = `SELECT DISTINCT d.nombreDeporte, e.nombreEquipo, SUM(r.puntos) AS total_puntos
+                              FROM rankinge r
+                              JOIN deporte d ON d.id = r.codDeporte
+                              JOIN equipos e ON e.codEquipo = r.codEquipo
+                              WHERE r.codUniversidad = 1
+                              GROUP BY d.nombreDeporte, e.nombreEquipo
+                              ORDER BY d.nombredeporte DESC,total_puntos DESC`;
+                                  conexion.query(
+                                    sql5,
+                                    (error, rankingGeneralEquipos) => {
+                                      // torneos
+                                      if (error) {
+                                        console.log(error);
+                                      } else {
+                                        const sql6 = `SELECT j.nombreJugador, e.nombreEquipo, d.nombreDeporte, SUM(g.goles) AS goles_totales
+                                        FROM goleadores g
+                                        INNER JOIN jugador j ON g.codJugador = j.codJugador
+                                        INNER JOIN equipos e ON e.codEquipo = g.codEquipo
+                                        INNER JOIN deporte d ON d.id = g.codDeporte
+                                        INNER JOIN torneos t ON t.codTorneo = g.codTorneo
+                                        WHERE t.codTorneo = ?
+                                        GROUP BY j.codJugador, j.nombreJugador, e.nombreEquipo, d.nombreDeporte
+                                        ORDER BY goles_totales DESC
+                                        `;
+                                        conexion.query(
+                                          sql6,[codTorneo],
+                                          (error, goleadores) => {
+                                            // torneos
+                                            if (error) {
+                                              console.log(error);
+                                            } else {
+                                              res.render("home.ejs", {
+                                                goleadores,
+                                                partidos,
+                                                deportes,
+                                                partidosTorneos,
+                                                eliminatorias,
+                                                resultados,
+                                                torneos,
+                                                rankingGeneral,
+                                                rankingGeneralEquipos,
+                                              });
+                                            }
+                                          }
+                                        );
+                                      }
+                                    }
+                                  );
+                                }
+                              });
+                            }
                           });
                         }
                       });
                     }
                   });
                 }
-              });
-            }
-          });
+              }
+            );
+          }
         }
-      });
+      );
     }
   });
 });

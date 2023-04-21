@@ -30,39 +30,39 @@
                   <div class="container">
                     <div class="row">
                       <div class="col-12 mt-5">
-                        <h2 class="text-center text-white"><%= partidos[0].nombreTorneo %></h2>
-                        <h2 class="text-center text-white">Próximos Partidos</h2>
+                        <h1 class="text-center text-white proximosPartidos">Próximos Partidos</h1>
                       </div>
-                      <% partidos.forEach((partidos,i)=>{ %>
+                      <% partidos.forEach((partido,i)=>{ %>
                         <div class="col-12 mt-5 mb-5">
+                          <h2 class="text-white text-center"><%= partidos[0].nombreTorneo %> - <%= partido.etapa %></h2>
                           <h3 class="text-white text-center">
-                             <%= partidos.nombreDeporte %>
+                             <%= partido.nombreDeporte %>
                           </h3>
                           <div class="matchup-container d-flex justify-content-center align-items-center">
                             <div class="team-container">
-                              <img src="<%= partidos.imagen1 ? partidos.imagen1 : 'images/UCAB-LOBOS.svg' %>"
-                                alt="<%= partidos.equipo1 %>">
+                              <img src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                alt="<%= partido.equipo1 %>">
                               <h4 class="text-white text-center tituloEquipo">
-                                <%= partidos.equipo1 %>
+                                <%= partido.equipo1 %>
                               </h4>
                             </div>
                             <div class="vs text-white">VS</div>
                             <div class="team-container">
-                              <img src="<%= partidos.imagen2 ? partidos.imagen2 : 'images/UCAB-LOBOS.svg' %>"
-                                alt="<%= partidos.equipo2 %>">
+                              <img src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
+                                alt="<%= partido.equipo2 %>">
                               <h4 class="text-white text-center tituloEquipo">
-                                <%= partidos.equipo2 %>
+                                <%= partido.equipo2 %>
                               </h4>
                             </div>
                           </div>
                           <div class="text-center mt-5">
                             <h5 class="text-white">
-                              <%= new Date(partidos.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partidos.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %><i class='bx bxs-calendar'></i>
+                              <%= new Date(partido.fecha).toLocaleDateString('es-ES') %> - <%= new Date(partido.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %><i class='bx bxs-calendar'></i>
                             </h5>
                           </div>
                           <div class="text-center">
                             <h5 class="text-white">
-                              <%= partidos.nombreEstadio %> <i class='bx bxs-map-pin'></i>
+                              <%= partido.nombreEstadio %> <i class='bx bxs-map-pin'></i>
                             </h5>
                           </div>
                         </div>
@@ -77,7 +77,7 @@
                   <% if (resultados.length> 0) { %>
                     <div class="container text-center">
                       <h2 class="text-center"><%= resultados[0].nombreTorneo %></h2>
-                      <h2 class="text-center">Resultados Clasificatoria</h2>
+                      <h2 class="text-center">Resultados Partidos</h2>
                     </div>
                       <div class="col-md-3 mx-auto ms-5 me-5 text-center">
                         <select class="form-select border-3" aria-label="Default select example" id="selectJornada">

@@ -1000,6 +1000,13 @@ th.position-sticky {
 .proximosPartidos{
   background-color: #19115e;
 }
+.proximosPartidos h1{
+  color: white;
+  background-color: #cea40b;
+  padding: 14px;
+  border-radius: 55px;
+  }
+
 .goleadores{
   color: #000;
   padding: 14px;
