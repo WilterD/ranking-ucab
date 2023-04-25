@@ -130,8 +130,12 @@
                             </div>
                               <% } %>
                                 <div class="d-flex flex-wrap text-center justify-content-center align-items-center">
-                                  <h2 class="text-center TituloJornada">CLASIFICADO
+                                  <% if(resultado.equipo1===resultado.equipo2) {%>
+                                    <h2 class="text-center TituloJornada">CLASIFICADO</h2>
+                                  <% }else{  %>
+                                  <h2 class="text-center TituloJornada"><%= new Date(resultado.fecha).toLocaleDateString('es-ES') %> - <%= new Date(resultado.fecha).toLocaleString("en-US", {hour12: true, hour: "numeric", minute: "numeric"}) %>
                                   </h2>
+                                  <% } %>
                                 </div>
                                 <div class="matchup-container d-flex justify-content-center align-items-center">
                                   <% if(resultado.equipo1===resultado.equipo2) {%>
