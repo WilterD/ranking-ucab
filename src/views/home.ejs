@@ -52,16 +52,16 @@
                           </h3>
                           <div class="matchup-container d-flex justify-content-center align-items-center">
                             <div class="team-container">
-                              <img src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
-                                alt="<%= partido.equipo1 %>">
+                              <img data-src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                alt="<%= partido.equipo1 %>" class="lazy">
                               <h4 class="text-white text-center tituloEquipo">
                                 <%= partido.equipo1 %>
                               </h4>
                             </div>
                             <div class="vs text-white">VS</div>
                             <div class="team-container">
-                              <img src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
-                                alt="<%= partido.equipo2 %>">
+                              <img data-src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
+                                alt="<%= partido.equipo2 %>" class="lazy">
                               <h4 class="text-white text-center tituloEquipo">
                                 <%= partido.equipo2 %>
                               </h4>
@@ -135,8 +135,8 @@
                                 </div>
                                 <div class="matchup-container d-flex justify-content-center align-items-center">
                                   <div class="team-container">
-                                    <img src="<%= resultado.imagen1 ? resultado.imagen1 : 'images/UCAB-LOBOS.svg' %>"
-                                      alt="Logo del equipo 1">
+                                    <img data-src="<%= resultado.imagen1 ? resultado.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                      alt="Logo del equipo 1" class="lazy">
                                     <h4 class="text-center tituloEquipo">
                                       <%= resultado.equipo1 %>
                                     </h4>
@@ -145,9 +145,8 @@
                                     <%= resultado.puntos1 %> - <%= resultado.puntos2 %>
                                   </div>
                                   <div class="team-container">
-                                    <img
-                                      src="<%= resultado.imagen2 ? resultado.imagen2 : 'images/UCAB-LOBOS.svg' %>"
-                                      alt="Logo del equipo 2">
+                                    <img data-src="<%= resultado.imagen2 ? resultado.imagen2 : 'images/UCAB-LOBOS.svg' %>"
+                                      alt="Logo del equipo 2" class="lazy">
                                     <h4 class="text-center tituloEquipo">
                                       <%= resultado.equipo2 %>
                                     </h4>
@@ -222,10 +221,9 @@
                                                     <tbody class="mx-auto">
                                                       <tr class="">
                                                         <td class="">
-                                                          <abbr class=""><img width="50px"
-                                                              height="50px"
-                                                              src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
-                                                              alt="<%= partido.equipo1 %>"></abbr>
+                                                          <abbr class=""><img data-src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>" width="50px"
+                                                            height="50px"
+                                                              alt="<%= partido.equipo1 %>" class="lazy"></abbr>
                                                           <span class="tournament-bracket__flag flag-icon flag-icon-ca"
                                                             aria-label="Flag"></span>
                                                         </td>
@@ -237,8 +235,8 @@
                                                       <td class="tournament-bracket__country">
                                                         <abbr class="tournament-bracket__code"><img width="50px"
                                                             height="50px"
-                                                            src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
-                                                            alt="<%= partido.equipo1 %>"></abbr>
+                                                            data-src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                                            alt="<%= partido.equipo1 %>" class="lazy"></abbr>
                                                         <span class="tournament-bracket__flag flag-icon flag-icon-ca"
                                                           aria-label="Flag"></span>
                                                       </td>
@@ -252,8 +250,8 @@
                                                       <td class="tournament-bracket__country">
                                                         <abbr class="tournament-bracket__code"><img width="50px"
                                                             height="50px"
-                                                            src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
-                                                            alt="<%= partido.equipo2 %>"></abbr>
+                                                            data-src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
+                                                            alt="<%= partido.equipo2 %>" class="lazy"></abbr>
                                                         <span class="tournament-bracket__flag flag-icon flag-icon-kz"
                                                           aria-label="Flag"></span>
                                                       </td>
@@ -280,7 +278,7 @@
                                                     <tbody class="tournament-bracket__content">
                                                       <tr class="torneo-bracket-equipo">
                                                         <td class="tournament-bracket__country">
-                                                          <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
+                                                          <abbr class="tournament-bracket__code"><img width="40px" height="40px" data-src="images/ShieldGray.svg" alt="logo" class="lazy"></abbr>
                                                           <span
                                                             class="tournament-bracket__flag flag-icon flag-icon-fi"
                                                             aria-label="Flag"></span>
@@ -293,7 +291,7 @@
                                                         class="torneo-bracket-equipo">
                                                         <td class="tournament-bracket__country">
                                                           <abbr class="tournament-bracket__code"
-                                                            ><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
+                                                            ><img width="40px" height="40px" data-src="images/ShieldGray.svg" alt="logo" class="lazy"></abbr>
                                                           <span
                                                             class="tournament-bracket__flag flag-icon flag-icon-ru"
                                                             aria-label="Flag"></span>
@@ -341,8 +339,8 @@
                                                       <td class="">
                                                         <abbr class=""><img width="50px"
                                                             height="50px"
-                                                            src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
-                                                            alt="<%= partido.equipo1 %>"></abbr>
+                                                            data-src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                                            alt="<%= partido.equipo1 %>" class="lazy"></abbr>
                                                         <span class="tournament-bracket__flag flag-icon flag-icon-ca"
                                                           aria-label="Flag"></span>
                                                       </td>
@@ -354,8 +352,8 @@
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"><img width="50px"
                                                           height="50px"
-                                                          src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
-                                                          alt="<%= partido.equipo1 %>"></abbr>
+                                                          data-src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                                          alt="<%= partido.equipo1 %>" class="lazy"></abbr>
                                                       <span class="tournament-bracket__flag flag-icon flag-icon-ca"
                                                         aria-label="Flag"></span>
                                                     </td>
@@ -369,8 +367,8 @@
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"><img width="50px"
                                                           height="50px"
-                                                          src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
-                                                          alt="<%= partido.equipo2 %>"></abbr>
+                                                          data-src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
+                                                          alt="<%= partido.equipo2 %>" class="lazy"></abbr>
                                                       <span class="tournament-bracket__flag flag-icon flag-icon-kz"
                                                         aria-label="Flag"></span>
                                                     </td>
@@ -398,7 +396,7 @@
                                                     <tbody class="tournament-bracket__content">
                                                       <tr class="torneo-bracket-equipo">
                                                         <td class="tournament-bracket__country">
-                                                          <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
+                                                          <abbr class="tournament-bracket__code"><img width="40px" height="40px" data-src="images/ShieldGray.svg" alt="logo" class="lazy"></abbr>
                                                           <span
                                                             class="tournament-bracket__flag flag-icon flag-icon-fi"
                                                             aria-label="Flag"></span>
@@ -411,7 +409,7 @@
                                                         class="torneo-bracket-equipo">
                                                         <td class="tournament-bracket__country">
                                                           <abbr class="tournament-bracket__code"
-                                                            ><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
+                                                            ><img width="40px" height="40px" data-src="images/ShieldGray.svg" alt="logo" class="lazy"></abbr>
                                                           <span
                                                             class="tournament-bracket__flag flag-icon flag-icon-ru"
                                                             aria-label="Flag"></span>
@@ -460,8 +458,8 @@
                                                       <td class="">
                                                         <abbr class=""><img width="50px"
                                                             height="50px"
-                                                            src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
-                                                            alt="<%= partido.equipo1 %>"></abbr>
+                                                            data-src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                                            alt="<%= partido.equipo1 %>" class="lazy"></abbr>
                                                         <span class="tournament-bracket__flag flag-icon flag-icon-ca"
                                                           aria-label="Flag"></span>
                                                       </td>
@@ -473,8 +471,8 @@
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"><img width="50px"
                                                           height="50px"
-                                                          src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
-                                                          alt="<%= partido.equipo1 %>"></abbr>
+                                                          data-src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                                          alt="<%= partido.equipo1 %>" class="lazy"></abbr>
                                                       <span class="tournament-bracket__flag flag-icon flag-icon-ca"
                                                         aria-label="Flag"></span>
                                                     </td>
@@ -488,8 +486,8 @@
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"><img width="50px"
                                                           height="50px"
-                                                          src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
-                                                          alt="<%= partido.equipo2 %>"></abbr>
+                                                          data-src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
+                                                          alt="<%= partido.equipo2 %>" class="lazy"></abbr>
                                                       <span class="tournament-bracket__flag flag-icon flag-icon-kz"
                                                         aria-label="Flag"></span>
                                                     </td>
@@ -517,7 +515,7 @@
                                                   <tbody class="tournament-bracket__content">
                                                     <tr class="torneo-bracket-equipo">
                                                       <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
+                                                        <abbr class="tournament-bracket__code"><img width="40px" height="40px" data-src="images/ShieldGray.svg" alt="logo" class="lazy"></abbr>
                                                         <span
                                                           class="tournament-bracket__flag flag-icon flag-icon-fi"
                                                           aria-label="Flag"></span>
@@ -530,7 +528,7 @@
                                                       class="torneo-bracket-equipo">
                                                       <td class="tournament-bracket__country">
                                                         <abbr class="tournament-bracket__code"
-                                                          ><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
+                                                          ><img width="40px" height="40px" data-src="images/ShieldGray.svg" alt="logo" class="lazy"></abbr>
                                                         <span
                                                           class="tournament-bracket__flag flag-icon flag-icon-ru"
                                                           aria-label="Flag"></span>
@@ -580,8 +578,8 @@
                                                       <td class="">
                                                         <abbr class=""><img width="50px"
                                                             height="50px"
-                                                            src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
-                                                            alt="<%= partido.equipo1 %>"></abbr>
+                                                            data-src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                                            alt="<%= partido.equipo1 %>" class="lazy"></abbr>
                                                         <span class="tournament-bracket__flag flag-icon flag-icon-ca"
                                                           aria-label="Flag"></span>
                                                       </td>
@@ -593,8 +591,8 @@
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"><img width="50px"
                                                           height="50px"
-                                                          src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
-                                                          alt="<%= partido.equipo1 %>"></abbr>
+                                                          data-src="<%= partido.imagen1 ? partido.imagen1 : 'images/UCAB-LOBOS.svg' %>"
+                                                          alt="<%= partido.equipo1 %>" class="lazy"></abbr>
                                                       <span class="tournament-bracket__flag flag-icon flag-icon-ca"
                                                         aria-label="Flag"></span>
                                                     </td>
@@ -608,8 +606,8 @@
                                                     <td class="tournament-bracket__country">
                                                       <abbr class="tournament-bracket__code"><img width="50px"
                                                           height="50px"
-                                                          src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
-                                                          alt="<%= partido.equipo2 %>"></abbr>
+                                                          data-src="<%= partido.imagen2 ? partido.imagen2 : 'images/UCAB-LOBOS.svg' %>"
+                                                          alt="<%= partido.equipo2 %>" class="lazy"></abbr>
                                                       <span class="tournament-bracket__flag flag-icon flag-icon-kz"
                                                         aria-label="Flag"></span>
                                                     </td>
@@ -637,7 +635,7 @@
                                                   <tbody class="tournament-bracket__content">
                                                     <tr class="torneo-bracket-equipo">
                                                       <td class="tournament-bracket__country">
-                                                        <abbr class="tournament-bracket__code"><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
+                                                        <abbr class="tournament-bracket__code"><img width="40px" height="40px" data-src="images/ShieldGray.svg" alt="logo" class="lazy"></abbr>
                                                         <span
                                                           class="tournament-bracket__flag flag-icon flag-icon-fi"
                                                           aria-label="Flag"></span>
@@ -650,7 +648,7 @@
                                                       class="torneo-bracket-equipo">
                                                       <td class="tournament-bracket__country">
                                                         <abbr class="tournament-bracket__code"
-                                                          ><img width="40px" height="40px" src="images/ShieldGray.svg" alt="logo"></abbr>
+                                                          ><img width="40px" height="40px" data-src="images/ShieldGray.svg" alt="logo" class="lazy"></abbr>
                                                         <span
                                                           class="tournament-bracket__flag flag-icon flag-icon-ru"
                                                           aria-label="Flag"></span>
@@ -884,6 +882,37 @@
                                         });
                                       });
                                     </script>
+                                    <script>
+                                const images = document.querySelectorAll('.lazy');
+                                const config = {
+                                  rootMargin: '0px 0px 500px 0px'
+                                };
+                                let observer;
+
+                                function handleIntersect(entries, observer) {
+                                  entries.forEach((entry) => {
+                                    if (entry.isIntersecting) {
+                                      const image = entry.target;
+                                      image.setAttribute('src', image.getAttribute('data-src'));
+                                      image.classList.add('loaded');
+                                      observer.unobserve(image);
+                                    }
+                                  });
+                                }
+
+                                if ('IntersectionObserver' in window) {
+                                  observer = new IntersectionObserver(handleIntersect, config);
+                                  images.forEach((image) => {
+                                    observer.observe(image);
+                                  });
+                                } else {
+                                  images.forEach((image) => {
+                                    image.setAttribute('src', image.getAttribute('data-src'));
+                                    image.classList.add('loaded');
+                                  });
+                                }
+
+                                      </script>
                                               </body>
                                             </html>
 </body>
