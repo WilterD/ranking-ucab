@@ -87,10 +87,6 @@
                   <!-- Si no hay resultados, no mostrar nada -->
                   <section class="resultadosClasificatoria">
                   <% if (resultados.length> 0) { %>
-                    <div class="container text-center">
-                      <h2 class="text-center"><%= resultados[0].nombreTorneo %></h2>
-                      <h2 class="text-center">Resultados Partidos</h2>
-                    </div>
                       <div class="col-md-3 mx-auto ms-5 me-5 text-center">
                         <select class="form-select border-3" aria-label="Default select example" id="selectJornada">
                           <% const idMap=new Map(); %>
@@ -114,15 +110,17 @@
                             </option>
                           <% }); %>
                         </select>
-                        
                       </div>
                       <% } %>
-
                       <% let lastJornada=null; %>
                         <% resultados.forEach((resultado, index)=> { %>
                           <% if (resultado.jornada !==lastJornada) { %>
                             <div id="<%= resultado.jornada %>"
                               class="tabcontent <%= index === resultados.length - 1 ? 'show' : '' %>">
+                              <div class="container text-center">
+                                <h2 class="text-center"><%= resultados[index].nombreTorneo %></h2>
+                                <h2 class="text-center">Resultados Partidos</h2>
+                              </div>
                               <% } %>
                               <% if (resultado.jornada ==0) { %>
                                 <div class="container">
@@ -681,7 +679,7 @@
                                       </div>
                                     </div>
                                   </div>
-<% }; %>
+                                 <% }; %>
 
                                   <!-- Fin eliminatoria torneo -->
 

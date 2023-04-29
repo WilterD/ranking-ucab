@@ -1146,38 +1146,48 @@ router.get(["/", "/home"], (req, res) => {
                       e1.codEquipo AS codEquipo1, 
                       e2.codEquipo AS codEquipo2, 
                       p.codPartido 
-                    FROM partido p 
-                    INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
-                    INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
-                    INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
-                    LEFT JOIN (
-                      SELECT 
-                        g.codPartido, 
-                        g.codEquipo, 
-                        GROUP_CONCAT(CONCAT(j.nombreJugador, ' (', g.goles, ')') ORDER BY g.goles DESC SEPARATOR ', ') AS nombreJugador
-                      FROM goleadores g 
-                      INNER JOIN jugador j ON g.codJugador = j.codJugador 
-                      GROUP BY g.codPartido, g.codEquipo
-                    ) j1 ON p.codPartido = j1.codPartido AND e1.codEquipo = j1.codEquipo 
-                    LEFT JOIN (
-                      SELECT 
-                        g.codPartido, 
-                        g.codEquipo, 
-                        GROUP_CONCAT(CONCAT(j.nombreJugador, ' (', g.goles, ')') ORDER BY g.goles DESC SEPARATOR ', ') AS nombreJugador
-                      FROM goleadores g 
-                      INNER JOIN jugador j ON g.codJugador = j.codJugador 
-                      GROUP BY g.codPartido, g.codEquipo
-                    ) j2 ON p.codPartido = j2.codPartido AND e2.codEquipo = j2.codEquipo 
-                    WHERE p.codTorneo = 1 AND t.status = 1 
-                    GROUP BY p.codPartido, e1.codEquipo, e2.codEquipo 
-                    ORDER BY p.jornada ASC, 
-                             CASE p.etapa 
-                             WHEN 'CUARTOS DE FINAL' THEN 1 
-                             WHEN 'SEMIFINAL' THEN 2 
-                             WHEN 'TERCER LUGAR' THEN 3 
-                             WHEN 'FINAL SELECT' THEN 4 
-                             ELSE 5 
-                             END;`;
+                    FROM 
+                      partido p 
+                      INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
+                      INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
+                      INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
+                      LEFT JOIN (
+                        SELECT 
+                          g.codPartido, 
+                          g.codEquipo, 
+                          GROUP_CONCAT(CONCAT(j.nombreJugador, ' (', g.goles, ')') ORDER BY g.goles DESC SEPARATOR ', ') AS nombreJugador
+                        FROM 
+                          goleadores g 
+                          INNER JOIN jugador j ON g.codJugador = j.codJugador 
+                        GROUP BY g.codPartido, g.codEquipo
+                      ) j1 ON p.codPartido = j1.codPartido AND e1.codEquipo = j1.codEquipo 
+                      LEFT JOIN (
+                        SELECT 
+                          g.codPartido, 
+                          g.codEquipo, 
+                          GROUP_CONCAT(CONCAT(j.nombreJugador, ' (', g.goles, ')') ORDER BY g.goles DESC SEPARATOR ', ') AS nombreJugador
+                        FROM 
+                          goleadores g 
+                          INNER JOIN jugador j ON g.codJugador = j.codJugador 
+                        GROUP BY g.codPartido, g.codEquipo
+                      ) j2 ON p.codPartido = j2.codPartido AND e2.codEquipo = j2.codEquipo 
+                    WHERE 
+                      t.status = 1 
+                    GROUP BY 
+                      t.nombreTorneo,
+                      p.codPartido, 
+                      e1.codEquipo, 
+                      e2.codEquipo 
+                    ORDER BY 
+                      p.jornada ASC, 
+                      CASE p.etapa 
+                        WHEN 'CUARTOS DE FINAL' THEN 1 
+                        WHEN 'SEMIFINAL' THEN 2 
+                        WHEN 'TERCER LUGAR' THEN 3 
+                        WHEN 'FINAL SELECT' THEN 4 
+                        ELSE 5 
+                      END;
+                    `;
 
                       conexion.query(sql2, (error, resultados) => {
                         // resultados de partidos
@@ -1234,6 +1244,7 @@ router.get(["/", "/home"], (req, res) => {
                                             if (error) {
                                               console.log(error);
                                             } else {
+                                              console.log(resultados)
                                               res.render("home.ejs", {
                                                 goleadores,
                                                 partidos,
