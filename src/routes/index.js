@@ -1244,7 +1244,6 @@ router.get(["/", "/home"], (req, res) => {
                                             if (error) {
                                               console.log(error);
                                             } else {
-                                              console.log(resultados)
                                               res.render("home.ejs", {
                                                 goleadores,
                                                 partidos,
