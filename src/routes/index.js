@@ -9,12 +9,20 @@ import multer from "multer";
 import util from "util";
 
 import session from "express-session";
-import flash from "connect-flash";
+import npm from "connect-flash";
 import { check, validationResult } from "express-validator";
 import bcrypt from "bcrypt";
 
 import { uploadImg } from "../helpers/imgUploader.cjs";
 import { publicDir } from "../helpers/fileManager.cjs";
+import homeController from "../controllers/homeController.cjs";
+import EquiposController from "../controllers/equiposController.cjs";
+
+
+// Rutas para la página de inicio
+router.get(['/home','/'], homeController.getHomePage);
+router.get('/equipos:id', EquiposController.getEquiposPage);
+
 
 router.get("/admin/deleteEstadio/:codEstadio", (req, res) => {
   const codEstadio = req.params.codEstadio;
@@ -97,11 +105,14 @@ router.get("/admin/deleteEquipo/:codEquipo", (req, res) => {
 
 router.get("/admin/jugadores", requireLogin, (req, res) => {
   conexion.query(
-    "SELECT j.codJugador, j.nombreJugador, j.codCarrera, c.id, COALESCE(e.nombreEquipo, 'Sin Equipo') AS nombreEquipo, c.nombreCarrera FROM jugador j JOIN carreras c ON j.codCarrera = c.id LEFT JOIN equipos e ON j.codEquipo = e.codEquipo; ",
+    `SELECT j.nombreJugador, j.codCarrera, c.id, c.nombreCarrera, j.codJugador
+    FROM jugador j 
+    LEFT JOIN carreras c ON j.codCarrera = c.id`,
     (error, jugadores) => {
       if (error) {
         console.log(error);
       } else {
+        console.log(jugadores)
         res.render("admin/jugadores.ejs", {
           jugadores: jugadores,
         });
@@ -131,7 +142,7 @@ router.get("/admin/crearJugador", requireLogin, (req, res) => {
                     jugador,
                     carrera,
                     equipo,
-                    deporte
+                    deporte,
                   });
                 }
               });
@@ -798,13 +809,11 @@ router.get("/admin/deleteDeporte/:id", requireLogin, (req, res) => {
 });
 
 router.get("/admin/rankingIndividual", requireLogin, (req, res) => {
-  const sql = `SELECT t.nombreTorneo,r.id,j.nombreJugador,c.nombreCarrera, d.nombreDeporte,r.puntos 
-  FROM rankini r 
-  JOIN carreras c ON r.codCarrera = c.id 
-  JOIN deporte d ON r.codDeporte = d.id 
-  JOIN jugador j ON r.codJugador = j.codJugador
-  JOIN torneos t ON r.codTorneo = t.codTorneo
-  `;
+  const sql = `SELECT r.id, t.nombreTorneo, d.nombreDeporte, r.puntos, c.nombreCarrera, r.nombreJugador
+  FROM rankini r
+  LEFT JOIN torneos t ON r.codTorneo = t.codTorneo
+  LEFT JOIN deporte d ON r.codDeporte = d.id
+  LEFT JOIN carreras c ON r.codCarrera = c.id `;
   conexion.query(sql, (error, rankini) => {
     if (error) {
       console.log(error);
@@ -846,7 +855,8 @@ router.get("/admin/crearRankingIndividual", requireLogin, (req, res) => {
 router.get("/admin/editarRankingRI/:id", requireLogin, (req, res) => {
   const id = req.params.id;
   conexion.query(
-    "SELECT r.id, r.codCarrera, c.id as codCarrera, d.id as codDeporte, c.nombreCarrera, r.puntos, j.codJugador, j.nombreJugador, d.nombreDeporte FROM rankini r JOIN deporte d ON r.codDeporte = d.id JOIN jugador j ON r.codJugador = j.codJugador JOIN carreras c ON r.codCarrera = c.id WHERE r.id = ?",
+    `SELECT r.id FROM rankini r
+    WHERE r.id = ?`,
     [id],
     (error, ranking) => {
       if (error) {
@@ -868,6 +878,7 @@ router.get("/admin/editarRankingRI/:id", requireLogin, (req, res) => {
                       if (error) {
                         console.log(error);
                       } else {
+                        console.log(ranking)
                         res.render("admin/editarRankingRI", {
                           ranking: ranking[0],
                           deportes: deportes,
@@ -902,7 +913,10 @@ router.get("/admin/deleteRI/:id", requireLogin, (req, res) => {
 
 router.get("/admin/rankingEquipos", requireLogin, (req, res) => {
   conexion.query(
-    "SELECT t.nombreTorneo,e.nombreEquipo, d.nombreDeporte, r.puntos, r.id FROM rankinge r JOIN equipos e ON r.codEquipo = e.codEquipo JOIN deporte d ON r.codDeporte = d.id JOIN torneos t ON r.codTorneo = t.codTorneo",
+    `SELECT t.nombreTorneo, d.nombreDeporte, r.puntos, r.id, r.nombreEquipo 
+    FROM rankinge r 
+    JOIN deporte d ON r.codDeporte = d.id 
+    LEFT JOIN torneos t ON r.codTorneo = t.codTorneo`,
     (error, rankinge) => {
       if (error) {
         console.log(error);
@@ -944,40 +958,24 @@ router.get("/admin/crearRankingEquipos", requireLogin, (req, res) => {
 
 router.get("/admin/editarRankingRE/:id", requireLogin, (req, res) => {
   const id = req.params.id;
-  const sql = `
-  SELECT re.*, e.nombreEquipo, e.codEquipo, d.nombreDeporte, d.id 
+  const sql = 
+  `SELECT re.puntos, re.id
   FROM rankinge re 
-  JOIN deporte d ON re.codDeporte = d.id
-  JOIN equipos e ON re.codEquipo = e.codEquipo
-  WHERE id = ?  
-  `;
+  WHERE re.id = ?`;
   conexion.query(sql, [id], (error, rankingRE) => {
     if (error) {
       throw error;
     } else {
-      conexion.query("SELECT * FROM equipos", (error, equipos) => {
-        if (error) {
-          console.log(error);
-        } else {
-          conexion.query(
-            "SELECT * FROM deporte WHERE tipoDeporte='Equipos'",
-            (error, deportes) => {
-              if (error) {
-                console.log(error);
-              } else {
-                res.render("admin/editarRankingRE", {
-                  rankingRE: rankingRE[0],
-                  equipos: equipos,
-                  deportes: deportes,
-                });
-              }
-            }
-          );
-        }
+      // redireccionar a editar
+      res.render("admin/editarRankingRE", {
+        rankingRE: rankingRE[0]
       });
     }
-  });
-});
+  })
+})
+      
+      
+
 
 router.get("/admin/deleteRE/:id", requireLogin, (req, res) => {
   const id = req.params.id;
@@ -1063,221 +1061,6 @@ router.get("/admin/dashboard", requireLogin, async (req, res) => {
   }
 });
 
-router.get(["/", "/home"], (req, res) => {
-  const sql = `SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, e1.imagen AS imagen1, e2.imagen AS imagen2, t.nombreTorneo, t.codTorneo, es.nombreEstadio, p.jornada, p.fecha, p.etapa, d.nombreDeporte, p.codPartido 
-  FROM partido p 
-  INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
-  INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
-  INNER JOIN estadio es ON p.codEstadio = es.codEstadio 
-  INNER JOIN deporte d ON p.codDeporte = d.id 
-  INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
-  WHERE p.fecha >= NOW() AND t.status=1 
-  ORDER BY p.fecha ASC;`;
-
-  conexion.query(sql, (error, partidos) => {
-    // proximos partidos
-    if (error) {
-      console.log(error);
-    } else {
-      // completar llave foranea de codTorneo de rankinge a torneos
-      const sql = ` 
-      SELECT DISTINCT d.nombreDeporte, t.nombreTorneo, d.id, t.codTorneo
-    FROM ((rankini r INNER JOIN torneos t ON r.codTorneo = t.codTorneo) 
-     INNER JOIN deporte d ON r.codDeporte = d.id) 
-    WHERE t.status = 1 
-      UNION 
-      SELECT DISTINCT d.nombreDeporte, t.nombreTorneo, d.id, t.codTorneo 
-        FROM (rankinge r INNER JOIN torneos t ON r.codTorneo = t.codTorneo) 
-        INNER JOIN deporte d ON r.codDeporte = d.id 
-      WHERE t.status = 1;`;
-      conexion.query(
-        // Rankging individual y por equipos
-        sql,
-        (error, deportes) => {
-          if (error) {
-            console.log(error);
-          } else {
-            const sql = `SELECT p.fecha, p.jornada, p.etapa, e1.nombreEquipo AS equipo1, e1.imagen AS imagen1, e2.imagen AS imagen2, p.puntos1, e2.nombreEquipo AS equipo2, p.puntos2 
-            FROM partido p 
-            INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo
-            INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
-            INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
-            WHERE (p.etapa = 'TERCER LUGAR' OR p.etapa = 'CUARTOS DE FINAL' OR p.etapa = 'SEMIFINAL' OR p.etapa = 'FINAL') 
-              AND t.status = 1 
-            ORDER BY CASE p.etapa 
-              WHEN 'CUARTOS DE FINAL' THEN 1 
-              WHEN 'SEMIFINAL' THEN 2 
-              WHEN 'TERCER LUGAR' THEN 3 
-              WHEN 'FINAL' THEN 4 
-            END
-            `;
-            conexion.query(
-              // partidos con Clasificatoria de Cuartos, semifinal, final, tercer lugar
-              sql,
-              (error, partidosTorneos) => {
-                if (error) {
-                  console.log(error);
-                } else {
-                  const sql = `SELECT t.nombreTorneo,eq.nombreEquipo,d.nombreDeporte, e.*
-                  FROM eliminatorias e
-                  JOIN equipos eq ON e.codEquipo = eq.codEquipo
-                  JOIN deporte d ON eq.codDeporte = d.id
-                  JOIN torneos t ON e.codTorneo = t.codTorneo
-                  WHERE t.status = 1 
-                  ORDER BY e.puntos DESC;`;
-
-                  conexion.query(sql, (error, eliminatorias) => {
-                    if (error) {
-                      console.log(error);
-                    } else {
-                      const sql2 = `SELECT 
-                      j1.nombreJugador AS goleadores_equipo1, 
-                      j2.nombreJugador AS goleadores_equipo2, 
-                      t.nombreTorneo, 
-                      p.fecha, 
-                      p.jornada, 
-                      p.etapa, 
-                      e1.nombreEquipo AS equipo1, 
-                      e1.imagen AS imagen1, 
-                      e2.imagen AS imagen2, 
-                      p.puntos1, 
-                      e2.nombreEquipo AS equipo2, 
-                      p.puntos2, 
-                      e1.codEquipo AS codEquipo1, 
-                      e2.codEquipo AS codEquipo2, 
-                      p.codPartido 
-                    FROM 
-                      partido p 
-                      INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
-                      INNER JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo 
-                      INNER JOIN torneos t ON p.codTorneo = t.codTorneo 
-                      LEFT JOIN (
-                        SELECT 
-                          g.codPartido, 
-                          g.codEquipo, 
-                          GROUP_CONCAT(CONCAT(j.nombreJugador, ' (', g.goles, ')') ORDER BY g.goles DESC SEPARATOR ', ') AS nombreJugador
-                        FROM 
-                          goleadores g 
-                          INNER JOIN jugador j ON g.codJugador = j.codJugador 
-                        GROUP BY g.codPartido, g.codEquipo
-                      ) j1 ON p.codPartido = j1.codPartido AND e1.codEquipo = j1.codEquipo 
-                      LEFT JOIN (
-                        SELECT 
-                          g.codPartido, 
-                          g.codEquipo, 
-                          GROUP_CONCAT(CONCAT(j.nombreJugador, ' (', g.goles, ')') ORDER BY g.goles DESC SEPARATOR ', ') AS nombreJugador
-                        FROM 
-                          goleadores g 
-                          INNER JOIN jugador j ON g.codJugador = j.codJugador 
-                        GROUP BY g.codPartido, g.codEquipo
-                      ) j2 ON p.codPartido = j2.codPartido AND e2.codEquipo = j2.codEquipo 
-                    WHERE 
-                      t.status = 1 
-                    GROUP BY 
-                      t.nombreTorneo,
-                      p.codPartido, 
-                      e1.codEquipo, 
-                      e2.codEquipo 
-                    ORDER BY 
-                      p.jornada ASC, 
-                      CASE p.etapa 
-                        WHEN 'CUARTOS DE FINAL' THEN 1 
-                        WHEN 'SEMIFINAL' THEN 2 
-                        WHEN 'TERCER LUGAR' THEN 3 
-                        WHEN 'FINAL SELECT' THEN 4 
-                        ELSE 5 
-                      END;
-                    `;
-
-                      conexion.query(sql2, (error, resultados) => {
-                        // resultados de partidos
-                        if (error) {
-                          console.log(error);
-                        } else {
-                          const sql3 = `SELECT * FROM torneos`;
-                          conexion.query(sql3, (error, torneos) => {
-                            // torneos
-                            if (error) {
-                              console.log(error);
-                            } else {
-                              const sql4 = `SELECT DISTINCT j.nombreJugador,c.nombreCarrera,d.nombreDeporte, SUM(r.puntos) AS total_puntos
-                              FROM rankini r
-                              JOIN jugador j ON j.codJugador = r.codJugador
-                              JOIN carreras c ON c.id = r.codCarrera
-                              JOIN deporte d ON d.id = r.codDeporte
-                              WHERE r.codUniversidad = 1
-                              GROUP BY j.nombreJugador, c.nombreCarrera,d.nombreDeporte
-                              ORDER BY d.nombredeporte DESC,total_puntos DESC`;
-                              conexion.query(sql4, (error, rankingGeneral) => {
-                                // torneos
-                                if (error) {
-                                  console.log(error);
-                                } else {
-                                  const sql5 = `SELECT DISTINCT d.nombreDeporte, e.nombreEquipo, SUM(r.puntos) AS total_puntos
-                              FROM rankinge r
-                              JOIN deporte d ON d.id = r.codDeporte
-                              JOIN equipos e ON e.codEquipo = r.codEquipo
-                              WHERE r.codUniversidad = 1
-                              GROUP BY d.nombreDeporte, e.nombreEquipo
-                              ORDER BY d.nombredeporte DESC,total_puntos DESC`;
-                                  conexion.query(
-                                    sql5,
-                                    (error, rankingGeneralEquipos) => {
-                                      // torneos
-                                      if (error) {
-                                        console.log(error);
-                                      } else {
-                                        const sql6 = `SELECT j.nombreJugador, e.nombreEquipo, d.nombreDeporte, SUM(g.goles) AS goles_totales
-                                        FROM goleadores g
-                                        INNER JOIN jugador j ON g.codJugador = j.codJugador
-                                        INNER JOIN equipos e ON e.codEquipo = g.codEquipo
-                                        INNER JOIN deporte d ON d.id = g.codDeporte
-                                        INNER JOIN torneos t ON t.codTorneo = g.codTorneo
-                                        WHERE t.status = 1
-                                        GROUP BY j.codJugador, j.nombreJugador, e.nombreEquipo, d.nombreDeporte
-                                        ORDER BY goles_totales DESC
-                                        `;
-                                        conexion.query(
-                                          sql6,
-                                          (error, goleadores) => {
-                                            // torneos
-                                            if (error) {
-                                              console.log(error);
-                                            } else {
-                                              res.render("home.ejs", {
-                                                goleadores,
-                                                partidos,
-                                                deportes,
-                                                partidosTorneos,
-                                                eliminatorias,
-                                                resultados,
-                                                torneos,
-                                                rankingGeneral,
-                                                rankingGeneralEquipos,
-                                              });
-                                            }
-                                          }
-                                        );
-                                      }
-                                    }
-                                  );
-                                }
-                              });
-                            }
-                          });
-                        }
-                      });
-                    }
-                  });
-                }
-              }
-            );
-          }
-        }
-      );
-    }
-  });
-});
 
 router.get(["/torneos:codTorneo"], (req, res) => {
   const codTorneo = req.params.codTorneo;
@@ -1291,7 +1074,7 @@ router.get(["/torneos:codTorneo"], (req, res) => {
   WHERE p.fecha >= NOW() AND t.codTorneo=? 
   ORDER BY p.fecha ASC;`;
 
-  conexion.query(sql,[codTorneo], (error, partidos) => {
+  conexion.query(sql, [codTorneo], (error, partidos) => {
     // proximos partidos
     if (error) {
       console.log(error);
@@ -1309,7 +1092,8 @@ router.get(["/torneos:codTorneo"], (req, res) => {
       WHERE t.codTorneo = ?;`;
       conexion.query(
         // Rankging individual y por equipos
-        sql,[codTorneo],
+        sql,
+        [codTorneo],
         (error, deportes) => {
           if (error) {
             console.log(error);
@@ -1330,7 +1114,8 @@ router.get(["/torneos:codTorneo"], (req, res) => {
             `;
             conexion.query(
               // partidos con Clasificatoria de Cuartos, semifinal, final, tercer lugar
-              sql,[codTorneo],
+              sql,
+              [codTorneo],
               (error, partidosTorneos) => {
                 if (error) {
                   console.log(error);
@@ -1343,7 +1128,7 @@ router.get(["/torneos:codTorneo"], (req, res) => {
                   WHERE t.codTorneo = ? 
                   ORDER BY e.puntos DESC;`;
 
-                  conexion.query(sql,[codTorneo], (error, eliminatorias) => {
+                  conexion.query(sql, [codTorneo], (error, eliminatorias) => {
                     if (error) {
                       console.log(error);
                     } else {
@@ -1396,7 +1181,7 @@ router.get(["/torneos:codTorneo"], (req, res) => {
                              ELSE 5 
                              END;`;
 
-                      conexion.query(sql2,[codTorneo], (error, resultados) => {
+                      conexion.query(sql2, [codTorneo], (error, resultados) => {
                         // resultados de partidos
                         if (error) {
                           console.log(error);
@@ -1445,7 +1230,8 @@ router.get(["/torneos:codTorneo"], (req, res) => {
                                         ORDER BY goles_totales DESC
                                         `;
                                         conexion.query(
-                                          sql6,[codTorneo],
+                                          sql6,
+                                          [codTorneo],
                                           (error, goleadores) => {
                                             // torneos
                                             if (error) {
@@ -1534,7 +1320,7 @@ router.get("/ranking:id:codTorneo", (req, res) => {
                             ri.puntos, 
                             d.nombreDeporte,
                             d.tipoDeporte,
-                            j.nombreJugador,
+                            ri.nombreJugador,
                             t.nombreTorneo, 
                             t.codTorneo,
                             c.nombreCarrera 
@@ -1543,7 +1329,6 @@ router.get("/ranking:id:codTorneo", (req, res) => {
                             INNER JOIN deporte d ON ri.codDeporte = d.id 
                             INNER JOIN torneos t ON ri.codTorneo = t.codTorneo 
                             INNER JOIN carreras c ON ri.codCarrera = c.id 
-                            INNER JOIN jugador j ON ri.codJugador = j.codJugador
                           WHERE 
                             d.id = ?
                             AND t.codTorneo = ?
@@ -1553,35 +1338,100 @@ router.get("/ranking:id:codTorneo", (req, res) => {
                 if (error) {
                   console.log(error);
                 } else {
-                  res.render("ranking.ejs", {
-                    ranking,
-                    deportes,
-                    torneos,
+                 const sql4 = `SELECT
+                 e.nombreEquipo AS NombreEquipo,
+                 j.nombreJugador AS NombreJugador
+             FROM
+                 equipos e
+                 INNER JOIN jugadores_equipos je ON e.codEquipo = je.codEquipo
+                 INNER JOIN jugador j ON je.codJugador = j.codJugador
+                 INNER JOIN deporte d ON e.codDeporte = d.id
+             WHERE
+                 d.id = ?
+             ORDER BY
+                 e.nombreEquipo, j.nombreJugador;`
+                  conexion.query(sql4, [id], (error, jugadores) => {
+
+                    if(error){
+                      console.log(error);
+                    }else{
+
+                      const deportesConEquiposSQL = `
+                      SELECT DISTINCT d.nombreDeporte, d.id
+                      FROM deporte d
+                      INNER JOIN equipos e ON d.id = e.codDeporte`;
+
+                      conexion.query(deportesConEquiposSQL, (error, deportesConEquipos) => {
+                        if(error){
+                          console.log(error);
+                        }else{
+                          res.render("ranking.ejs", {
+                            ranking,
+                            deportes,
+                            torneos,
+                            jugadores,
+                            deportesConEquipos
+                          });
+                        }
+                      })
+                    }
                   });
                 }
               });
             } else if (deporte[0].tipoDeporte == "Equipos") {
               // datos Ranking Equipo
               const sql4 = `SELECT
-                          re.puntos,d.nombreDeporte,d.tipoDeporte,e.nombreEquipo,t.nombreTorneo,t.codTorneo
-                        FROM
-                          rankinge re
-                          INNER JOIN deporte d ON re.codDeporte = d.id
-                          INNER JOIN torneos t ON re.codTorneo = t.codTorneo
-                          INNER JOIN equipos e ON re.codEquipo = e.codEquipo
-                        WHERE
-                          d.id = ?
-                          AND t.codTorneo = ?
-                        ORDER BY
-                          re.puntos DESC`;
+              re.puntos, d.nombreDeporte, d.tipoDeporte,
+              COALESCE(e.nombreEquipo, re.nombreEquipo) AS nombreEquipo,
+              t.nombreTorneo, t.codTorneo
+          FROM rankinge re
+          INNER JOIN deporte d ON re.codDeporte = d.id
+          INNER JOIN torneos t ON re.codTorneo = t.codTorneo
+          LEFT JOIN equipos e ON re.codEquipo = e.codEquipo
+          WHERE d.id = ?
+              AND t.codTorneo = ?
+          ORDER BY re.puntos DESC;
+          `;
               conexion.query(sql4, [id, codTorneo], (error, rankinge) => {
                 if (error) {
                   console.log(error);
-                } else {
-                  res.render("rankingE.ejs", {
-                    rankinge,
-                    deportes,
-                    torneos,
+                }else {
+                  // seleccionar jugadores y equipos
+                  const sql5 = `SELECT
+                                  e.nombreEquipo AS NombreEquipo,
+                                  j.nombreJugador AS NombreJugador
+                              FROM
+                                  equipos e
+                                  INNER JOIN jugadores_equipos je ON e.codEquipo = je.codEquipo
+                                  INNER JOIN jugador j ON je.codJugador = j.codJugador
+                                  INNER JOIN deporte d ON e.codDeporte = d.id
+                              WHERE
+                                  d.id = ?
+                              ORDER BY
+                                  e.nombreEquipo, j.nombreJugador;`;
+                  conexion.query(sql5, [id], (error, jugadores) => {
+                    if(error){
+                      console.log(error);
+                    }else{
+                      const deportesConEquiposSQL = `
+                      SELECT DISTINCT d.nombreDeporte, d.id
+                      FROM deporte d
+                      INNER JOIN equipos e ON d.id = e.codDeporte`;
+
+                      conexion.query(deportesConEquiposSQL, (error, deportesConEquipos) => {
+                        if(error){
+                          console.log(error);
+                        }else{
+                                res.render("rankingE.ejs", {
+                                  rankinge,
+                                  deportes,
+                                  torneos,
+                                  jugadores,
+                                  deportesConEquipos
+                                });
+                              }
+                            })
+                    }
                   });
                 }
               });
@@ -1592,6 +1442,10 @@ router.get("/ranking:id:codTorneo", (req, res) => {
     });
   });
 });
+
+                          
+
+                    
 
 // IMAGEN
 const storage = multer.memoryStorage();
@@ -1877,9 +1731,6 @@ router.get("/admin/deleteGoleador/:codPartido", (req, res) => {
     }
   );
 });
-
-
-
 
 // Guardar registros
 router.post("/saveGrupo", mycrud.saveGrupo);

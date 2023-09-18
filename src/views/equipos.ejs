@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('partials/headHome.ejs') %>
+    <link rel="stylesheet" href="/css/equipos.css">
+    <title>Equipos - UCABSPORT</title>
+</head>
+<body>
+    <div class="preloader">
+        <div class="spinner"></div>
+      </div>
+      <div class="content">
+        <%- include('partials/navHome.ejs') %>
+    <!-- sliders -->
+      <%- include('partials/sliders.ejs') %>
+    <% if (jugadoresEquipos.length > 0) { %>
+        <div class="container mt-5">
+            <h1 class="text-center">Equipos de <%= deporteSeleccionado[0].nombreDeporte %> </h1>
+            <div class="row">
+                <!-- En pantallas grandes, muestra 4 equipos por fila -->
+                <div class="col-lg-3 col-md-6 col-sm-12 mb-3">
+                    <div class="tabs nav flex-column nav-pills" id="teamButtons" role="tablist" aria-orientation="vertical">
+                        <!-- Los botones de equipo se generarán aquí -->
+                    </div>
+                </div>
+                <!-- En pantallas grandes, muestra los jugadores en el resto del ancho -->
+                <div class="col-lg-9 col-md-6 col-sm-12">
+                    <div class="tab-content" id="teamPlayers">
+                        <!-- La lista de jugadores se generará aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+         <%- include('partials/seccionNoticias.ejs') %>
+                                  <%- include('partials/footer.ejs') %>
+                                    </div> <!-- cierre de contenido de preloader -->
+                                    <%- include('partials/scriptsHome.ejs') %>
+        <script>
+
+            // Datos de ejemplo para los equipos y jugadores
+
+
+            const datosEquiposJugadores = JSON.parse('<%- JSON.stringify(jugadoresEquipos) %>');
+            const teamButtonsContainer = document.getElementById('teamButtons');
+            const teamPlayersContainer = document.getElementById('teamPlayers');
+
+            // Crear un objeto para agrupar jugadores por equipo
+            const equipos = {};
+
+            // Organizar los datos en el objeto 'equipos'
+            datosEquiposJugadores.forEach((fila) => {
+                const nombreEquipo = fila.NombreEquipo;
+                const nombreJugador = fila.NombreJugador;
+
+                if (!equipos[nombreEquipo]) {
+                    equipos[nombreEquipo] = [];
+                }
+
+                equipos[nombreEquipo].push(nombreJugador);
+            });
+
+            // Crear botones para cada equipo
+            for (const nombreEquipo in equipos) {
+                const button = document.createElement('button');
+                button.textContent = nombreEquipo;
+                button.classList.add('tablinks');
+
+                // Agregar un evento para mostrar los jugadores cuando se hace clic en el botón
+                button.addEventListener('click', () => {
+                    mostrarJugadores(nombreEquipo, equipos[nombreEquipo]);
+                });
+
+                teamButtonsContainer.appendChild(button);
+            }
+
+            // Función para mostrar la lista de jugadores de un equipo
+            function mostrarJugadores(nombreEquipo, jugadores) {
+                // Limpiar el contenedor de jugadores
+                teamPlayersContainer.innerHTML = '';
+
+                // Crear una lista de jugadores para el equipo seleccionado
+                const ul = document.createElement('ul');
+
+                jugadores.forEach((nombreJugador) => {
+                    const li = document.createElement('li');
+                    li.textContent = nombreJugador;
+                    ul.appendChild(li);
+                });
+
+                teamPlayersContainer.appendChild(ul);
+
+                // Marcar el botón de equipo seleccionado
+                const buttons = document.querySelectorAll('.tablinks');
+                buttons.forEach((button) => {
+                    button.classList.remove('active');
+                    if (button.textContent === nombreEquipo) {
+                        button.classList.add('active');
+                    }
+                });
+            }
+
+            // Función para crear los tabs de equipos
+            function crearTabsEquipos() {
+                const teamTabsContainer = document.getElementById('teamButtons');
+                const teamPlayersContainer = document.getElementById('teamPlayers');
+
+                // Crear los tabs de equipos
+                equiposYJugadores.forEach((equipo, index) => {
+                    const tab = document.createElement('div');
+                    tab.classList.add('tab');
+                    tab.setAttribute('id', equipo.NombreEquipo);
+
+                    const button = document.createElement('button');
+                    button.textContent = equipo.NombreEquipo;
+                    button.classList.add('tablinks');
+
+                    // Agregar un evento para mostrar los jugadores del equipo al hacer clic en el tab
+                    button.addEventListener('click', () => {
+                        mostrarJugadoresEquipo(equipo.NombreEquipo);
+                    });
+
+                    tab.appendChild(button);
+                    teamTabsContainer.appendChild(tab);
+
+
+                });
+            }
+            // Llamar a la función para crear los tabs de equipos al cargar la página
+            window.addEventListener('load', crearTabsEquipos);
+        </script>
+</body>
+</html>

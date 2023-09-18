@@ -5,5 +5,20 @@
         ".vscode{,/**}"
     ],
     "appService.defaultWebAppToDeploy": "/subscriptions/9ae36f6f-0435-40a5-b7b0-932f97bf6e97/resourceGroups/Wolf-League/providers/Microsoft.Web/sites/rankingucab",
-    "appService.deploySubpath": "."
+    "appService.deploySubpath": ".",
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "rankingucab.mysql.database.azure.com",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "UCABSPORT.COM",
+            "database": "rankingucab",
+            "username": "wilterd",
+            "password": "nkWrr%64tE3q"
+        }
+    ]
 }

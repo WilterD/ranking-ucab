@@ -24,6 +24,17 @@
                                     tabindex="1">
                             </div>
                             <div class="mb-3">
+                                <label for="Carrera" class="form-label">Carrera</label>
+                                <select name="codCarrera" id="codCarrera" class="form-select">
+                                    <option disabled selected>Seleccione una carrera</option>
+                                    <% carrera.forEach((carrera)=>{ %>
+                                        <option value="<%= carrera.id %>">
+                                            <%= carrera.nombreCarrera %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="mb-3">
                                 <label for="nombreDeporte" class="form-label">Nombre Deporte</label>
                                 <select id="nombreDeporte" name="codDeporte" class="form-select" aria-label="Default select example"
                                   tabindex="2" required>
@@ -39,7 +50,7 @@
                               </div>
                             <div class="mb-3">
                                 <label for="codEquipo" class="form-label">Equipo</label>
-                                <select name="codEquipo" id="codEquipo1" class="form-select">
+                                <select name="codEquipo[]" id="codEquipo" class="form-select">
                                     <option disabled selected>Seleccione un equipo</option>
                                     <% equipo.forEach((equipo)=>{ %>
                                         <option value="<%= equipo.codEquipo %>">
@@ -48,17 +59,16 @@
                                         <% }) %>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label for="Carrera" class="form-label">Carrera</label>
-                                <select name="codCarrera" id="codCarrera" class="form-select">
-                                    <option disabled selected>Seleccione una carrera</option>
-                                    <% carrera.forEach((carrera)=>{ %>
-                                        <option value="<%= carrera.id %>">
-                                            <%= carrera.nombreCarrera %>
-                                        </option>
-                                        <% }) %>
-                                </select>
+                            <label>(Si el jugador forma parte de otros equipos)</label>
+                            <div class="mb-3 mx-auto text-center" style="max-width: 200px;">
+                                
+                                <div class="btn btn-outline-primary fs-2 rounded" id="agregarCampo"><i class='bx bxs-plus-circle'></i></div>
                             </div>
+
+                            <div id="contenedorSelects">
+
+                            </div>
+                            
                             <button id="submit-btn" type="submit" class="btn btn-primary" tabindex="5">Guardar</button>
                             <a href="/admin/jugadores" class="btn btn-secondary">Cancelar</a>
                         </form>
@@ -78,8 +88,98 @@
                 </div>
             </div>
         </section>
-        <%- include('partials/selectEquipos.ejs') %>
         <%- include('partials/scripts.ejs') %>
+       <script>
+   // Función para actualizar los equipos
+   function actualizarEquipos(selectDeporte, selectEquipo) {
+  const codDeporte = selectDeporte.value;
+
+  $.ajax({
+    url: `/actualizarEquipos/${codDeporte}`,
+    type: 'GET',
+    dataType: 'json',
+    success: function (response) {
+      try {
+        const equipos = JSON.parse(response.jsonEquipos);
+        let template = '';
+        equipos.forEach((equipo) => {
+          template += `<option value="${equipo.codEquipo}">${equipo.nombreEquipo}</option>`;
+        });
+
+        // Actualiza solo el selectEquipo específico pasado como argumento
+        selectEquipo.innerHTML = template;
+      } catch (e) {
+        console.error('Error al analizar la respuesta:', e);
+        return;
+      }
+    },
+    error: function (xhr, status, error) {
+      console.log(xhr);
+      console.log(status);
+      console.log(error);
+    }
+  });
+}
+
+
+// Evento de cambio para selectores iniciales
+const selectDeporte = document.getElementById('nombreDeporte');
+const selectEquipo = document.getElementById('codEquipo');
+
+selectDeporte.addEventListener('change', function () {
+  actualizarEquipos(selectDeporte, selectEquipo);
+});
+
+const contenedorSelects = document.getElementById('contenedorSelects');
+
+// Agrega un evento de cambio al contenedor principal
+contenedorSelects.addEventListener('change', function (event) {
+  // Verifica si el objetivo del evento es un select de nombreDeporte
+  if (event.target && event.target.className.includes('nombreDeporte')) {
+    actualizarEquipos(event.target, selectEquipo);
+  }
+});
+
+// Evento para agregar campos dinámicamente
+$(document).ready(function() {
+  let contadorCampos = 0; // Inicializa el contador en 0
+
+  $("#agregarCampo").click(function() {
+    // Clonar el último campo nombreDeporte y su nombre
+    const ultimoCampoDeporte = $("select[name^='codDeporte']:last");
+    const nuevoCampoDeporte = ultimoCampoDeporte.clone();
+    const nuevoIdentificadorDeporte = `nombreDeporte${contadorCampos}`;
+    nuevoCampoDeporte.attr("id", nuevoIdentificadorDeporte);
+
+    // Clonar el último campo codEquipo y su nombre
+    const ultimoCampoEquipo = $("select[name^='codEquipo']:last");
+    const nuevoCampoEquipo = ultimoCampoEquipo.clone();
+    const nuevoNombreCampo = `codEquipo${contadorCampos}[]`;
+    nuevoCampoEquipo.attr("name", nuevoNombreCampo).val("");
+
+    // Incrementa el contador para el siguiente conjunto de campos
+    contadorCampos++;
+
+    // Almacena una referencia al select de equipo clonado
+    const selectEquipoClonado = nuevoCampoEquipo[0];
+
+    // Agregar los nuevos campos clonados al final
+    $(".mb-3:last").after(nuevoCampoDeporte);
+    $(".mb-3:last").after(nuevoCampoEquipo);
+
+    // Agrega el evento change al nuevo selector de nombreDeporte
+    nuevoCampoDeporte.on('change', function () {
+      // Pasa la referencia al select de equipo clonado
+      actualizarEquipos($(this)[0], selectEquipoClonado);
+    });
+  });
+});
+
+
+
+</script>
+        
+        
 </body>
 
 </html>

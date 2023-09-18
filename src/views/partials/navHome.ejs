@@ -39,8 +39,24 @@
                                 <% }) %>
                         </ul>
                     </li>
+                    <% } %>
+                    <% if (deportesConEquipos.length> 0) { %>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown navbarDropdown2"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Equipos
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu2" aria-labelledby="navbarDropdown">
+                            <% deportesConEquipos.forEach((equipos)=>{ %>
+                                <li><a class="dropdown-item linkMenu" href="/equipos<%= equipos.id %>">
+                                        <%= equipos.nombreDeporte %>
+                                    </a></li>
+                                <% }) %>
+                        </ul>
+                    </li>
+                    <% } %>
+                   
                 </ul>
             </div>
-            <% } %>
     </div>
 </nav>
