@@ -112,7 +112,6 @@ router.get("/admin/jugadores", requireLogin, (req, res) => {
       if (error) {
         console.log(error);
       } else {
-        console.log(jugadores)
         res.render("admin/jugadores.ejs", {
           jugadores: jugadores,
         });
@@ -878,7 +877,6 @@ router.get("/admin/editarRankingRI/:id", requireLogin, (req, res) => {
                       if (error) {
                         console.log(error);
                       } else {
-                        console.log(ranking)
                         res.render("admin/editarRankingRI", {
                           ranking: ranking[0],
                           deportes: deportes,

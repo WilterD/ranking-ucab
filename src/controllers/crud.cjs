@@ -133,9 +133,6 @@ for (let i = 0; i < codJugador.length; i++) {
           const codEquipoItem = codEquipo[i];
           const codJugadorItem = codJugador[i];
           const golesInt = parseInt(gol); // convertir a número entero
-          console.log(codEquipoItem)
-          console.log(codJugadorItem)
-          console.log(golesInt)
           const valores = [
             golesInt,
             codDeporte,
@@ -188,8 +185,6 @@ for (let i = 0; i < codJugador.length; i++) {
 
 exports.saveEquipo = (req, res) => {
   const { codDeporte, nombreEquipo } = req.body;
-
-  console.log(req.headers);
 
   if (!req.file?.path) {
     conexion.query(
@@ -292,9 +287,6 @@ exports.saveJugador = (req, res) => {
       } else {
         // Obtener el ID del jugador recién insertado
         const jugadorId = results.insertId;
-        console.log("id recien insertado")
-        console.log(jugadorId)
-
         // Insertar las relaciones entre el jugador y los equipos seleccionados en 'jugadores_equipos'
         codEquipos.forEach((codEquipo) => {
           conexion.query(
@@ -430,8 +422,6 @@ exports.updateEliminatoria = (req, res) => {
   const goles_en_contra = req.body.goles_en_contra;
   const diferencia_goles = req.body.diferencia_goles;
   const puntos = req.body.puntos;
-
-  console.log(req.body);
 
   conexion.query(
     "UPDATE eliminatorias SET ? WHERE id = ?",
@@ -753,13 +743,25 @@ exports.saveRE = (req, res) => {
   const codDeporte = req.body.codDeporte;
   const codTorneo = req.body.codTorneo;
 
+  //nombre del equipo
   conexion.query(
+    "SELECT nombreEquipo FROM equipos WHERE codEquipo=?",
+    [codEquipo],
+    (error, nombreEquipo) => {
+      if (error) {
+        console.log(error);
+        res.status(400).json({
+          msg: "Error",
+        });
+      }else{
+      conexion.query(
     "INSERT INTO rankinge SET ?",
     {
-      codEquipo: codEquipo,
-      puntos: puntos,
-      codDeporte: codDeporte,
-      codTorneo: codTorneo,
+      codEquipo,
+      puntos,
+      codDeporte,
+      codTorneo,
+      nombreEquipo: nombreEquipo[0].nombreEquipo,
     },
     (error, results) => {
       if (error) {
@@ -767,9 +769,11 @@ exports.saveRE = (req, res) => {
         res.status(400).json({ msg: "error" });
       } else {
         res.redirect("/admin/rankingEquipos");
-      }
-    }
-  );
+          }
+        }
+      );
+    };
+  });
 };
 
 exports.updateRE = (req, res) => {
@@ -840,8 +844,7 @@ exports.saveTorneoStatus = (req, res) => {
   const sql = `
     UPDATE torneos
     SET status = 1
-    WHERE codTorneo = ?;
-  `;
+    WHERE codTorneo = ?`;
 
   conexion.query(sql, [codTorneo, codTorneo], (error, results) => {
     if (error) {

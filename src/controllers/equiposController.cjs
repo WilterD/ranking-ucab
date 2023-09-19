@@ -74,8 +74,6 @@ ORDER BY
                 return res.status(500).send("Error de servidor");
               }
 
-              console.log(jugadoresEquipos);
-
               res.render("equipos.ejs", {
                 jugadoresEquipos,
                 deportes,

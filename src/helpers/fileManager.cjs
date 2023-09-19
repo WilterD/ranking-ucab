@@ -25,7 +25,6 @@ async function initFileManager() {
 const deleteFile = async (path, filename) => {
   try {
     await fse.remove(path);
-    console.log(`${filename} file deleted!`);
   } catch (err) {
     console.log(err);
   }
