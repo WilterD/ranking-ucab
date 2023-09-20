@@ -309,9 +309,13 @@ exports.saveJugador = (req, res) => {
 
 
 exports.updateJugador = (req, res) => {
+
+  const codEquipos = Object.keys(req.body)
+    .filter(key => key.startsWith('codEquipo'))
+    .map(key => req.body[key]);
+
   const codJugador = req.body.codJugador;
   const nombreJugador = req.body.nombreJugador;
-  const codEquipo = req.body.codEquipo;
   const codCarrera = req.body.codCarrera;
 
   conexion.query(
@@ -320,7 +324,6 @@ exports.updateJugador = (req, res) => {
       {
         nombreJugador,
         codJugador,
-        codEquipo,
         codCarrera,
       },
       codJugador,
@@ -330,11 +333,27 @@ exports.updateJugador = (req, res) => {
         console.log(error);
         res.status(400).json({ msg: "error" });
       } else {
+        // insertar nuevos equipos del jugador
+        codEquipos.forEach((codEquipo) => {
+          conexion.query(
+            "INSERT INTO jugadores_equipos (codJugador, codEquipo) VALUES (?, ?)",
+            [codJugador, codEquipo],
+            (error) => {
+              if (error) {
+                console.log(error);
+                res.status(400).json({ msg: "Error al guardar la relación jugador-equipo" });
+              }
+            }
+          );
+        });
+
+        // Redirige a admin/jugadores después de completar la edición
         res.redirect("/admin/jugadores");
       }
     }
   );
 };
+
 
 exports.saveCarrera = (req, res) => {
   const nombreCarrera = req.body.nombreCarrera;
@@ -866,3 +885,11 @@ exports.saveTorneoStatus = (req, res) => {
     }
   });
 };
+
+
+
+
+
+
+
+

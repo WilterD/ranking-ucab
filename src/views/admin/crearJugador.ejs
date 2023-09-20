@@ -147,12 +147,14 @@ $(document).ready(function() {
   $("#agregarCampo").click(function() {
     // Clonar el último campo nombreDeporte y su nombre
     const ultimoCampoDeporte = $("select[name^='codDeporte']:last");
+    ultimoCampoDeporte.addClass("mb-3");
     const nuevoCampoDeporte = ultimoCampoDeporte.clone();
     const nuevoIdentificadorDeporte = `nombreDeporte${contadorCampos}`;
     nuevoCampoDeporte.attr("id", nuevoIdentificadorDeporte);
 
     // Clonar el último campo codEquipo y su nombre
     const ultimoCampoEquipo = $("select[name^='codEquipo']:last");
+    ultimoCampoEquipo.addClass("mb-3");
     const nuevoCampoEquipo = ultimoCampoEquipo.clone();
     const nuevoNombreCampo = `codEquipo${contadorCampos}[]`;
     nuevoCampoEquipo.attr("name", nuevoNombreCampo).val("");

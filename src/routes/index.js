@@ -171,13 +171,37 @@ router.get("/admin/editarJugador/:codJugador", requireLogin, (req, res) => {
               if (error) {
                 throw error;
               } else {
-                res.render("admin/editarJugador.ejs", {
-                  jugador: jugador[0],
-                  carrera: carrera,
-                  equipo: equipo,
-                });
+                // seleccionar todos los deportes
+                conexion.query("SELECT * FROM deporte", (error, deporte) => {
+                  if (error) {
+                    throw error;
+                  } else {
+
+                    // nombreEquipo del jugador
+                    conexion.query(
+                      `SELECT e.codEquipo, nombreEquipo 
+                      FROM equipos e
+                        INNER JOIN jugadores_equipos j ON e.codEquipo = j.codEquipo
+                        WHERE j.codJugador = ?`, [jugador[0].codJugador],
+                      (error, nombreEquipo) => {
+                        if (error) {
+                          throw error;
+                        } else {
+                          res.render("admin/editarJugador.ejs", {
+                            jugador: jugador[0],
+                            carrera: carrera,
+                            equipo: equipo,
+                            deporte: deporte,
+                            nombreEquipo: nombreEquipo,
+                          });
+                        }
+                      });
+                  }
+                })
               }
+
             });
+
           }
         });
       }
@@ -1729,6 +1753,176 @@ router.get("/admin/deleteGoleador/:codPartido", (req, res) => {
     }
   );
 });
+
+
+// mostrar Equipos
+router.post("/admin/mostrarEquipos", requireLogin, (req, res) => {
+  const codJugador = req.body.codJugador;
+  const sql = `SELECT * FROM jugadores_equipos WHERE codJugador = ?`;
+
+  conexion.query(sql, [codJugador], (error, jugadores) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.render("admin/mostrarEquipos.ejs", { jugadores: jugadores[0] }); //render muestra el archivo ejs
+    }
+  });
+});
+
+// Obtener equipos con Ajax
+router.get("/mostrarEquipos/:codJugador", async (req, res) => {
+  try {
+    const codJugador = req.params.codJugador;
+
+    // Consulta SQL para obtener los equipos del deporte seleccionado
+    const sql = "SELECT * FROM jugadores_equipos WHERE codJugador = ?";
+    conexion.query(sql, [codJugador], (error, equipos) => {
+      if (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error del servidor" });
+      } else {
+
+        // obtener todos los equipos del codJugador
+        const sql2 = 
+        `SELECT e.codEquipo, nombreEquipo 
+        FROM equipos e
+          INNER JOIN jugadores_equipos j ON e.codEquipo = j.codEquipo
+          WHERE j.codJugador = ?`;
+
+        conexion.query(sql2, [codJugador], (error, equiposJugador) => {
+          if (error) {
+            console.error(error);
+            res.status(500).json({ error: "Error del servidor" });
+          } else {
+                  const jsonEquipos = JSON.stringify(equiposJugador);
+                  // Enviar el objeto JSON al cliente
+                  res.json({ jsonEquipos });
+                }
+              });
+            }
+          });
+        } catch (err) {
+          console.error(err);
+          res.status(500).json({ error: "Error del servidor" });
+        }
+      });
+
+
+      // eliminar un equipo de un jugador
+      router.get("/deleteEquipoJugador/:codJugador/:codEquipo", (req, res) => {
+        const codJugador = req.params.codJugador;
+        const codEquipo = req.params.codEquipo;
+      
+        conexion.query(
+          `DELETE FROM jugadores_equipos
+           WHERE codJugador = ? AND codEquipo = ?`,
+          [codJugador, codEquipo],
+          (error, results) => {
+            if (error) {
+              console.log(error);
+              res.json({ success: false, message: "Error al eliminar el equipo" });
+            } else {
+              res.json({ success: true, message: "Equipo eliminado con éxito" });
+            }
+          }
+        );
+      });
+      
+
+
+      // Obtener jugadores con Ajax
+router.get("/mostrarJugadores/:codEquipo", async (req, res) => {
+  try {
+    const codEquipo = req.params.codEquipo;
+        // obtener todos los nombre de los jugadores
+        const sql2 = 
+        `SELECT ju.codJugador, nombreJugador, je.codEquipo 
+        FROM jugador ju
+          INNER JOIN jugadores_equipos je ON ju.codJugador = je.codJugador
+          WHERE je.codEquipo = ?`;
+        conexion.query(sql2, [codEquipo], (error, jugadores) => {
+          if (error) {
+            console.error(error);
+            res.status(500).json({ error: "Error del servidor" });
+          } else {
+                  const jsonJugadores = JSON.stringify(jugadores);
+                }
+              });
+            }
+           catch (err) {
+          console.error(err);
+          res.status(500).json({ error: "Error del servidor" });
+        }
+      });
+
+      router.get("/obtenerTodosJugadores/:codEquipo", async (req, res) => {
+        const codEquipo = req.params.codEquipo;
+        try {
+          // obtener todos los nombre de los jugadores
+          const todosJugadoresSQL =
+            `SELECT j.codJugador, j.nombreJugador, c.nombreCarrera
+            FROM jugador j
+            INNER JOIN carreras c ON j.codCarrera = c.id
+            WHERE j.codJugador NOT IN (
+              SELECT codJugador
+              FROM jugadores_equipos
+              WHERE codEquipo = ?
+            );`
+          conexion.query(todosJugadoresSQL,[codEquipo],(error, jugadores) => {
+            if (error) {
+              console.error(error);
+              res.status(500).json({ error: "Error del servidor" });
+            } else {
+              const jsonJugadores = JSON.stringify(jugadores);
+              // Enviar el objeto JSON al cliente
+              res.json({ jsonJugadores });
+            }
+          });
+        } catch (err) {
+          console.error(err);
+          res.status(500).json({ error: "Error del servidor" });
+        }
+      });
+
+     
+      router.post("/insertarJugadoresEquipos", async (req, res) => {
+        try {
+          const { codJugador, codEquipo } = req.body;
+      
+          if (!Array.isArray(codJugador) || !codJugador.length) {
+            return res.status(400).json({ error: "No se proporcionaron jugadores válidos" });
+          }
+      
+          // Construye la consulta SQL para la inserción múltiple
+          const placeholders = codJugador.map(() => "(?, ?)").join(", ");
+          const valoresInsercion = codJugador.reduce((acc, cod) => [...acc, cod, codEquipo], []);
+      
+          const sqlInsertarJugadores = `INSERT INTO jugadores_equipos (codJugador, codEquipo) VALUES ${placeholders}`;
+      
+          conexion.query(sqlInsertarJugadores, valoresInsercion, (error, result) => {
+            if (error) {
+              console.error(error);
+              res.status(500).json({ error: "Error del servidor" });
+            } else {
+              res.json({ success: true, message: `${result.affectedRows} jugadores insertados con éxito` });
+            }
+          });
+        } catch (err) {
+          console.error(err);
+          res.status(500).json({ error: "Error del servidor" });
+        }
+      });
+      
+
+    
+          
+        
+        
+
+            
+
+
+
 
 // Guardar registros
 router.post("/saveGrupo", mycrud.saveGrupo);

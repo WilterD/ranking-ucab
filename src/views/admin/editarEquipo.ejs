@@ -16,7 +16,8 @@
       <% if (equipo) { %>
         <div class="container mt-4">
           <div class="card border-secondary">
-            <div class="card-header">Editar Equipo</div>
+            <div class="card-header">Editar Equipo <button onclick="agregarJugadores('<%= equipo.codEquipo %>')"
+                class="btn btn-primary ms-auto me-2">Agregar Jugadores <i class='bx bxs-plus-circle'></i></button></div>
             <div class="card-body">
               <form action="/updateEquipo" method="POST" enctype="multipart/form-data">
                 <input id="codEquipo" name="codEquipo" value="<%= equipo.codEquipo %>" hidden>
@@ -68,7 +69,100 @@
         </div>
       </section>
 
+
       <%- include('partials/scripts.ejs') %>
+
+        <script>
+          function agregarJugadores(codEquipo) {
+            // Realizar una solicitud AJAX para obtener la lista de jugadores
+            $.ajax({
+              url: `/obtenerTodosJugadores/${codEquipo}`,
+              type: 'GET',
+              dataType: 'json',
+              success: function (response) {
+                const jugadores = JSON.parse(response.jsonJugadores);
+
+                // Crea un elemento div para contener los checkboxes de los jugadores
+                const jugadorDiv = document.createElement('div');
+
+                // Itera sobre la lista de jugadores y crea un checkbox para cada uno
+                jugadores.forEach(jugador => {
+                  const jugadorContainer = document.createElement('div');
+                  jugadorContainer.classList.add('d-flex', 'justify-content-between', 'mb-3'); // Agrega clases de flexbox y margen inferior
+
+                  const label = document.createElement('label');
+                  label.textContent = jugador.nombreJugador;
+
+                  const small = document.createElement('small');
+                  small.textContent = `: ${jugador.nombreCarrera}`;
+
+                  const checkboxDiv = document.createElement('div');
+                  checkboxDiv.classList.add('form-check', 'align-self-center'); // Utiliza clases de Bootstrap para alineación
+
+                  const checkbox = document.createElement('input');
+                  checkbox.classList.add('form-check-input'); // Clase de Bootstrap para checkboxes
+                  checkbox.type = 'checkbox';
+                  checkbox.value = jugador.codJugador;
+                  checkbox.style.transform = 'scale(1.5)';
+
+                  checkboxDiv.appendChild(checkbox);
+                  jugadorContainer.appendChild(label);
+                  jugadorContainer.appendChild(small);
+                  jugadorContainer.appendChild(checkboxDiv);
+                  jugadorDiv.appendChild(jugadorContainer);
+                });
+
+
+
+                // Muestra SweetAlert con los checkboxes de los jugadores
+                Swal.fire({
+                  title: 'Selecciona jugadores',
+                  html: jugadorDiv,
+                  showCancelButton: true,
+                  confirmButtonText: 'Agregar al equipo',
+                  preConfirm: () => {
+                    // Aquí puedes obtener los jugadores seleccionados
+                    const selectedPlayers = Array.from(jugadorDiv.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+
+                    const url = '/insertarJugadoresEquipos';
+                    const data = {
+                      codEquipo: codEquipo,
+                      codJugador: selectedPlayers
+                    };
+
+                    // Realiza la solicitud AJAX
+                    return fetch(url, {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      },
+                      body: JSON.stringify(data)
+                    })
+                      .then(response => response.json())
+                      .then(result => {
+                        // Maneja la respuesta de la inserción aquí
+                        if (result.success) {
+                          Swal.fire('Éxito', 'Jugadores agregados al equipo correctamente', 'success');
+                        } else {
+                          Swal.fire('Error', 'Hubo un problema al agregar los jugadores al equipo', 'error');
+                        }
+                      })
+                      .catch(error => {
+                        console.error('Error al realizar la solicitud AJAX:', error);
+                        Swal.fire('Error', 'Hubo un error al agregar los jugadores al equipo', 'error');
+                      });
+                  }
+                });
+              },
+              error: function (xhr, status, error) {
+                console.error(error);
+                // Manejar el error aquí
+              }
+            });
+          }
+
+
+        </script>
 
 </body>
 

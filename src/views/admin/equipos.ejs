@@ -3,6 +3,22 @@
 <head>
   <%- include('partials/head.ejs') %>
     <title>Equipos</title>
+    <style>
+      .equipo-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+    
+      .equipo-titulo {
+        flex-grow: 1;
+      }
+    
+      .boton-eliminar {
+        width: 30px;
+        margin-left: 10px;
+      }
+    </style>
 </head>
 <body>
    <%- include('partials/navigation.ejs') %>
@@ -23,6 +39,7 @@
                 <th scope="col">Nombre</th>
                 <th scope="col">Deporte</th>    
                 <th scope="col">Logo</th>  
+                <th scope="col">Jugadores</th>    
                 <th scope="col">Acciones</th>           
               </tr>
           </thead>
@@ -31,12 +48,17 @@
         <tr>  
             <td><%= equipos.nombreEquipo %></td>  
             <td><%= equipos.nombreDeporte %></td>  
-            <td><img class="img-fluid text-center mx-auto" src="<%= equipos.imagen ? equipos.imagen : '../images/UCAB-LOBOS.svg' %>" width="55px" height="55px" alt="logo" /></td>  
+        
+            <td><img class="img-fluid text-center mx-auto" src="<%= equipos.imagen ? equipos.imagen : '../images/UCAB-LOBOS.svg' %>" width="55px" height="55px" alt="logo" /></td> 
+            <td><a class="btn btn-primary" onclick="mostrarJugadores('<%= equipos.codEquipo %>')">Mostrar <i
+              class='bx bxs-shield'></i></a></td>
+
             <td>
               <a href="/admin/editarEquipo/<%= equipos.codEquipo %>" class="btn btn-outline-info"><i class='bx bxs-pencil fs-5'></i></a>
               <a onclick="confirmar('<%= equipos.codEquipo %>','/admin/deleteEquipo')" class="btn btn-outline-danger">
                 <i class='bx bxs-trash'></i></a>
             </td>
+            
         </tr>                                   
      <% }) %>
             </tbody>
@@ -65,6 +87,101 @@
     tabla.order([1, 'desc']).draw();
     })
     
+  </script>
+  <script>
+    // mostrar sweet alert con los equipos del jugador cuando se presiona el boton mostrar
+
+    function mostrarJugadores(codEquipo) {
+          $.ajax({
+            url: `/mostrarJugadores/${codEquipo}`,
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+
+
+              // Analiza el JSON
+              const jugadores = JSON.parse(response.jsonJugadores);
+
+              // Verifica si se recibieron equipos
+              if (jugadores && jugadores.length > 0) {
+                // Crea un array de títulos de jugadores con botones de eliminación
+                const jugadoresConBotones = jugadores.map(function (jugador) {
+                  const tituloJugador = jugador.nombreJugador;
+                  const botonEliminar = `<button class="btn btn-danger eliminar-jugador" data-cod-jugador="${jugador.codJugador}"><i class='bx bxs-trash'></i></button>`;
+                  return `<div class="equipo-container">
+                            <span class="equipo-titulo">${tituloJugador}</span>
+                            <div class="boton-eliminar">${botonEliminar}</div>
+                          </div>
+                        `;
+                      });
+
+                // Muestra los jugadores en el modal
+                Swal.fire({
+                  title: 'Jugadores del Equipo',
+                  html: `<ul><li class="mb-3">${jugadoresConBotones.join('</li><li>')}</li></ul>`,
+                  showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                  },
+                  hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                  }
+                });
+
+                // Agrega un manejador de eventos para los botones de eliminación
+                $('.eliminar-jugador').on('click', function () {
+                  const codJugador = $(this).data('cod-jugador');
+
+                  // Realiza la eliminación mediante una solicitud AJAX
+                  eliminarEquipoDeJugador(codJugador, codEquipo);
+                });
+              } else {
+                // Manejar el caso en el que no se recibieron equipos
+                Swal.fire({
+                  title: 'No se encontraron jugadores',
+                  text: 'Este equipo está sin jugadores',
+                  icon: 'info'
+                });
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error(error);
+              // Manejar el error aquí
+            }
+          });
+
+          function eliminarEquipoDeJugador(codJugador, codEquipo) {
+            // Realiza la solicitud AJAX para eliminar el equipo
+            $.ajax({
+              url: `/deleteEquipoJugador/${codJugador}/${codEquipo}`,
+              type: 'GET', // Cambia el tipo de solicitud según tus necesidades
+              success: function (response) {
+
+
+
+                if (response.message) {
+                  Swal.fire({
+                    title: "Jugador Eliminado del Equipo",
+                    text: false,
+                    icon: 'success'
+                  });
+                  // Actualiza la lista de equipos después de la eliminación si es necesario
+                } else {
+                  Swal.fire({
+                    title: 'Error al Eliminar el jugador',
+                    text: 'Hubo un problema al eliminar el jugador.',
+                    icon: 'error'
+                  });
+                }
+                // Actualiza la lista de equipos después de la eliminación si es necesario
+                // Puedes recargar la lista de equipos o realizar alguna otra acción
+              },
+              error: function (xhr, status, error) {
+                console.error(error);
+                // Manejar el error aquí
+              }
+            });
+          }
+        }
   </script>
 </body>
 </html>

@@ -1,62 +1,195 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <%- include('partials/head.ejs') %>
     <title>Jugadores</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+      .equipo-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+    
+      .equipo-titulo {
+        flex-grow: 1;
+      }
+    
+      .boton-eliminar {
+        width: 30px;
+        margin-left: 10px;
+      }
+    </style>
 </head>
+
 <body>
-   <%- include('partials/navigation.ejs') %>
-   <section class="home-section">
-    <div class="home-content">
-      <i class='bx bx-menu' ></i>
-      >>> Jugadores
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="">
-          <a href="/admin/crearJugador" class="btn btn-outline-primary fs-2 btn-block"> Agregar <i class='bx bxs-plus-circle'></i></a> 
-        </div> 
-        <div class="col-xs-12 mt-3 table-responsive">
-          <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
-    <thead>
-      <tr class="bg-primary text-white">
-        <th scope="col">Nombre</th>            
-        <th scope="col">Carrera</th>           
-        <th scope="col">Acciones</th>           
-      </tr>
-    </thead>
-    <tbody>
-      <% jugadores.forEach((jugador)=>{ %>
-        <tr>  
-          <td><%= jugador.nombreJugador %></td>
-          <td><%= jugador.nombreCarrera %></td>
-            <td>
-              <a href="/admin/editarJugador/<%= jugador.codJugador %>" class="btn btn-outline-info"><i class='bx bxs-pencil fs-5'></i></a>
-              <a onclick="confirmar('<%= jugador.codJugador %>','/admin/deleteJugador')" class="btn btn-outline-danger"><i class='bx bxs-trash'></i></a>
-            </td>
-        </tr>                                   
-     <% }) %>
-    </tbody>
-  </table>
-</div>
-</div>
-</div>
-</section> 
+  <%- include('partials/navigation.ejs') %>
+    <section class="home-section">
+      <div class="home-content">
+        <i class='bx bx-menu'></i>
+        >>> Jugadores
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="">
+            <a href="/admin/crearJugador" class="btn btn-outline-primary fs-2 btn-block"> Agregar <i
+                class='bx bxs-plus-circle'></i></a>
+          </div>
+          <div class="col-xs-12 mt-3 table-responsive">
+            <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
+              <thead>
+                <tr class="bg-primary text-white">
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Carrera</th>
+                  <th scope="col">Equipos 🔰</th>
+                  <th scope="col">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% jugadores.forEach((jugador)=>{ %>
+                  <tr>
+                    <td>
+                      <%= jugador.nombreJugador %>
+                    </td>
+                    <td>
+                      <%= jugador.nombreCarrera %>
+                    </td>
+                    <td><a class="btn btn-primary" onclick="mostrarEquipos('<%= jugador.codJugador %>')">Mostrar <i
+                          class='bx bxs-shield'></i></a></td>
+                    <td>
+                      <a href="/admin/editarJugador/<%= jugador.codJugador %>" class="btn btn-outline-info"><i
+                          class='bx bxs-pencil fs-5'></i></a>
+                      <a onclick="confirmar('<%= jugador.codJugador %>','/admin/deleteJugador')"
+                        class="btn btn-outline-danger"><i class='bx bxs-trash'></i></a>
+                    </td>
+                  </tr>
+                  <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<section class="home-section">
-<div class="container">
-<div class="row">
-<div class="col-xs-12 mx-auto">
-  <div id="mensajes">
-  <p id="mensaje"></p>
-  <img class="rounded" src="../../images/medioAmbiente.png" width="330" height="230">
-</div>
-</div>
-</div>
-</div>
-</section>
+    <section class="home-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12 mx-auto">
+            <div id="mensajes">
+              <p id="mensaje"></p>
+              <img class="rounded" src="../../images/medioAmbiente.png" width="330" height="230">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <%- include('partials/scripts.ejs') %>
+
+
+    <%- include('partials/scripts.ejs') %>
+
+      <script>
+
+
+
+        // mostrar sweet alert con los equipos del jugador cuando se presiona el boton mostrar
+
+        function mostrarEquipos(codJugador) {
+          $.ajax({
+            url: `/mostrarEquipos/${codJugador}`,
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+
+
+              // Analiza el JSON
+              const equipos = JSON.parse(response.jsonEquipos);
+
+              // Verifica si se recibieron equipos
+              if (equipos && equipos.length > 0) {
+                // Crea un array de títulos de equipos con botones de eliminación
+                const equiposConBotones = equipos.map(function (equipo) {
+                  const tituloEquipo = equipo.nombreEquipo;
+                  const botonEliminar = `<button class="btn btn-danger eliminar-equipo" data-cod-equipo="${equipo.codEquipo}"><i class='bx bxs-trash'></i></button>`;
+                  return `<div class="equipo-container">
+                            <span class="equipo-titulo">${tituloEquipo}</span>
+                            <div class="boton-eliminar">${botonEliminar}</div>
+                          </div>
+                        `;
+                      });
+
+                // Muestra los equipos en el modal
+                Swal.fire({
+                  title: 'Equipos del Jugador',
+                  html: `<ul><li class="mb-3">${equiposConBotones.join('</li><li>')}</li></ul>`,
+                  showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                  },
+                  hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                  }
+                });
+
+                // Agrega un manejador de eventos para los botones de eliminación
+                $('.eliminar-equipo').on('click', function () {
+                  const codEquipo = $(this).data('cod-equipo');
+
+                  // Realiza la eliminación mediante una solicitud AJAX
+                  eliminarEquipoDeJugador(codJugador, codEquipo);
+                });
+              } else {
+                // Manejar el caso en el que no se recibieron equipos
+                Swal.fire({
+                  title: 'No se encontraron equipos',
+                  text: 'El jugador no está asociado a ningún equipo.',
+                  icon: 'info'
+                });
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error(error);
+              // Manejar el error aquí
+            }
+          });
+
+          function eliminarEquipoDeJugador(codJugador, codEquipo) {
+            // Realiza la solicitud AJAX para eliminar el equipo
+            $.ajax({
+              url: `/deleteEquipoJugador/${codJugador}/${codEquipo}`,
+              type: 'GET', // Cambia el tipo de solicitud según tus necesidades
+              success: function (response) {
+
+
+
+                if (response.message) {
+                  Swal.fire({
+                    title: response.message,
+                    text: false,
+                    icon: 'success'
+                  });
+                  // Actualiza la lista de equipos después de la eliminación si es necesario
+                } else {
+                  Swal.fire({
+                    title: 'Error al Eliminar Equipo',
+                    text: 'Hubo un problema al eliminar el equipo.',
+                    icon: 'error'
+                  });
+                }
+                // Actualiza la lista de equipos después de la eliminación si es necesario
+                // Puedes recargar la lista de equipos o realizar alguna otra acción
+              },
+              error: function (xhr, status, error) {
+                console.error(error);
+                // Manejar el error aquí
+              }
+            });
+          }
+        }
+
+
+      </script>
 
 </body>
+
 </html>
