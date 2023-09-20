@@ -1381,7 +1381,10 @@ router.get("/ranking:id:codTorneo", (req, res) => {
                       const deportesConEquiposSQL = `
                       SELECT DISTINCT d.nombreDeporte, d.id
                       FROM deporte d
-                      INNER JOIN equipos e ON d.id = e.codDeporte`;
+                      WHERE d.id IN (
+                        SELECT DISTINCT e.codDeporte
+                        FROM equipos e
+                        INNER JOIN jugadores_equipos je ON e.codEquipo = je.codEquipo`;
 
                       conexion.query(deportesConEquiposSQL, (error, deportesConEquipos) => {
                         if(error){
@@ -1438,7 +1441,10 @@ router.get("/ranking:id:codTorneo", (req, res) => {
                       const deportesConEquiposSQL = `
                       SELECT DISTINCT d.nombreDeporte, d.id
                       FROM deporte d
-                      INNER JOIN equipos e ON d.id = e.codDeporte`;
+                      WHERE d.id IN (
+                        SELECT DISTINCT e.codDeporte
+                        FROM equipos e
+                        INNER JOIN jugadores_equipos je ON e.codEquipo = je.codEquipo`;
 
                       conexion.query(deportesConEquiposSQL, (error, deportesConEquipos) => {
                         if(error){
