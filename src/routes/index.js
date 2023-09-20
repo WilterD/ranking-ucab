@@ -17,11 +17,13 @@ import { uploadImg } from "../helpers/imgUploader.cjs";
 import { publicDir } from "../helpers/fileManager.cjs";
 import homeController from "../controllers/homeController.cjs";
 import EquiposController from "../controllers/equiposController.cjs";
+import RankingController from "../controllers/rankingController.cjs";
 
 
 // Rutas para la página de inicio
 router.get(['/home','/'], homeController.getHomePage);
 router.get('/equipos:id', EquiposController.getEquiposPage);
+router.get('/admin/ranking/:id', RankingController.getRankingPage);
 
 
 router.get("/admin/deleteEstadio/:codEstadio", (req, res) => {
@@ -522,8 +524,18 @@ router.get("/admin/eliminatorias", requireLogin, (req, res) => {
     if (error) {
       console.log(error);
     } else {
-      res.render("admin/eliminatorias.ejs", { eliminatoria: eliminatoria });
-    }
+      const todosDeportes = `SELECT * FROM deporte`;
+      conexion.query(todosDeportes, (error, deportes) => {
+        if(error){
+          console.log(error);
+        }else{
+          res.render("admin/eliminatorias.ejs", {
+            eliminatoria: eliminatoria,
+            deportes: deportes,
+          });
+        }
+    });
+  }
   });
 });
 
@@ -831,20 +843,7 @@ router.get("/admin/deleteDeporte/:id", requireLogin, (req, res) => {
   });
 });
 
-router.get("/admin/rankingIndividual", requireLogin, (req, res) => {
-  const sql = `SELECT r.id, t.nombreTorneo, d.nombreDeporte, r.puntos, c.nombreCarrera, r.nombreJugador
-  FROM rankini r
-  LEFT JOIN torneos t ON r.codTorneo = t.codTorneo
-  LEFT JOIN deporte d ON r.codDeporte = d.id
-  LEFT JOIN carreras c ON r.codCarrera = c.id `;
-  conexion.query(sql, (error, rankini) => {
-    if (error) {
-      console.log(error);
-    } else {
-      res.render("admin/rankingIndividual.ejs", { rankini: rankini }); //render muestra el archivo ejs
-    }
-  });
-});
+
 
 router.get("/admin/crearRankingIndividual", requireLogin, (req, res) => {
   conexion.query("SELECT * FROM jugador", (error, jugadores) => {
