@@ -194,33 +194,40 @@ exports.getHomePage = (req, res) => {
                       const deportesConEquiposSQL = `
                       SELECT DISTINCT d.nombreDeporte, d.id
                       FROM deporte d
-                      INNER JOIN equipos e ON d.id = e.codDeporte`;
+                      WHERE d.id IN (
+                        SELECT DISTINCT e.codDeporte
+                        FROM equipos e
+                        INNER JOIN jugadores_equipos je ON e.codEquipo = je.codEquipo
+                      );`;
 
-                      conexion.query(deportesConEquiposSQL, (error, deportesConEquipos) => {
-                        if (error) {
-                          console.log(error);
-                          return res.status(500).send("Error de servidor");
+                      conexion.query(
+                        deportesConEquiposSQL,
+                        (error, deportesConEquipos) => {
+                          if (error) {
+                            console.log(error);
+                            return res.status(500).send("Error de servidor");
+                          }
+
+                          res.render("home.ejs", {
+                            eliminatorias,
+                            partidos,
+                            deportes,
+                            partidosTorneos,
+                            resultados,
+                            torneos,
+                            rankingGeneral,
+                            rankingGeneralEquipos,
+                            goleadores,
+                            deportesConEquipos,
+                          });
                         }
-
-                      res.render("home.ejs", {
-                        eliminatorias,
-                        partidos,
-                        deportes,
-                        partidosTorneos,
-                        resultados,
-                        torneos,
-                        rankingGeneral,
-                        rankingGeneralEquipos,
-                        goleadores,
-                        deportesConEquipos
-                      });
+                      );
                     });
                   }
                 );
               });
-            });
-          }); // cierre de conexion.query
-        });
+            }); // cierre de conexion.query
+          });
         });
       });
     });
