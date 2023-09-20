@@ -99,6 +99,12 @@
             timeout: 10000,
             success: function (response) {
 
+              console.log("response")
+              console.log(response)
+
+              console.log("response.jsonJugadores")
+              console.log(response.jsonJugadores)
+
 
               // Analiza el JSON
               const jugadores = JSON.parse(response.jsonJugadores);
