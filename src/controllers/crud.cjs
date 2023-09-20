@@ -705,6 +705,7 @@ exports.saveRI = (req, res) => {
               conexion.query(
                 "INSERT INTO rankini SET ?",
                 {
+                  codJugador: codJugador,
                   puntos: puntos,
                   codCarrera: carreras[0].codCarrera,
                   codDeporte: codDeporte,
