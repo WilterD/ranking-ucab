@@ -1846,6 +1846,8 @@ router.get("/mostrarJugadores/:codEquipo", async (req, res) => {
             res.status(500).json({ error: "Error del servidor" });
           } else {
                   const jsonJugadores = JSON.stringify(jugadores);
+                  // Enviar el objeto JSON al cliente
+                  res.json({ jsonJugadores });
                 }
               });
             }
