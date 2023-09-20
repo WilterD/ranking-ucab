@@ -1259,6 +1259,18 @@ router.get(["/torneos:codTorneo"], (req, res) => {
                                             if (error) {
                                               console.log(error);
                                             } else {
+                                               const deportesConEquiposSQL = `
+                                               SELECT DISTINCT d.nombreDeporte, d.id
+                                               FROM deporte d
+                                               WHERE d.id IN (
+                                                 SELECT DISTINCT e.codDeporte
+                                                 FROM equipos e
+                                                 INNER JOIN jugadores_equipos je ON e.codEquipo = je.codEquipo);`;
+
+                                              conexion.query(deportesConEquiposSQL, (error, deportesConEquipos) => {
+                                                if(error){
+                                                  console.log(error);
+                                                }else{
                                               res.render("home.ejs", {
                                                 goleadores,
                                                 partidos,
@@ -1269,7 +1281,9 @@ router.get(["/torneos:codTorneo"], (req, res) => {
                                                 torneos,
                                                 rankingGeneral,
                                                 rankingGeneralEquipos,
+                                                deportesConEquipos
                                               });
+
                                             }
                                           }
                                         );
@@ -1277,22 +1291,28 @@ router.get(["/torneos:codTorneo"], (req, res) => {
                                     }
                                   );
                                 }
-                              });
-                            }
-                          });
+                              }
+                            );
+                          }
                         }
-                      });
+                      );
                     }
-                  });
-                }
+                  }
+                );
               }
-            );
-          }
+            }
+          );
         }
-      );
-    }
+      }
+    );
+  }
+});
+          }})
+        }
   });
 });
+                                        
+                                        
 
 router.get("/rankingE", (req, res) => {
   conexion.query(
@@ -1384,7 +1404,7 @@ router.get("/ranking:id:codTorneo", (req, res) => {
                       WHERE d.id IN (
                         SELECT DISTINCT e.codDeporte
                         FROM equipos e
-                        INNER JOIN jugadores_equipos je ON e.codEquipo = je.codEquipo`;
+                        INNER JOIN jugadores_equipos je ON e.codEquipo = je.codEquipo);`;
 
                       conexion.query(deportesConEquiposSQL, (error, deportesConEquipos) => {
                         if(error){
@@ -1444,7 +1464,7 @@ router.get("/ranking:id:codTorneo", (req, res) => {
                       WHERE d.id IN (
                         SELECT DISTINCT e.codDeporte
                         FROM equipos e
-                        INNER JOIN jugadores_equipos je ON e.codEquipo = je.codEquipo`;
+                        INNER JOIN jugadores_equipos je ON e.codEquipo = je.codEquipo);`;
 
                       conexion.query(deportesConEquiposSQL, (error, deportesConEquipos) => {
                         if(error){
