@@ -1111,7 +1111,7 @@ router.get(["/torneos:codTorneo"], (req, res) => {
       SELECT DISTINCT d.nombreDeporte, t.nombreTorneo, d.id, t.codTorneo 
         FROM (rankinge r INNER JOIN torneos t ON r.codTorneo = t.codTorneo) 
         INNER JOIN deporte d ON r.codDeporte = d.id 
-      WHERE t.codTorneo = ?;`;
+      WHERE t.status = 1`;
       conexion.query(
         // Rankging individual y por equipos
         sql,
