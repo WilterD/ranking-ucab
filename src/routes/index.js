@@ -20,10 +20,36 @@ import EquiposController from "../controllers/equiposController.cjs";
 import RankingController from "../controllers/rankingController.cjs";
 
 
+
+
+
 // Rutas para la página de inicio
 router.get(['/home','/'], homeController.getHomePage);
 router.get('/equipos:id', EquiposController.getEquiposPage);
 router.get('/admin/ranking/:id', RankingController.getRankingPage);
+
+
+router.use((req, res, next) => {
+  const deportesSQL = 'SELECT * FROM deporte';
+
+  // Usa req.app para acceder a la instancia de la aplicación
+  const app = req.app;
+
+  // Accede a la conexión a la base de datos utilizando la variable 'conexion'
+  conexion.query(deportesSQL, (err, results) => {
+      if (err) {
+          throw err;
+      }
+
+      // Asigna los resultados a app.locals.deportes
+      app.locals.deportes = results;
+
+      // Continúa con el flujo de la solicitud
+      next();
+  });
+});
+
+
 
 
 router.get("/admin/deleteEstadio/:codEstadio", (req, res) => {
@@ -49,7 +75,7 @@ router.get("/admin/equipos", requireLogin, (req, res) => {
         console.log(error);
       } else {
         res.render("admin/equipos.ejs", {
-          equipos: equipos,
+          equipos
         });
       }
     }
