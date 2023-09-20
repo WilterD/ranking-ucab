@@ -20,7 +20,7 @@
                 class='bx bxs-plus-circle'></i></a>
           </div>
           <div class="col-xs-12 mt-3 table-responsive table-responsive">
-            <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
+            <table class="table table-bordered table-striped text-center mt-4" id="tablaDeportes">
               <thead>
                 <tr class="bg-primary text-white">
                   <th scope="col">Nombre</th>
@@ -67,6 +67,12 @@
 
 
     <%- include('partials/scripts.ejs') %>
+    <script>
+      // Configuracion Tabla Deportes
+      $(document).ready(function () {
+          initializeTable('tablaDeportes');
+      });
+  </script>
 </body>
 
 </html>

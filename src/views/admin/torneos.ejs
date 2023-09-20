@@ -6,9 +6,11 @@
     <title>Torneos</title>
 
 </head>
-
 <body>
   <%- include('partials/navigation.ejs') %>
+  
+  
+
     <section class="home-section">
       <div class="home-content">
         <i class='bx bx-menu'></i>
@@ -21,7 +23,7 @@
                 class='bx bxs-plus-circle'></i></a>
           </div>
           <div class="col-xs-12 mt-3 table-responsive">
-            <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
+            <table class="table table-bordered table-striped text-center mt-4" id="tablaTorneos">
               <thead>
                 <tr class="bg-primary text-white">
                   <th scope="col">Nombre</th>
@@ -37,10 +39,12 @@
                       <%= torneos.nombreTorneo %>
                     </td>
                     <td>
-                      <%= torneos.fecha_inicio && new Date(torneos.fecha_inicio).getTime() ? new Date(torneos.fecha_inicio).toLocaleDateString('es-ES') : 'Sin definir' %>
+                      <%= torneos.fecha_inicio && new Date(torneos.fecha_inicio).getTime() ? new
+                        Date(torneos.fecha_inicio).toLocaleDateString('es-ES') : 'Sin definir' %>
                     </td>
                     <td>
-                      <%= torneos.fecha_fin && new Date(torneos.fecha_fin).getTime() ? new Date(torneos.fecha_fin).toLocaleDateString('es-ES') : 'Sin definir' %>
+                      <%= torneos.fecha_fin && new Date(torneos.fecha_fin).getTime() ? new
+                        Date(torneos.fecha_fin).toLocaleDateString('es-ES') : 'Sin definir' %>
 
 
                     </td>
@@ -61,34 +65,35 @@
       </div>
       <div class="container mt-4">
         <div class="card border-secondary">
-            <div class="card-header">Torneo Publicado</div>
-            <div class="card-body">
-                <form action="/saveTorneoStatus" method="POST">
-                  <div class="mb-3">
-                    <select id="codTorneo" name="codTorneo" class="form-select" aria-label="Default select example"
-                      tabindex="2" required>
-                      <option selected value="<%= torneosPublicados.codTorneo %>">
-                        <%= torneosPublicados.nombreTorneo %>
+          <div class="card-header">Torneo Publicado</div>
+          <div class="card-body">
+            <form action="/saveTorneoStatus" method="POST">
+              <div class="mb-3">
+                <select id="codTorneo" name="codTorneo" class="form-select" aria-label="Default select example"
+                  tabindex="2" required>
+                  <option selected value="<%= torneosPublicados.codTorneo %>">
+                    <%= torneosPublicados.nombreTorneo %>
+                  </option>
+                  <% torneos.forEach((torneos)=>{ %>
+                    <% if(torneos.codTorneo !=torneosPublicados.codTorneo){ %>
+                      <option value="<%= torneos.codTorneo %>">
+                        <%= torneos.nombreTorneo %> %>
                       </option>
-                      <% torneos.forEach((torneos)=>{ %>
-                        <% if(torneos.codTorneo != torneosPublicados.codTorneo){  %>
-                        <option value="<%= torneos.codTorneo %>">
-                          <%= torneos.nombreTorneo %> %>
-                        </option>
-                        <% } %>
+                      <% } %>
                         <% }) %>
-                    </select>
-                  </div>
-                  <div class="mb-3">
-                    <label for="publicar" class="form-label">Nota(Este será el torneo que aparecerá en la página principal)</label>
-                  <br>
-                        <button type="submit" class="btn btn-primary">Publicar</button>
-                        <a href="/admin/torneos" style="visibility: hidden;" class="btn btn-secondary">Cancelar</a>
-                      </div>
-                </form>
-            </div>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="publicar" class="form-label">Nota(Este será el torneo que aparecerá en la página
+                  principal)</label>
+                <br>
+                <button type="submit" class="btn btn-primary">Publicar</button>
+                <a href="/admin/torneos" style="visibility: hidden;" class="btn btn-secondary">Cancelar</a>
+              </div>
+            </form>
+          </div>
         </div>
-    </div>
+      </div>
     </section>
 
     <section class="home-section">
@@ -106,11 +111,15 @@
 
     <%- include('partials/scripts.ejs') %>
     <script>
-      $(document).ready(function() {
-      let tabla = $('#miTabla').DataTable();
-      tabla.order([1, 'asc']).draw();
+      // Configuracion Tabla Equipos
+      $(document).ready(function () {
+          initializeTable('tablaTorneos');
       });
   </script>
+
+       
+
+     
 </body>
 
 </html>

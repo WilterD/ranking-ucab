@@ -1,17 +1,26 @@
-<!--boostrap-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <!--JQUERY-->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Librería jQuery UI -->
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
 
-<!--SELECT MENU-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<!-- jQuery, Popper.js, Bootstrap JS -->
+<script src="../../js/popper/popper.min.js"></script>
+<script src="../../js/bootstrap/js/bootstrap.min.js"></script>
+  
+<!-- datatables JS -->
+<script type="text/javascript" src="../../js/datatables/datatables.min.js"></script>    
+ 
+<!-- para usar botones en datatables JS -->  
+<script src="../../js/datatables/Buttons-1.5.6/js/dataTables.buttons.min.js"></script>  
+<script src="../../js/datatables/JSZip-2.5.0/jszip.min.js"></script>    
+<script src="../../js/datatables/pdfmake-0.1.36/pdfmake.min.js"></script>    
+<script src="../../js/datatables/pdfmake-0.1.36/vfs_fonts.js"></script>
+<script src="../../js/datatables/Buttons-1.5.6/js/buttons.html5.min.js"></script>
+ 
+<!-- código miTabla-->    
+<script type="text/javascript" src="../../js/miTabla.js"></script>
 
-<!--DATATABLES-->
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap5.min.js"></script>
 <!--SWEET ALERT-->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
@@ -79,28 +88,7 @@ if (form) {
 
 
  
-
-  $(document).ready(function () {
-   let tabla = $('#miTabla').DataTable({
-      pageLength: 10,
-      lengthMenu: [[5, 10, 20, 50, 100, -1], [5, 10, 20, 50, 100, 'Todos']],
-      "language": {
-        "lengthMenu": "Mostrar _MENU_ ",
-        "zeroRecords": "No se encontraron registros",
-        "info": "",
-        "infoEmpty": "No hay registros disponibles",
-        "infoFiltered": "",
-        "search": "Buscar:",
-        "paginate": {
-          "first": "Primero",
-          "last": "Último",
-          "next": "Siguiente",
-          "previous": "Anterior"
-        }
-      }
-    });
-  });
-
+// Confirmacion de borrar Sweet Alert
   function confirmar(id, ruta) {
     Swal.fire({
       title: '¿Confirma eliminar el registro seleccionado?',
@@ -116,6 +104,7 @@ if (form) {
       }
     });
   };
+
 </script>
 <!-- sidebar Menu  -->
 <script>
@@ -132,7 +121,7 @@ if (form) {
     sidebar.classList.toggle("close");
   });
 </script>
-
+<!-- Mostrar Mensajes -->
 <script>
   const mensajes = [
     "Reducir, reutilizar y reciclar es importante para proteger el medio ambiente.",

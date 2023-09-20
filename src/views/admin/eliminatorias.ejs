@@ -1,87 +1,108 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <%- include('partials/head.ejs') %>
-    <title>Eliminatorias</title>
-    
+  <title>Eliminatorias</title>
 </head>
+
 <body>
-   <%- include('partials/navigation.ejs') %>
+  <%- include('partials/navigation.ejs') %>
   <section class="home-section">
     <div class="home-content">
-      <i class='bx bx-menu' ></i>
+      <i class='bx bx-menu'></i>
       >>> Eliminatorias
     </div>
     <div class="container">
       <div class="row">
         <div class="">
-          <a href="/admin/crearEliminatoria" class="btn btn-outline-primary fs-2 btn-block ml-auto"> Agregar <i class='bx bxs-plus-circle'></i></a> 
-        </div> 
+          <a href="/admin/crearEliminatoria" class="btn btn-outline-primary fs-2 btn-block ml-auto"> Agregar <i class='bx bxs-plus-circle'></i></a>
+        </div>
         <div class="col-xs-12 mt-3 table-responsive table-responsive table-responsive">
-          <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
+          <table class="table table-bordered table-striped text-center mt-4" id="tablaEliminatoria">
             <thead>
               <tr class="bg-primary text-white">
                 <th scope="col">Torneo</th>
                 <th scope="col">Equipo</th>
                 <th scope="col">PJ</th>
-                <th scope="col">PG</th>    
-                <th scope="col">PE</th>           
-                <th scope="col">PP</th>           
-                <th scope="col">GF</th>           
-                <th scope="col">GC</th>           
-                <th scope="col">DIF</th>           
-                <th scope="col">PTS</th>           
-                <th scope="col">Acciones</th>           
+                <th scope="col">PG</th>
+                <th scope="col">PE</th>
+                <th scope="col">PP</th>
+                <th scope="col">GF</th>
+                <th scope="col">GC</th>
+                <th scope="col">DIF</th>
+                <th scope="col">PTS</th>
+                <th scope="col" class="acciones">Acciones</th>
+
               </tr>
             </thead>
             <tbody>
               <% eliminatoria.forEach((elim)=>{ %>
-                <tr>  
-                  <td><%= elim.nombreTorneo %> - <%= elim.nombreDeporte %></td>  
-                    <td><%= elim.nombreEquipo %></td>  
-                    <td><%= elim.juegos_jugados %></td>  
-                    <td><%= elim.juegos_ganados %></td>
-                    <td><%= elim.juegos_empate %></td>
-                    <td><%= elim.juegos_perdidos %></td>
-                    <td><%= elim.goles_a_favor %></td>
-                    <td><%= elim.goles_en_contra %></td>
-                    <td><%= elim.diferencia_goles%></td>
-                    <td><%= elim.puntos%></td>
-                    <td>
-                      <a href="/admin/editarEliminatoria/<%= elim.id %>" class="btn btn-outline-info"> <i class='bx bxs-pencil fs-5'></i></a>
-                      <a onclick="confirmar('<%= elim.id %>','/admin/deleteEliminatoria')" class="btn btn-outline-danger"><i
-                        class='bx bxs-trash'></i></a>
-                    </td>
-                </tr>                                   
-             <% }) %>
+                <tr>
+                  <td>
+                    <%= elim.nombreTorneo %> - <%= elim.nombreDeporte %>
+                  </td>
+                  <td>
+                    <%= elim.nombreEquipo %>
+                  </td>
+                  <td>
+                    <%= elim.juegos_jugados %>
+                  </td>
+                  <td>
+                    <%= elim.juegos_ganados %>
+                  </td>
+                  <td>
+                    <%= elim.juegos_empate %>
+                  </td>
+                  <td>
+                    <%= elim.juegos_perdidos %>
+                  </td>
+                  <td>
+                    <%= elim.goles_a_favor %>
+                  </td>
+                  <td>
+                    <%= elim.goles_en_contra %>
+                  </td>
+                  <td>
+                    <%= elim.diferencia_goles%>
+                  </td>
+                  <td>
+                    <%= elim.puntos%>
+                  </td>
+                  <td>
+                    <a href="/admin/editarEliminatoria/<%= elim.id %>" class="btn btn-outline-info"> <i
+                        class='bx bxs-pencil fs-5'></i></a>
+                    <a onclick="confirmar('<%= elim.id %>','/admin/deleteEliminatoria')"
+                      class="btn btn-outline-danger"><i class='bx bxs-trash'></i></a>
+                  </td>
+                </tr>
+                <% }) %>
             </tbody>
           </table>
         </div>
       </div>
     </div>
-  </section> 
+  </section>
 
   <section class="home-section">
     <div class="container">
       <div class="row">
         <div class="col-xs-12 mx-auto">
           <div id="mensajes">
-  <p id="mensaje"></p>
-  <img class="rounded" src="../../images/medioAmbiente.png" width="330" height="230">
-</div>
+            <p id="mensaje"></p>
+            <img class="rounded" src="../../images/medioAmbiente.png" width="330" height="230">
+          </div>
         </div>
       </div>
     </div>
   </section>
-  
-  
+
   <%- include('partials/scripts.ejs') %>
   <script>
-    $(document).ready(function() {
-    let tabla = $('#miTabla').DataTable();
-    tabla.order([8, 'desc']).draw();
-    })
-    
-  </script>
+    $(document).ready(function () {
+        initializeTable('tablaEliminatoria');
+    });
+</script>
 </body>
+
 </html>

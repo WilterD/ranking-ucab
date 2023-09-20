@@ -33,7 +33,7 @@
           <a href="/admin/crearEquipo" class="btn btn-outline-primary fs-2 btn-block"> Agregar <i class='bx bxs-plus-circle'></i></a> 
         </div> 
         <div class="col-xs-12 mt-3 table-responsive">
-          <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
+          <table class="table table-bordered table-striped text-center mt-4" id="tablaEquipos">
             <thead>
               <tr class="bg-primary text-white">
                 <th scope="col">Nombre</th>
@@ -82,12 +82,12 @@
   </section>
   <%- include('partials/scripts.ejs') %>
   <script>
-    $(document).ready(function() {
-    let tabla = $('#miTabla').DataTable();
-    tabla.order([1, 'desc']).draw();
-    })
-    
-  </script>
+    // Configuracion Tabla Equipos
+    $(document).ready(function () {
+        initializeTable('tablaEquipos');
+    });
+</script>
+<!-- Mostrar Jugadores -->
   <script>
     // mostrar sweet alert con los equipos del jugador cuando se presiona el boton mostrar
 

@@ -1942,6 +1942,17 @@ router.get("/mostrarJugadores/:codEquipo", async (req, res) => {
       });
       
 
+      router.get("/ejemplo",(req, res) => {
+        conexion.query("SELECT * FROM torneos", (error, torneos) => {
+          if (error) {
+            console.log(error);
+          } else {
+
+        res.render("ejemplo.ejs");
+
+          }})
+      });
+
     
           
         

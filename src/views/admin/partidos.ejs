@@ -18,7 +18,7 @@
           <a href="/admin/crearPartido" class="btn btn-outline-primary fs-2 btn-block ml-auto"> Agregar <i class='bx bxs-plus-circle'></i></a> 
         </div> 
         <div class="col-xs-12 mt-3 table-responsive">
-          <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
+          <table class="table table-bordered table-striped text-center mt-4" id="tablaPartidos">
             <thead>
               <tr class="bg-primary text-white">
                 <th scope="col">J</th> 
@@ -77,10 +77,10 @@
   
   <%- include('partials/scripts.ejs') %>
   <script>
-      $(document).ready(function() {
-      let tabla = $('#miTabla').DataTable();
-      tabla.order([9, 'asc']).draw();
-      });
-  </script>
+    // Configuracion Tabla Deportes
+    $(document).ready(function () {
+        initializeTable('tablaPartidos');
+    });
+</script>
 </body>
 </html>

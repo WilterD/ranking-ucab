@@ -20,7 +20,7 @@
                 class='bx bxs-plus-circle'></i></a>
           </div>
           <div class="col-xs-12 mt-3 table-responsive">
-            <table class="table table-bordered table-striped text-center mt-4" id="miTabla">
+            <table class="table table-bordered table-striped text-center mt-4" id="rankingIndividualTabla">
               <thead>
                 <tr class="bg-primary text-white">
                   <th scope="col">#</th>
@@ -80,59 +80,12 @@
       </div>
     </section>
     <%- include('partials/scripts.ejs') %>
-      <script>
-        $(document).ready(function () {
-          if ($.fn.DataTable.isDataTable('#miTabla')) {
-            $('#miTabla').DataTable().destroy();
-          }
-          var tabla = $('#miTabla').DataTable({
-            "order": [[5, "desc"]], // Ordenar por la columna de Puntos en orden descendente
-            columnDefs: [{
-              orderable: false,
-              targets: [0, 1, 2, 3, 4,5] // deshabilitar ordenamiento en la columna "Acciones"
-            }],
-            "language": {
-              "lengthMenu": "Mostrar _MENU_ ",
-              "zeroRecords": "No se encontraron registros",
-              "info": "",
-              "infoEmpty": "No hay registros disponibles",
-              "infoFiltered": "(filtrado de _MAX_ registros totales)",
-              "search": "Buscar:",
-              "paginate": {
-                "first": "Primero",
-                "last": "Último",
-                "next": "Siguiente",
-                "previous": "Anterior"
-              }
-            },
-
-            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
-              var index = iDisplayIndex + 1; // Obtener el índice de la fila después de filtrar y sumar 1
-              $('td:eq(0)', nRow).text(index); // Actualizar el número de posición en la primera columna
-              return nRow;
-            }
-          });
-
-          tabla.on('draw.dt', function () {
-            // Obtener las filas visibles en la tabla
-            var rows = tabla.rows({ page: 'current' }).nodes();
-
-            // Actualizar la posición de ranking para cada fila visible
-            var i, rankingPosition;
-            for (i = 0; i < rows.length; i++) {
-              rankingPosition = tabla.page.info().start + i + 1;
-              $(rows[i]).find('td:eq(0)').text(rankingPosition);
-            }
-          });
-
-          tabla.on('page.dt', function () {
-            // Redibujar la tabla después de cambiar de página
-            tabla.draw(false);
-
-          });
-        });
-
-      </script>
+    <script>
+      // Configuracion Tabla Deportes
+      $(document).ready(function () {
+          initializeTable('rankingIndividualTabla');
+      });
+  </script>
 </body>
 
 </html>
