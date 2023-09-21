@@ -144,7 +144,8 @@ exports.getHomePage = (req, res) => {
                 return res.status(500).send("Error de servidor");
               }
 
-              const rankingGeneralSQL = `SELECT DISTINCT r.nombreJugador,c.nombreCarrera,d.nombreDeporte, SUM(r.puntos) AS total_puntos
+              const rankingGeneralSQL = 
+              `SELECT DISTINCT r.nombreJugador,c.nombreCarrera,d.nombreDeporte, SUM(r.puntos) AS total_puntos
               FROM rankini r
               LEFT JOIN jugador j ON j.codJugador = r.codJugador
               JOIN carreras c ON c.id = r.codCarrera

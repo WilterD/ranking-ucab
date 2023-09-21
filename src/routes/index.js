@@ -1239,13 +1239,14 @@ router.get(["/torneos:codTorneo"], (req, res) => {
                             if (error) {
                               console.log(error);
                             } else {
-                              const sql4 = `SELECT DISTINCT j.nombreJugador,c.nombreCarrera,d.nombreDeporte, SUM(r.puntos) AS total_puntos
+                              const sql4 = 
+                              `SELECT DISTINCT r.nombreJugador,c.nombreCarrera,d.nombreDeporte, SUM(r.puntos) AS total_puntos
                               FROM rankini r
-                              JOIN jugador j ON j.codJugador = r.codJugador
+                              LEFT JOIN jugador j ON j.codJugador = r.codJugador
                               JOIN carreras c ON c.id = r.codCarrera
                               JOIN deporte d ON d.id = r.codDeporte
                               WHERE r.codUniversidad = 1
-                              GROUP BY j.nombreJugador, c.nombreCarrera,d.nombreDeporte
+                              GROUP BY r.nombreJugador, c.nombreCarrera,d.nombreDeporte
                               ORDER BY d.nombredeporte DESC,total_puntos DESC`;
                               conexion.query(sql4, (error, rankingGeneral) => {
                                 // torneos
