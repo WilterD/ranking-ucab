@@ -1,5 +1,3 @@
-// mitabla.js
-
 $(document).ready(function () {
   // Configuración genérica de DataTables
   const defaultConfig = {
@@ -38,23 +36,17 @@ $(document).ready(function () {
             row.splice(-1, 1); // Elimina la última celda de cada fila
           });
 
-          // Agregar una imagen en el encabezado del PDF
-          var imgData = "asd"; // Reemplaza 'BASE64_DE_TU_IMAGEN' con la representación Base64 de tu imagen
-
           // Define el contenido personalizado del encabezado
           var header = {
             columns: [
-              
               {
-                text: "Tu encabezado personalizado aquí", // Puedes reemplazar esto con tu encabezado personalizado
+                text: "https://ucabsport.com", // Puedes reemplazar esto con tu encabezado personalizado
                 alignment: "center",
                 margin: [0, 20, 0, 0],
                 fontSize: 12,
-                decoration: "underline",
                 fontFamily: "Roboto",
                 bold: true,
               },
-              {},
             ],
           };
 
