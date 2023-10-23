@@ -378,8 +378,3 @@ a:visited {
 a:link, a:visited {
   text-decoration: none;
 }
-
-#teamPlayers ul li
-{
-  text-transform: capitalize;
-}

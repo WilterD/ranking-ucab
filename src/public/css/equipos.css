@@ -30,6 +30,7 @@
 
 #teamPlayers ul li {
   margin-bottom: 5px;
+  text-transform: capitalize;
 }
 
 /* Estilo para el contenedor general */
