@@ -377,8 +377,7 @@ exports.updateCarrera = (req, res) => {
   const nombreCarrera = req.body.nombreCarrera;
   const id = req.body.id;
   conexion.query(
-    "UPDATE carreras SET ? WHERE id = ?",
-    [{ nombreCarrera: nombreCarrera }, id],
+    "UPDATE carreras SET ? WHERE id = ?",[{ nombreCarrera: nombreCarrera }, id],
     (error, results) => {
       if (error) {
         console.log(error);

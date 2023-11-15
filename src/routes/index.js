@@ -316,13 +316,14 @@ router.get("/admin/", requireLogin, (req, res) => {});
 router.get("/admin/partidos", requireLogin, (req, res) => {
   // Realizar la consulta SQL
   // SELECT e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2,
-  const sql = `SELECT t.nombreTorneo,e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2,p.jornada, p.puntos1,p.codPartido, p.puntos2, p.etapa, p.fecha, e.nombreEstadio, d.nombreDeporte
+  const sql = `SELECT t.nombreTorneo, e1.nombreEquipo AS equipo1, e2.nombreEquipo AS equipo2, p.jornada, p.puntos1, p.codPartido, p.puntos2, p.etapa, p.fecha, e.nombreEstadio, d.nombreDeporte
   FROM partido p
   JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo
   JOIN equipos e2 ON p.codEquipo2 = e2.codEquipo
   JOIN estadio e ON p.codEstadio = e.codEstadio
   JOIN deporte d ON p.codDeporte = d.id
   JOIN torneos t ON p.codTorneo = t.codTorneo
+  WHERE p.fecha <= DATE_SUB(NOW(), INTERVAL 6 MONTH)  
   `;
 
   conexion.query(sql, (error, partidos) => {
