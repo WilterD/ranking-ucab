@@ -1655,11 +1655,17 @@ router.get("/admin/deleteTorneo/:codTorneo", (req, res) => {
 router.get("/actualizarJugadores/:codEquipo", async (req, res) => {
   const codEquipo = req.params.codEquipo;
   try {
-    const sql = `SELECT j.codJugador, j.nombreJugador
-    FROM jugador j
-    INNER JOIN equipos e ON j.codEquipo = e.codEquipo
-    INNER JOIN deporte d ON e.codDeporte = d.id
-    WHERE UPPER(d.nombreDeporte) LIKE 'F%' AND e.codEquipo = ?;`;
+    const sql = 
+    `
+    SELECT j.codJugador, j.nombreJugador
+FROM jugador j
+INNER JOIN jugadores_equipos je ON j.codJugador = je.codJugador
+INNER JOIN equipos e ON je.codEquipo = e.codEquipo
+INNER JOIN deporte d ON e.codDeporte = d.id
+WHERE UPPER(d.nombreDeporte) LIKE 'F%'
+
+    `;
+
     conexion.query(sql, [codEquipo], (error, jsonJugadores) => {
       if (error) {
         console.error(error);
