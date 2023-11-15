@@ -323,7 +323,8 @@ router.get("/admin/partidos", requireLogin, (req, res) => {
   JOIN estadio e ON p.codEstadio = e.codEstadio
   JOIN deporte d ON p.codDeporte = d.id
   JOIN torneos t ON p.codTorneo = t.codTorneo
-  WHERE p.fecha <= DATE_SUB(NOW(), INTERVAL 6 MONTH)  
+  WHERE p.fecha >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH);
+  
   `;
 
   conexion.query(sql, (error, partidos) => {
