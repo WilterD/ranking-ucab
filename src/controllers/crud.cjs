@@ -72,7 +72,6 @@ exports.updatePartido = (req, res) => {
   );
 
   const codEquipo = equiposEntries.map(([key, value]) => value);
-
   const codJugador = codJugadorEntries.map(([key, value]) => value);
   const goles = golesEntries.map(([key, value]) => value);
 
@@ -88,98 +87,77 @@ exports.updatePartido = (req, res) => {
   const etapa = req.body.etapa;
   const jornada = req.body.jornada;
 
-  const sql = `
-  SELECT * FROM goleadores WHERE codPartido = ? AND codJugador IN (?)
-  `;
-  conexion.query(sql, [codPartido, codJugador], (error, results) => {
-    if (error) {
-      console.log(error);
-      res.status(400).json({ msg: "Error al consultar goleadores" });
-    } else {
-      // Si no esta ese goleador en ese partido, se inserta
-      if (results && results.length === 0) {
-        // Definir la sentencia SQL para insertar los datos
-        const sql = "INSERT INTO goleadores (codEquipo, codTorneo, codDeporte, codPartido, codJugador, goles) VALUES (?, ?, ?, ?, ?, ?)";
-
-for (let i = 0; i < codJugador.length; i++) {
-  const codEquipoItem = codEquipo[i];
-  const codJugadorItem = codJugador[i];
-  const golesItem = parseInt(goles[i], 10); // Convertir a número entero
-
-  const valores = [
-    codEquipoItem,
+  // Actualizar el partido primero
+  const partidoValues = {
     codTorneo,
+    fecha,
+    codEstadio,
     codDeporte,
-    codPartido,
-    codJugadorItem,
-    golesItem,
-  ];
+    puntos1,
+    puntos2,
+    etapa,
+    jornada,
+    codEquipo1,
+    codEquipo2
+  };
 
-  conexion.query(sql, valores, (err, result) => {
-    if (err) {
-      console.log(err);
-    }
-  });
-}
-
-      } else {
-        // si hay goleadores, entonces se actualizan
-
-
-        const sql =
-          "UPDATE goleadores SET goles = ? WHERE codDeporte = ? AND codEquipo = ? AND codTorneo = ? AND codPartido = ? AND codJugador = ?";
-
-        for (let [i, gol] of goles.entries()) {
-          const codEquipoItem = codEquipo[i];
-          const codJugadorItem = codJugador[i];
-          const golesInt = parseInt(gol); // convertir a número entero
-          const valores = [
-            golesInt,
-            codDeporte,
-            codEquipoItem,
-            codTorneo,
-            codPartido,
-            codJugadorItem,
-          ];
-          conexion.query(sql, valores, (err, result) => {
-            if (err) throw err;
-          });
-        }
-
-        if (error) {
-          console.log(error);
-        }
+  conexion.query(
+    "UPDATE partido SET ? WHERE codPartido = ?",
+    [partidoValues, codPartido],
+    (errorPartido) => {
+      if (errorPartido) {
+        console.log(errorPartido);
+        return res.status(400).json({ msg: "Error al actualizar el partido" });
       }
-      // actualizar el partido
-      conexion.query(
-        "UPDATE partido SET ? WHERE codPartido = ?",
-        [
-          {
-            codTorneo,
-            fecha,
-            codEstadio,
-            codDeporte,
-            puntos1,
-            puntos2,
-            etapa,
-            jornada,
-            codEquipo1,
-            codEquipo2,
-          },
-          codPartido,
-        ],
-        (error, results) => {
-          if (error) {
-            console.log(error);
-            res.status(400).json({ msg: "Error al actualizar el partido" });
+
+      // Función para actualizar o insertar goleadores
+      const updateGoleadores = () => {
+        const insertOrUpdateGoleadores = (index) => {
+          if (index < codJugador.length) {
+            const codEquipoItem = codEquipo[index];
+            const codJugadorItem = codJugador[index];
+            const golesItem = parseInt(goles[index], 10);
+
+            const sql = `
+              INSERT INTO goleadores (codEquipo, codTorneo, codDeporte, codPartido, codJugador, goles) 
+              VALUES (?, ?, ?, ?, ?, ?)
+              ON DUPLICATE KEY UPDATE goles = ?;
+            `;
+            const valores = [
+              codEquipoItem,
+              codTorneo,
+              codDeporte,
+              codPartido,
+              codJugadorItem,
+              golesItem,
+              golesItem,
+            ];
+
+            conexion.query(sql, valores, (err, result) => {
+              if (err) {
+                console.log(err);
+              }
+              insertOrUpdateGoleadores(index + 1);
+            });
           } else {
             res.redirect("/admin/partidos");
           }
-        }
-      );
+        };
+
+        insertOrUpdateGoleadores(0);
+      };
+
+      // Verificar si se enviaron datos de goleadores
+      if (codJugador && codJugador.length > 0 && goles && goles.length > 0) {
+        updateGoleadores();
+      } else {
+        res.redirect("/admin/partidos");
+      }
     }
-  });
+  );
 };
+
+
 
 // Equipos
 
