@@ -1977,12 +1977,12 @@ router.get("/mostrarJugadores/:codEquipo", async (req, res) => {
       
 
       router.get("/ejemplo",(req, res) => {
-        conexion.query("SELECT * FROM torneos", (error, torneos) => {
+        conexion.query("SELECT imagen FROM equipos", (error, imagenes) => {
           if (error) {
             console.log(error);
           } else {
 
-        res.render("ejemplo.ejs");
+        res.render("ejemplo.ejs", {imagenes});
 
           }})
       });
