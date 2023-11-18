@@ -27,6 +27,7 @@ import RankingController from "../controllers/rankingController.cjs";
 router.get(['/home','/'], homeController.getHomePage);
 router.get('/equipos:id', EquiposController.getEquiposPage);
 router.get('/admin/ranking/:id', RankingController.getRankingPage);
+router.get('/ejemplo', homeController.getEjemplo)
 
 
 router.use((req, res, next) => {
@@ -544,10 +545,12 @@ router.get("/admin/deleteUsuarios/:id", requireLogin, (req, res) => {
 
 router.get("/admin/eliminatorias", requireLogin, (req, res) => {
   const sql = `SELECT e.nombreEquipo, eli.*, t.nombreTorneo, d.nombreDeporte
-   FROM eliminatorias eli 
-   JOIN equipos e ON eli.codEquipo = e.codEquipo 
-   JOIN torneos t ON eli.codTorneo = t.codTorneo
-   JOIN deporte d ON eli.codDeporte = d.id;`;
+  FROM eliminatorias eli 
+  JOIN equipos e ON eli.codEquipo = e.codEquipo 
+  JOIN torneos t ON eli.codTorneo = t.codTorneo
+  JOIN deporte d ON eli.codDeporte = d.id
+  WHERE t.fecha_inicio > DATE_SUB(NOW(), INTERVAL 4 MONTH);
+  `;
   conexion.query(sql, (error, eliminatoria) => {
     if (error) {
       console.log(error);

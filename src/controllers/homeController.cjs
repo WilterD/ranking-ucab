@@ -1,5 +1,24 @@
 const conexion = require("../database/db.cjs");
+exports.getEjemplo = (req, res) => {
+  const eliminatoriasSQL = `
+    SELECT t.nombreTorneo, eq.nombreEquipo, d.nombreDeporte, e.*
+    FROM eliminatorias e
+    JOIN equipos eq ON e.codEquipo = eq.codEquipo
+    JOIN deporte d ON eq.codDeporte = d.id
+    JOIN torneos t ON e.codTorneo = t.codTorneo
+    WHERE t.status = 1 
+    ORDER BY e.puntos DESC;
+    `;
 
+  conexion.query(eliminatoriasSQL, (error, eliminatorias) => {
+    if (error) {
+      console.log(error);
+      return res.status(500).send("Error de servidor");
+    }
+    console.log(eliminatorias);
+    res.render("ejemplo.ejs", { eliminatorias });
+  });
+};
 exports.getHomePage = (req, res) => {
   const eliminatoriasSQL = `
     SELECT t.nombreTorneo, eq.nombreEquipo, d.nombreDeporte, e.*
@@ -146,8 +165,7 @@ exports.getHomePage = (req, res) => {
                 return res.status(500).send("Error de servidor");
               }
 
-              const rankingGeneralSQL = 
-              `SELECT DISTINCT r.nombreJugador,c.nombreCarrera,d.nombreDeporte, SUM(r.puntos) AS total_puntos
+              const rankingGeneralSQL = `SELECT DISTINCT r.nombreJugador,c.nombreCarrera,d.nombreDeporte, SUM(r.puntos) AS total_puntos
               FROM rankini r
               LEFT JOIN jugador j ON j.codJugador = r.codJugador
               JOIN carreras c ON c.id = r.codCarrera
@@ -211,7 +229,7 @@ exports.getHomePage = (req, res) => {
                             return res.status(500).send("Error de servidor");
                           }
 
-                          console.log(resultados)
+                          console.log(resultados);
 
                           res.render("home.ejs", {
                             eliminatorias,

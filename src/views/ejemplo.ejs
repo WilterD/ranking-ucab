@@ -26,6 +26,7 @@
 
 <body>
     <style>
+        
         .carousel-container {
             width: 100%;
             overflow: hidden;
@@ -45,12 +46,76 @@
 
     <div class="carousel-container">
         <div class="carousel-slide">
-            <% imagenes.forEach((img)=>{ %>
-            <img src="<%= img.imagen  %>" alt="Logos" draggable="false">
-            <% }) %>
+            <img src="" alt="Logos" draggable="false">
             <!-- Agrega más imágenes de logos según sea necesario -->
         </div>
     </div>
+
+
+
+
+    <% if (eliminatorias.length> 0) { %>
+        <div class="container mt-3 mb-3">
+            <% var deporteActual = ""; %>
+            <h2 class="text-center"><%= eliminatorias[0].nombreTorneo %></h2>
+            <% eliminatorias.forEach((fila) => {
+              if (fila.nombreDeporte !== deporteActual) { %>
+                <% deporteActual = fila.nombreDeporte; %>
+                <h2 class="text-center">TABLA DE POSICIONES</h2>
+                <h2 class="text-center titulosRankings"><%= deporteActual %></h2>
+                <div class="table-responsive">
+                <table class="rankingPosiciones table table-bordered table-striped text-center mt-4">
+                  <thead>
+                    <tr class="bg-primary text-white">
+                      <th class="position-sticky posiciones-th" style="left: 0;" scope="col">Equipo</th>
+                      <th scope="col">PJ</th>
+                        <th scope="col">PG</th>
+                        <th scope="col">PE</th>
+                        <th scope="col">PP</th>
+                        <th scope="col">GF</th>
+                        <th scope="col">GC</th>
+                        <th scope="col">DIF</th>
+                        <th scope="col">PTS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+              <% } %>
+                    <tr>
+                      <td class="position-sticky equipo-td" style="left: 0"><%= fila.nombreEquipo %></td>
+                      <td>
+                        <%= fila.juegos_jugados %>
+                      </td>
+                      <td>
+                        <%= fila.juegos_ganados %>
+                      </td>
+                      <td>
+                        <%= fila.juegos_empate %>
+                      </td>
+                      <td>
+                        <%= fila.juegos_perdidos %>
+                      </td>
+                      <td>
+                        <%= fila.goles_a_favor %>
+                      </td>
+                      <td>
+                        <%= fila.goles_en_contra %>
+                      </td>
+                      <td>
+                        <%= fila.diferencia_goles%>
+                      </td>
+                      <td>
+                        <%= fila.puntos%>
+                      </td>
+                    </tr>
+              <% if (eliminatorias.indexOf(fila) === eliminatorias.length - 1 || fila.nombreDeporte !== eliminatorias[eliminatorias.indexOf(fila) + 1].nombreDeporte) { %>
+                  </tbody>
+                </table>
+            </div>
+              <% } %>
+            <% }) %>
+          </div>
+          <% } %>
+          
 
 
 
