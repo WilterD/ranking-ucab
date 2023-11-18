@@ -1,13 +1,12 @@
 <% if (deportes.length> 0) { %>
 <div class="container mt-5">
-  <h1 class="text-center"><%= torneos[0].nombreTorneo %></h1>
     <h1 class="text-center">Ranking Deportivo 🔥</h1>
   </div>
   <div class="container mb-5 mt-3">
     <div class="row">
       <% deportes.forEach((deportes)=>{ %>
         <div class="col-lg-3 col-md-6 col-sm-12">
-          <a href="/ranking<%= deportes.id %><%= torneos[0].codTorneo %>">
+          <a href="/ranking/<%= deportes.id %>/<%= torneos.codTorneo %>">
             <div class="card">
               <div class="card-body">
                 <i class='bx bx-medal icon'></i>

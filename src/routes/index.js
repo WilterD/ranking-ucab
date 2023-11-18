@@ -1358,7 +1358,7 @@ router.get("/rankingE", (req, res) => {
   );
 });
 
-router.get("/ranking:id:codTorneo", (req, res) => {
+router.get("/ranking/:id/:codTorneo", (req, res) => {
   let codTorneo = req.params.codTorneo;
   let id = req.params.id; // id Deporte
 
