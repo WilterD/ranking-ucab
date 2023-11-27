@@ -7,8 +7,7 @@ exports.getEjemplo = (req, res) => {
     JOIN deporte d ON eq.codDeporte = d.id
     JOIN torneos t ON e.codTorneo = t.codTorneo
     WHERE t.status = 1 
-    ORDER BY e.puntos DESC;
-    `;
+    ORDER BY e.puntos DESC;`;
 
   conexion.query(eliminatoriasSQL, (error, eliminatorias) => {
     if (error) {
@@ -106,7 +105,8 @@ exports.getHomePage = (req, res) => {
           p.puntos2, 
           e1.codEquipo AS codEquipo1, 
           e2.codEquipo AS codEquipo2, 
-          p.codPartido 
+          p.codPartido,
+          b.blog_id
       FROM 
           partido p 
           INNER JOIN equipos e1 ON p.codEquipo1 = e1.codEquipo 
@@ -132,9 +132,10 @@ exports.getHomePage = (req, res) => {
                   INNER JOIN jugador j ON g.codJugador = j.codJugador 
               GROUP BY g.codPartido, g.codEquipo
           ) j2 ON p.codPartido = j2.codPartido AND e2.codEquipo = j2.codEquipo 
+          LEFT JOIN blogs b ON p.codPartido = b.codPartido
       WHERE 
           t.status = 1 
-          AND DATE(p.fecha) <= CURDATE()  -- Filtrar por fechas menores o iguales a la fecha actual
+          AND DATE(p.fecha) <= CURDATE()
       GROUP BY 
           t.nombreTorneo,
           p.codPartido, 
@@ -149,6 +150,7 @@ exports.getHomePage = (req, res) => {
               WHEN 'FINAL SELECT' THEN 4 
               ELSE 5 
           END
+      
       `;
 
           conexion.query(resultadosSQL, (error, resultados) => {
@@ -229,7 +231,19 @@ exports.getHomePage = (req, res) => {
                             return res.status(500).send("Error de servidor");
                           }
 
-                          console.log(resultados);
+                          const blogsSQL = 
+                          `SELECT * FROM blogs`;
+
+                      conexion.query(
+                        blogsSQL,
+                        (error, blogs) => {
+                          if (error) {
+                            console.log(error);
+                            return res.status(500).send("Error de servidor");
+                          }
+
+                          console.log(resultados)
+
 
                           res.render("home.ejs", {
                             eliminatorias,
@@ -242,6 +256,7 @@ exports.getHomePage = (req, res) => {
                             rankingGeneralEquipos,
                             goleadores,
                             deportesConEquipos,
+                            blogs
                           });
                         }
                       );
@@ -249,6 +264,7 @@ exports.getHomePage = (req, res) => {
                   }
                 );
               });
+            }); 
             }); // cierre de conexion.query
           });
         });

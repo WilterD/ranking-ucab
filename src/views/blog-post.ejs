@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <%- include('partials/headHome.ejs') %>
+        <title>Blogs - UCAB SPORT</title>
+        <link rel="stylesheet" type="text/css" href="/libraries/lib.css">
+        <link rel="stylesheet" type="text/css" href="/css/shortcode.css">
+        <link rel="stylesheet" type="text/css" href="/blogs.css">
+        <link href="https://fonts.googleapis.com/css?family=Arizonia|Crimson+Text:400,400i,600,600i,700,700i|Lato:100,100i,300,300i,400,400i,700,700i,900,900i|Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
+</head>
+
+<body>
+    
+
+                <main>
+                    <!-- Page Banner -->
+                    <div class="page-banner container-fluid no-padding">
+                        <!-- Container -->
+                        <div class="container">
+                            <div class="banner-content">
+                                <h3><%= blogs.titulo %></h3>
+                            </div>
+                            <ol class="breadcrumb">
+                                <li><a href="/home" title="Home">Home</a></li>
+                                <li class="active">Blog</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="content-area blog-section blog-post col-md-8 col-sm-8 col-xs-12">
+                            <article class="type-post">
+                                <div class="entry-cover">
+                                    <img width="100%" height="100%" src="../images/sectionMotivation.webp" alt="blog">
+                                    <span class="post-date"><i class="fa fa-calendar-o"></i> <b><%= blogs.created_at %></b></span>
+                                </div>
+                                <div class="blog-content">
+                                    <div class="entry-meta">
+                                        <span class="post-like"><b><i
+                                                    class="fa fa-heart-o"></i>224 Likes</b></span>
+                                        <span class="post-admin"><i class="fa fa-user"></i>Creado por <b>Max</b></span>
+                                    </div>
+                                    <div class="entry-content">
+                                        <p>You wanna be where you can see our troubles are all the same. You wanna be
+                                            where everybody knows You name. So lets make the most of this beautiful day.
+                                            Since we're together. , We're gonna do it. On your marksget set and go now.
+                                            Got a dream and we just know now we're gonna make our dream come true?
+                                            Sunday is Monday Happy Days. Tuesday Wednesday Happy Days. Thursday Friday
+                                            Happy Days.Saturday what a days Groovin' all week with you! Now were up in
+                                            the big leagues getting' our turn at bat. Knight Rider.</p>
+                                        
+                                            <blockquote>
+                                                <i class="fa fa-quote-left"></i>
+                                                Were gonna pay a call on the Addams Family. I have always wanted to have a
+                                                question neighbor just like you. I've wanted to live in a neighborhood with
+                                                you.
+                                            </blockquote>
+
+                                        <div class="tags">
+                                            <ul class="social">
+                                                <li><a href="#" title="twitter"><i class="fa fa-twitter"></i></a></li>
+                                                <li><a href="#" title="instagram"><i class="fa fa-tumblr"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                            <!-- Comment Section -->
+                            <div class="comment-section">
+                                <div class="section-heading">
+                                    <h3>Comentarios <span>(3)</span></h3>
+                                </div>
+                                <ul class="media-list">
+                                    <% comentarios.forEach((c)=>{ %>
+                                    <li class="media">
+                                        <div class="media-left">
+                                            <a href="#" title="Chris Evans"><img width="100%" height="100px" src="../images/sectionMotivation.webp"
+                                                    alt="comment"></a>
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="media-content">
+                                                <h4 class="media-heading">Autor: <%= c.usuario %></h4>
+                                                <span><i class="fa fa-calendar-o"></i><%= c.fecha %></span>
+                                                <p><%= c.comentario %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <% }) %> 
+                                </ul>
+                            </div>
+                           
+                            <div class="comment-form">
+                                <div class="section-heading">
+                                    <h3>Escribe tus comentarios</h3>
+                                </div>
+                                <form class="row">
+                                    <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                        <input type="text" required="" placeholder="Tu nombre"
+                                            class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <textarea placeholder="Introduce tu comentario . . ." rows="3"
+                                            class="form-control"></textarea>
+                                    </div>
+                                    <input type="submit" title="Enviar" value="Enviar" name="send">
+                                </form>
+                            </div>
+                        </div>
+                        <% if(blogsTotales>0) { %>
+                        <div class="col-md-4 col-sm-4 col-xs-12 widget-area">
+                            <aside class="widget widget_latest_post">
+                                <h3 class="widget-title">Post Recientes</h3>
+                                <% blogsTotales.forEach((blog)=>{ %>
+                                <div class="latest-box">
+                                    <div class="post-box">
+                                        <a href="#"><img src="images/latest-post-1.jpg" alt="Post"></a>
+                                        <h5><a href="#" title="<%= blog.titulo %>"><%= blog.titulo %></a></h5>
+                                        <span><a class="calendar" href="#"><i class="fa fa-calendar-o"></i>July 20,
+                                                2016</a><a href="#"><i class="fa fa-heart-o"></i> 224 Likes</a><a
+                                                href="#">Posted By Max</a></span>
+                                    </div>
+                                </div>
+                                <%  }) %>
+
+                            </aside>
+                        </div>
+                        <% } %>
+                    </div>
+                </main>
+                <script src="libraries/lib.js"></script>
+                <script src="libraries/jquery.countdown.min.js"></script>
+
+</body>
+
+</html>

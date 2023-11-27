@@ -87,7 +87,7 @@
                   <!-- Si no hay resultados, no mostrar nada -->
                   <section class="resultadosClasificatoria">
                   <% if (resultados.length> 0) { %>
-                      <div class="col-md-3 mx-auto ms-5 me-5 text-center">
+                      <div class="col-md-3 mx-auto ms-5 me-5 text-center mt-5">
                         <select class="form-select border-3" aria-label="Default select example" id="selectJornada">
                           <% const idMap=new Map(); %>
                           <% const options=[]; %>
@@ -164,9 +164,21 @@
                                   </div>
                                   <% } %>
                                 </div>
+                                <% if(resultado.blog_id) { %>
+                                  <div class="container">
+                                    <div class="row">
+                                        <div class="col-12 d-flex justify-content-center">
+                                            <a href="/blog-post/<%= resultado.blog_id %>" class="bg-primary rounded text-white btn-primary btn pr-5"> 
+                                                Resumen del partido
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% } %>
                                 <div class="container">
                                   <div class="row">
                                 <div class="goleadores">
+                                  
                                   <div class="tituloEquipo float-start text-start">
                                     <% if (resultado.codEquipo1 === resultado.codEquipo1 && resultado.goleadores_equipo1) { %>
                                       <% var goleadores1 = resultado.goleadores_equipo1.split(", "); %>
@@ -196,7 +208,10 @@
                             </div>
                             <% } %>
                               <% lastJornada=resultado.jornada; %>
+                              
                                 <% }); %>
+                                
+                              
                               </section>
 
                                   <!-- Eliminatoria Torneo -->
