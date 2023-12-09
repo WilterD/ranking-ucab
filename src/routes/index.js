@@ -1627,7 +1627,7 @@ router.get("/admin/crearTorneo", requireLogin, (req, res) => {
 router.get("/admin/editarTorneo/:codTorneo", requireLogin, (req, res) => {
   const codTorneo = req.params.codTorneo;
   conexion.query(
-    "SELECT * FROM torneos WHERE codTorneo",
+    "SELECT * FROM torneos WHERE codTorneo = ?",
     [codTorneo],
     (error, torneos) => {
       if (error) {
