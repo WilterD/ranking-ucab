@@ -204,13 +204,16 @@
                                   <div class="container mb-5">
                                     <h1>Eliminatoria</h1>
                                     <div class="tournament-bracket tournament-bracket--rounded">
+                                      <% var partidosCuartos = partidosTorneos.filter(function(partido) { 
+                                        return partido.etapa === "CUARTOS DE FINAL";
+                                      }); %>
+                                      <% var partidosPorDefinir = 4; %>
+                                      <% if (partidosCuartos.length > 0) { %>
                                       <div class="tournament-bracket__round tournament-bracket__round--quarterfinals">
                                         <h3 class="tournament-bracket__round-title">Cuartos De Final</h3>
                                         <ul class="tournament-bracket__list">
-                                          <% var partidosCuartos = partidosTorneos.filter(function(partido) { 
-                                            return partido.etapa === "CUARTOS DE FINAL";
-                                          }); %>
-                                         <% var partidosPorDefinir = 4; %>
+                                         
+                                         
                                           <% partidosCuartos.forEach((partido,i)=>{ %>
                                             <li class="tournament-bracket__item">
                                               <div class="tournament-bracket__match" tabindex="0">
@@ -320,13 +323,17 @@
                                            
                                         </ul>
                                       </div>
+                                      <% }; %>
+
+                                      <% var partidosSemi = partidosTorneos.filter(function(partido) { 
+                                        return partido.etapa === "SEMIFINAL";
+                                      }); %>
+                                     <% var partidoSemi = 2; %>
+                                     <% if (partidosSemi.length > 0) { %>
                                       <div class="tournament-bracket__round tournament-bracket__round--semifinals">
                                         <h3 class="tournament-bracket__round-title">Semifinal</h3>
                                         <ul class="tournament-bracket__list">
-                                          <% var partidosSemi = partidosTorneos.filter(function(partido) { 
-                                            return partido.etapa === "SEMIFINAL";
-                                          }); %>
-                                         <% var partidoSemi = 2; %>
+                                          
                                          <% partidosSemi.forEach((partido,i)=>{ %>
                                           <li class="tournament-bracket__item">
                                             <div class="tournament-bracket__match" tabindex="0">
@@ -439,13 +446,17 @@
 
                                         </ul>
                                       </div>
+                                      <% }; %>
+
+                                      <% var partidoTercer = partidosTorneos.filter(function(partido) { 
+                                        return partido.etapa === "TERCER LUGAR";
+                                      }); %>
+                                     <% var tecerlugar = 1; %>
+                                      <% if (partidoTercer.length > 0) { %>
                                       <div class="tournament-bracket__round tournament-bracket__round--bronze">
                                         <h3 class="tournament-bracket__round-title">Tercer Lugar</h3>
                                         <ul class="tournament-bracket__list">
-                                          <% var partidoTercer = partidosTorneos.filter(function(partido) { 
-                                            return partido.etapa === "TERCER LUGAR";
-                                          }); %>
-                                         <% var tecerlugar = 1; %>
+                                          
                                          <% partidoTercer.forEach((partido,i)=>{ %>
                                           <li class="tournament-bracket__item">
                                             <div class="tournament-bracket__match" tabindex="0">
@@ -559,13 +570,16 @@
 
 
                                       </div>
+                                      <% }; %>
+
+                                      <% var partidoFinal = partidosTorneos.filter(function(partido) { 
+                                        return partido.etapa === "FINAL";
+                                      }); %>
+                                     <% var final = 1; %>
                                       <div class="tournament-bracket__round tournament-bracket__round--gold">
                                         <h3 class="tournament-bracket__round-title">Final</h3>
                                         <ul class="tournament-bracket__list">
-                                          <% var partidoFinal = partidosTorneos.filter(function(partido) { 
-                                            return partido.etapa === "FINAL";
-                                          }); %>
-                                         <% var final = 1; %>
+                                          
                                          <% partidoFinal.forEach((partido,i)=>{ %>
                                           <li class="tournament-bracket__item">
                                             <div class="tournament-bracket__match" tabindex="0">
