@@ -395,7 +395,7 @@ router.get("/admin/editarPartido/:codPartido", (req, res) => {
                             if (error) {
                               console.log(error);
                             } else {
-                              const sql = `SELECT j.nombreJugador, g.goles, g.codPartido
+                              const sql = `SELECT j.nombreJugador, g.goles, g.codPartido, j.codJugador
                                FROM goleadores g
                                INNER JOIN jugador j ON j.codJugador = g.codJugador
                                INNER JOIN partido p ON p.codPartido = g.codPartido
@@ -1801,11 +1801,12 @@ router.post(
 
 // borrar goleador
 
-router.get("/admin/deleteGoleador/:codPartido", (req, res) => {
+router.get("/admin/deleteGoleador/:codPartido/:codJugador", (req, res) => {
   const codPartido = req.params.codPartido;
+  const codJugador = req.params.codJugador;
   conexion.query(
-    "DELETE FROM goleadores WHERE codPartido = ?",
-    [codPartido],
+    "DELETE FROM goleadores WHERE codPartido = ? AND codJugador = ?",
+    [codPartido, codJugador],
     (error, results) => {
       if (error) {
         console.log(error);

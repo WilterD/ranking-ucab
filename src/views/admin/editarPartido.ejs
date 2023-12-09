@@ -67,127 +67,133 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="mb-3" id="jornada">
-                                <label for="jornada" class="form-label">Jornada</label>
-                                <input type="number" class="form-control" name="jornada" tabindex="1"
-                                    value="<%= partido.jornada %>" />
-                            </div>
-                            <div class="mb-3">
-                                <label for="nombreDeporte" class="form-label">Nombre Deporte</label>
-                                <select id="nombreDeporte" name="codDeporte" class="form-select"
-                                    aria-label="Default select example" tabindex="2" required>
-                                    <option selected value="<%= partido.codDeporte %>">
-                                        <%= partido.nombreDeporte %>
-                                    </option>
-                                    <% deporte.forEach((deporte)=>{ %>
-                                        <option value="<%= deporte.id %>">
-                                            <%= deporte.nombreDeporte %> %>
-                                        </option>
-                                        <% }) %>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="fecha" class="form-label">Fecha del partido</label>
-                                <% const fechaPartido=new Date(partido.fecha); %>
-                                    <% fechaPartido.setHours(fechaPartido.getHours() - 4); %>
-                                        <% const fechaString=fechaPartido.toISOString().slice(0, -8); %>
-                                            <input required type="datetime-local" class="form-control" id="fecha"
-                                                name="fecha" tabindex="1" value="<%= fechaString %>" />
-
-                            </div>
-                            <div class="mb-3">
-                                <label for="codEstadio" class="form-label">Estadio</label>
-                                <select id="codEstadio" name="codEstadio" class="form-select" tabindex="2" required>
-                                    <option selected value="<%= partido.codEstadio %>">
-                                        <%= partido.nombreEstadio %>
-                                    </option>
-                                    <% estadios.forEach((estadio)=> { %>
-                                        <% if (estadio.codEstadio !==partido.codEstadio) { %>
-                                            <option value="<%= estadio.codEstadio %>">
-                                                <%= estadio.nombreEstadio %>
+                            <% if (partido.etapa==="CLASIFICATORIA" ) { %>
+                                <div class="mb-3" id="jornada">
+                                    <label for="jornada" class="form-label">Jornada</label>
+                                    <input type="number" class="form-control" name="jornada" tabindex="1"
+                                        value="<%= partido.jornada %>" />
+                                </div>
+                                <% } %>
+                                    <div class="mb-3">
+                                        <label for="nombreDeporte" class="form-label">Nombre Deporte</label>
+                                        <select id="nombreDeporte" name="codDeporte" class="form-select"
+                                            aria-label="Default select example" tabindex="2" required>
+                                            <option selected value="<%= partido.codDeporte %>">
+                                                <%= partido.nombreDeporte %>
                                             </option>
-                                            <% } %>
-                                                <% }); %>
-                                </select>
-                            </div>
+                                            <% deporte.forEach((deporte)=>{ %>
+                                                <option value="<%= deporte.id %>">
+                                                    <%= deporte.nombreDeporte %> %>
+                                                </option>
+                                                <% }) %>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="fecha" class="form-label">Fecha del partido</label>
+                                        <% const fechaPartido=new Date(partido.fecha); %>
+                                            <% fechaPartido.setHours(fechaPartido.getHours() - 4); %>
+                                                <% const fechaString=fechaPartido.toISOString().slice(0, -8); %>
+                                                    <input required type="datetime-local" class="form-control"
+                                                        id="fecha" name="fecha" tabindex="1"
+                                                        value="<%= fechaString %>" />
 
-                            <div class="mb-3">
-                                <label for="codEquipo1" class="form-label">Equipo Local</label>
-                                <select id="codEquipo1" name="codEquipo1" class="form-select"
-                                    aria-label="Default select example" tabindex="2" required>
-                                    <option selected value="<%= partido.codEquipo1 %>">
-                                        <%= partido.equipo1 %>
-                                    </option>
-                                    <% equipos.forEach((equipo)=> {
-                                        if (equipo.codEquipo1 === partido.codEquipo1) {
-                                        %>
-                                        <option value="<%= equipo.codEquipo1 %>">
-                                            <%= equipo.nombreEquipo %>
-                                        </option>
-                                        <% } else if (equipo.codDeporte===partido.id) { %>
-                                            <option value="<%= equipo.codEquipo1 %>">
-                                                <%= equipo.nombreEquipo %>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="codEstadio" class="form-label">Estadio</label>
+                                        <select id="codEstadio" name="codEstadio" class="form-select" tabindex="2"
+                                            required>
+                                            <option selected value="<%= partido.codEstadio %>">
+                                                <%= partido.nombreEstadio %>
                                             </option>
-                                            <% } }) %>
-                                </select>
-                            </div>
+                                            <% estadios.forEach((estadio)=> { %>
+                                                <% if (estadio.codEstadio !==partido.codEstadio) { %>
+                                                    <option value="<%= estadio.codEstadio %>">
+                                                        <%= estadio.nombreEstadio %>
+                                                    </option>
+                                                    <% } %>
+                                                        <% }); %>
+                                        </select>
+                                    </div>
 
-                            <div class="mb-3" id="puntos1">
-                                <label for="puntos1" class="form-label">Puntos Anotados</label>
-                                <input type="number" class="form-control" placeholder="Se puede dejar vacío"
-                                    name="puntos1" tabindex="1" value="<%= partido.puntos1 %>" />
-                            </div>
-
-
-                            <div class="mb-3">
-                                <label for="codEquipo2" class="form-label">Equipo Visitante</label>
-                                <select id="codEquipo2" name="codEquipo2" class="form-select"
-                                    aria-label="Default select example" tabindex="2" required>
-                                    <option selected value="<%= partido.codEquipo2 %>">
-                                        <%= partido.equipo2 %>
-                                    </option>
-                                    <% equipos.forEach((equipo)=> {
-                                        if (equipo.codEquipo2 === partido.codEquipo2) {
-                                        %>
-                                        <option selected value="<%= equipo.codEquipo2 %>">
-                                            <%= equipo.nombreEquipo %>
-                                        </option>
-                                        <% } else if (equipo.codDeporte===partido.id) { %>
-                                            <option value="<%= equipo.codEquipo2 %>">
-                                                <%= equipo.nombreEquipo %>
+                                    <div class="mb-3">
+                                        <label for="codEquipo1" class="form-label">Equipo Local</label>
+                                        <select id="codEquipo1" name="codEquipo1" class="form-select"
+                                            aria-label="Default select example" tabindex="2" required>
+                                            <option selected value="<%= partido.codEquipo1 %>">
+                                                <%= partido.equipo1 %>
                                             </option>
-                                            <% } }) %>
-                                </select>
-                            </div>
+                                            <% equipos.forEach((equipo)=> {
+                                                if (equipo.codEquipo1 === partido.codEquipo1) {
+                                                %>
+                                                <option value="<%= equipo.codEquipo1 %>">
+                                                    <%= equipo.nombreEquipo %>
+                                                </option>
+                                                <% } else if (equipo.codDeporte===partido.id) { %>
+                                                    <option value="<%= equipo.codEquipo1 %>">
+                                                        <%= equipo.nombreEquipo %>
+                                                    </option>
+                                                    <% } }) %>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3" id="puntos1">
+                                        <label for="puntos1" class="form-label">Puntos Anotados</label>
+                                        <input type="number" class="form-control" placeholder="Se puede dejar vacío"
+                                            name="puntos1" tabindex="1" value="<%= partido.puntos1 %>" />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="codEquipo2" class="form-label">Equipo Visitante</label>
+                                        <select id="codEquipo2" name="codEquipo2" class="form-select"
+                                            aria-label="Default select example" tabindex="2" required>
+                                            <option selected value="<%= partido.codEquipo2 %>">
+                                                <%= partido.equipo2 %>
+                                            </option>
+                                            <% equipos.forEach((equipo)=> {
+                                                if (equipo.codEquipo2 === partido.codEquipo2) {
+                                                %>
+                                                <option selected value="<%= equipo.codEquipo2 %>">
+                                                    <%= equipo.nombreEquipo %>
+                                                </option>
+                                                <% } else if (equipo.codDeporte===partido.id) { %>
+                                                    <option value="<%= equipo.codEquipo2 %>">
+                                                        <%= equipo.nombreEquipo %>
+                                                    </option>
+                                                    <% } }) %>
+                                        </select>
+                                    </div>
 
-                            <div class="mb-3" id="puntos2">
-                                <label for="puntos2" class="form-label">Puntos Anotados</label>
-                                <input type="number" class="form-control" placeholder="Se puede dejar vacío"
-                                    name="puntos2" tabindex="1" value="<%= partido.puntos2 %>" />
-                            </div>
+                                    <div class="mb-3" id="puntos2">
+                                        <label for="puntos2" class="form-label">Puntos Anotados</label>
+                                        <input type="number" class="form-control" placeholder="Se puede dejar vacío"
+                                            name="puntos2" tabindex="1" value="<%= partido.puntos2 %>" />
+                                    </div>
 
 
 
 
 
-                            <div class="mb-3">
-                                <button id="submit-btn" type="submit" class="btn btn-primary"
-                                    tabindex="5">Guardar</button>
-                                <a href="/admin/partidos" class="btn btn-secondary">Cancelar</a>
-                            </div>
-                            <div class="mb-3">
-                                <button class="btn btn-primary" id="agregar-goleador-btn">Agregar Goleador +</button>
-                                <div id="goleadores-container"></div>
-                            </div>
-                            <% if(goleadores.length>0){ %>
-                            <div class="mb-3">
-                                <h3>Goleadores</h3>
-                                
-                                <% goleadores.forEach((goleadores) => { %>
-                                    <h5><%= goleadores.nombreJugador %> Goles: <%= goleadores.goles %> <a href="/admin/deleteGoleador/<%= goleadores.codPartido %>" class="btn btn-outline-danger"> <i class='bx bxs-trash'></i></a></h4>
-                                    <% }) %>
-                            </div>
-                            <% } %>
+                                    <div class="mb-3">
+                                        <button id="submit-btn" type="submit" class="btn btn-primary"
+                                            tabindex="5">Guardar</button>
+                                        <a href="/admin/partidos" class="btn btn-secondary">Cancelar</a>
+                                    </div>
+                                    <div class="mb-3">
+                                        <button class="btn btn-primary" id="agregar-goleador-btn">Agregar Goleador
+                                            +</button>
+                                        <div id="goleadores-container"></div>
+                                    </div>
+                                    <% if(goleadores.length>0){ %>
+                                        <div class="mb-3">
+                                            <h3>Goleadores</h3>
+
+                                            <% goleadores.forEach((goleadores)=> { %>
+                                                <h5>
+                                                    <%= goleadores.nombreJugador %> Goles: <%= goleadores.goles %> <a
+                                                                href="/admin/deleteGoleador/<%= goleadores.codPartido %>/<%= goleadores.codJugador %>"
+                                                                class="btn btn-outline-danger"> <i
+                                                                    class='bx bxs-trash'></i></a></h4>
+                                                            <% }) %>
+                                        </div>
+                                        <% } %>
                         </form>
 
 
@@ -225,7 +231,7 @@
                                     </option>
                                     <% }) %>
                                 </select>`
-                                i++;
+                        i++;
                         // agregar seleccionar equipos
                         div.append(select1);
                         $("#goleadores-container").append(div);
@@ -235,7 +241,7 @@
                     });
                 });
 
-                function handleEquipoSelectChange(select,i) {
+                function handleEquipoSelectChange(select, i) {
                     const codEquipo = select.value;
 
                     // Realizar solicitud AJAX para obtener los datos de los jugadores
@@ -256,7 +262,7 @@
                             const input = $(`<div class="mt-3 mb-3" ><input name="goles[${i}]" class='form-control' placeholder="goles" autocomplete="off" type="number">`)
 
                             const div = $(`<div class="mb-3 mt-3"></div>`);
-                            
+
                             div.append(select2).append(input);
                             $("#goleadores-container").append(div);
                         },
@@ -267,7 +273,7 @@
                 }
 
 
-                
+
 
 
 
