@@ -43,7 +43,7 @@
                                             <%= rankinge.nombreEquipo %>
                                         </td>
                                         <td>
-                                            <%= rankinge.nombreDeporte %>
+                                            <%= rankinge.nombreDeporte %> <%= rankinge.codDeporte %>
                                         </td>
                                         <td>
                                             <%= rankinge.puntos %>
@@ -53,7 +53,7 @@
                                                 class="btn btn-outline-info">
                                                 <i class='bx bxs-pencil fs-5'></i></a>
 
-                                            <a onclick="confirmar('<%= rankinge.id %>','/admin/deleteRE')"
+                                            <a onclick="confirmar('<%= rankinge.id %>/<%= rankinge.codDeporte %>','/admin/deleteRE')"
                                                 class="btn btn-outline-danger"><i class='bx bxs-trash'></i></a>
                                         </td>
                                     </tr>

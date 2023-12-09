@@ -98,7 +98,7 @@ exports.updatePartido = (req, res) => {
     etapa,
     jornada,
     codEquipo1,
-    codEquipo2
+    codEquipo2,
   };
 
   conexion.query(
@@ -156,8 +156,6 @@ exports.updatePartido = (req, res) => {
     }
   );
 };
-
-
 
 // Equipos
 
@@ -250,10 +248,10 @@ exports.updateEquipo = (req, res) => {
 exports.saveJugador = (req, res) => {
   const nombreJugador = req.body.nombreJugador;
   const codCarrera = req.body.codCarrera;
- 
+
   const codEquipos = Object.keys(req.body)
-    .filter(key => key.startsWith('codEquipo'))
-    .map(key => req.body[key]);
+    .filter((key) => key.startsWith("codEquipo"))
+    .map((key) => req.body[key]);
 
   conexion.query(
     "INSERT INTO jugador (nombreJugador, codCarrera) VALUES (?, ?)",
@@ -273,7 +271,9 @@ exports.saveJugador = (req, res) => {
             (error) => {
               if (error) {
                 console.log(error);
-                res.status(400).json({ msg: "Error al guardar la relación jugador-equipo" });
+                res
+                  .status(400)
+                  .json({ msg: "Error al guardar la relación jugador-equipo" });
               }
             }
           );
@@ -285,12 +285,10 @@ exports.saveJugador = (req, res) => {
   );
 };
 
-
 exports.updateJugador = (req, res) => {
-
   const codEquipos = Object.keys(req.body)
-    .filter(key => key.startsWith('codEquipo'))
-    .map(key => req.body[key]);
+    .filter((key) => key.startsWith("codEquipo"))
+    .map((key) => req.body[key]);
 
   const codJugador = req.body.codJugador;
   const nombreJugador = req.body.nombreJugador;
@@ -319,7 +317,9 @@ exports.updateJugador = (req, res) => {
             (error) => {
               if (error) {
                 console.log(error);
-                res.status(400).json({ msg: "Error al guardar la relación jugador-equipo" });
+                res
+                  .status(400)
+                  .json({ msg: "Error al guardar la relación jugador-equipo" });
               }
             }
           );
@@ -331,7 +331,6 @@ exports.updateJugador = (req, res) => {
     }
   );
 };
-
 
 exports.saveCarrera = (req, res) => {
   const nombreCarrera = req.body.nombreCarrera;
@@ -355,7 +354,8 @@ exports.updateCarrera = (req, res) => {
   const nombreCarrera = req.body.nombreCarrera;
   const id = req.body.id;
   conexion.query(
-    "UPDATE carreras SET ? WHERE id = ?",[{ nombreCarrera: nombreCarrera }, id],
+    "UPDATE carreras SET ? WHERE id = ?",
+    [{ nombreCarrera: nombreCarrera }, id],
     (error, results) => {
       if (error) {
         console.log(error);
@@ -657,6 +657,7 @@ exports.saveRI = (req, res) => {
   const puntos = req.body.puntos;
   const codDeporte = req.body.codDeporte;
   const codTorneo = req.body.codTorneo;
+  const codUniversidad = 1; // Codigo universidad, puede variar dependiendo del tipo de user
 
   conexion.query(
     "SELECT codCarrera FROM jugador WHERE codJugador=?",
@@ -667,7 +668,7 @@ exports.saveRI = (req, res) => {
         res.status(400).json({
           msg: "Error",
         });
-      }else{
+      } else {
         // seleccionar nombre del jugador
         conexion.query(
           "SELECT nombreJugador FROM jugador WHERE codJugador=?",
@@ -678,7 +679,7 @@ exports.saveRI = (req, res) => {
               res.status(400).json({
                 msg: "Error",
               });
-            }else{
+            } else {
               conexion.query(
                 "INSERT INTO rankini SET ?",
                 {
@@ -688,6 +689,7 @@ exports.saveRI = (req, res) => {
                   codDeporte: codDeporte,
                   codTorneo: codTorneo,
                   nombreJugador: jugador[0].nombreJugador,
+                  codUniversidad: codUniversidad,
                 },
                 (error) => {
                   if (error) {
@@ -697,10 +699,12 @@ exports.saveRI = (req, res) => {
                         msg: "Error: El Jugador ya se encuenta en el Ranking de este deporte para este torneo",
                       });
                     } else {
-                      res.status(400).json({ msg: "Ha Ocurrido un error inesperado" });
+                      res
+                        .status(400)
+                        .json({ msg: "Ha Ocurrido un error inesperado" });
                     }
                   } else {
-                    res.redirect("admin/rankingIndividual");
+                    res.redirect(`/admin/ranking/${codDeporte}`);
                   }
                 }
               );
@@ -711,7 +715,6 @@ exports.saveRI = (req, res) => {
     }
   );
 };
-      
 
 exports.updateRI = (req, res) => {
   const id = req.body.id;
@@ -750,27 +753,28 @@ exports.saveRE = (req, res) => {
         res.status(400).json({
           msg: "Error",
         });
-      }else{
-      conexion.query(
-    "INSERT INTO rankinge SET ?",
-    {
-      codEquipo,
-      puntos,
-      codDeporte,
-      codTorneo,
-      nombreEquipo: nombreEquipo[0].nombreEquipo,
-    },
-    (error, results) => {
-      if (error) {
-        console.log(error);
-        res.status(400).json({ msg: "error" });
       } else {
-        res.redirect("/admin/rankingEquipos");
+        conexion.query(
+          "INSERT INTO rankinge SET ?",
+          {
+            codEquipo,
+            puntos,
+            codDeporte,
+            codTorneo,
+            nombreEquipo: nombreEquipo[0].nombreEquipo,
+          },
+          (error, results) => {
+            if (error) {
+              console.log(error);
+              res.status(400).json({ msg: "error" });
+            } else {
+              res.redirect("/admin/rankingEquipos");
+            }
           }
-        }
-      );
-    };
-  });
+        );
+      }
+    }
+  );
 };
 
 exports.updateRE = (req, res) => {
@@ -781,7 +785,7 @@ exports.updateRE = (req, res) => {
     "UPDATE rankinge SET ? WHERE id = ?",
     [
       {
-        puntos: puntos
+        puntos: puntos,
       },
       id,
     ],
@@ -863,11 +867,3 @@ exports.saveTorneoStatus = (req, res) => {
     }
   });
 };
-
-
-
-
-
-
-
-

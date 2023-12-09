@@ -891,10 +891,17 @@ router.get("/admin/crearRankingIndividual", requireLogin, (req, res) => {
               if (error) {
                 console.log(error);
               } else {
-                res.render("admin/crearRankingIndividual.ejs", {
-                  jugadores: jugadores,
-                  deportes: deportes,
-                  torneos: torneos,
+                conexion.query("SELECT id FROM deporte WHERE id = ?",[id], (error, id) => {
+                  if (error) {
+                    console.log(error);
+                  } else {
+                    res.render("admin/crearRankingIndividual", {
+                      jugadores: jugadores,
+                      deportes: deportes,
+                      torneos: torneos,
+                      id: id
+                    });
+                  }
                 });
               }
             });
@@ -950,18 +957,19 @@ router.get("/admin/editarRankingRI/:id", requireLogin, (req, res) => {
   );
 });
 
-router.get("/admin/deleteRI/:id", requireLogin, (req, res) => {
+router.get("/admin/deleteRI/:id/:codDeporte", requireLogin, (req, res) => {
   const id = req.params.id;
+  const codDeporte = req.params.codDeporte; 
+  console.log(codDeporte)
   conexion.query("DELETE FROM rankini WHERE id = ?", [id], (error, results) => {
     if (error) {
       console.log(error);
     } else {
-      res.redirect("/admin/rankingIndividual");
+      
+      res.redirect(`/admin/ranking/${codDeporte}`);
     }
   });
 });
-
-// Ranking Equipos
 
 router.get("/admin/rankingEquipos", requireLogin, (req, res) => {
   conexion.query(
@@ -1029,8 +1037,10 @@ router.get("/admin/editarRankingRE/:id", requireLogin, (req, res) => {
       
 
 
-router.get("/admin/deleteRE/:id", requireLogin, (req, res) => {
+router.get("/admin/deleteRE/:id/:codDeporte", requireLogin, (req, res) => {
   const id = req.params.id;
+  const codDeporte = req.params.codDeporte;
+
   conexion.query(
     "DELETE FROM rankinge WHERE id = ?",
     [id],
@@ -1038,7 +1048,7 @@ router.get("/admin/deleteRE/:id", requireLogin, (req, res) => {
       if (error) {
         console.log(error);
       } else {
-        res.redirect("/admin/rankingEquipos");
+        res.redirect(`/admin/ranking/${codDeporte}`);
       }
     }
   );

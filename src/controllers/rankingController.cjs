@@ -3,14 +3,15 @@ const conexion = require("../database/db.cjs");
 exports.getRankingPage = (req, res) => {
   const id = req.params.id;
   const tipoDeporteSQL = "SELECT tipoDeporte FROM deporte WHERE id = ?";
-  const rankiniSQL = `SELECT r.id, t.nombreTorneo, d.nombreDeporte, r.puntos, c.nombreCarrera, r.nombreJugador
+  const rankiniSQL = `SELECT r.id, t.nombreTorneo, d.nombreDeporte, r.puntos, c.nombreCarrera, r.nombreJugador, r.codDeporte
     FROM rankini r
     LEFT JOIN torneos t ON r.codTorneo = t.codTorneo
     LEFT JOIN deporte d ON r.codDeporte = d.id
     LEFT JOIN carreras c ON r.codCarrera = c.id
     WHERE r.codDeporte = ?`;
 
-  const rangingeSQL = `SELECT t.nombreTorneo, d.nombreDeporte, r.puntos, r.id, r.nombreEquipo 
+  const rangingeSQL = `SELECT t.nombreTorneo, d.nombreDeporte, r.puntos, r.id, r.nombreEquipo, 
+  r.codDeporte
  FROM rankinge r 
  JOIN deporte d ON r.codDeporte = d.id 
  LEFT JOIN torneos t ON r.codTorneo = t.codTorneo
