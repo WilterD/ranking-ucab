@@ -229,7 +229,7 @@ exports.getHomePage = (req, res) => {
                             return res.status(500).send("Error de servidor");
                           }
 
-                          console.log(resultados);
+                          console.log(partidosTorneos);
 
                           res.render("home.ejs", {
                             eliminatorias,
